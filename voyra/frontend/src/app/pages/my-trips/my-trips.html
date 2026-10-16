@@ -1,0 +1,161 @@
+<section class="omotac">
+  <header class="naslov">
+    <div>
+      <h1>{{ 'mojaPutovanja.naslov' | t }}</h1>
+      <p class="naslov__opis">{{ 'mojaPutovanja.opis' | t }}</p>
+    </div>
+
+    <a routerLink="/planiranje" class="dugme">{{ 'mojaPutovanja.novo' | t }}</a>
+  </header>
+
+  @if (ucitava()) {
+    <p class="stanje" data-testid="putovanja-ucitava">{{ 'opste.ucitavanje' | t }}&hellip;</p>
+  } @else if (greska(); as g) {
+    <div class="poruka poruka--greska" role="alert">{{ g }}</div>
+    <button type="button" class="dugme dugme--sporedno" (click)="ucitaj()">{{ 'opste.pokusajPonovo' | t }}</button>
+  } @else if (putovanja().length === 0) {
+    <div class="prazno" data-testid="putovanja-prazno">
+      <h2>{{ 'mojaPutovanja.nemate' | t }}</h2>
+      <p>{{ 'mojaPutovanja.nemateOpis' | t }}</p>
+      <a routerLink="/planiranje" class="dugme">{{ 'mojaPutovanja.prviPlan' | t }}</a>
+    </div>
+  } @else {
+    <div class="alatke">
+      <label class="alatke__filter">
+        <span>{{ 'mojaPutovanja.status' | t }}</span>
+        <select data-testid="putovanja-filter" [ngModel]="filter()"
+                (ngModelChange)="filter.set($event)">
+          <option value="">{{ 'mojaPutovanja.svi' | t: { broj: putovanja().length } }}</option>
+          @for (st of statusi; track st) {
+            <option [value]="st">{{ opisStatusa(st) }}</option>
+          }
+        </select>
+      </label>
+
+      <p class="alatke__broj">{{ 'mojaPutovanja.prikazano' | t: { broj: prikazana().length } }}</p>
+    </div>
+
+    @if (prikazana().length === 0) {
+      <p class="stanje">{{ 'mojaPutovanja.nemaSaStatusom' | t }}</p>
+    }
+
+    <ul class="putovanja" data-testid="putovanja-lista">
+      @for (p of prikazana(); track p._id) {
+        <li
+          class="kartica putovanje"
+          data-testid="putovanje"
+          [attr.data-id]="p._id"
+          [attr.data-status]="p.status">
+          <div class="putovanje__zaglavlje">
+            <div class="putovanje__glavno">
+              @if (menjaId() === p._id) {
+                <div class="izmena">
+                  <input
+                    type="text"
+                    [ngModel]="noviNaziv()"
+                    (ngModelChange)="noviNaziv.set($event)"
+                    [attr.aria-label]="'mojaPutovanja.nazivAria' | t"
+                  />
+                  <button type="button" class="dugme" [disabled]="cuva()" (click)="sacuvajNaziv(p)">
+                    {{ (cuva() ? 'opste.cuvam' : 'opste.sacuvaj') | t }}
+                  </button>
+                  <button type="button" class="dugme dugme--sporedno" (click)="otkaziIzmenu()">
+                    {{ 'mojaPutovanja.odustani' | t }}
+                  </button>
+                </div>
+              } @else {
+                <h2 class="putovanje__naslov" data-testid="putovanje-naslov">{{ p.title }}</h2>
+              }
+
+              <p class="putovanje__ruta">
+                {{ nazivMesta(p.fromCity, p.from) }} ({{ p.from }}) &rarr;
+                {{ nazivMesta(p.toCity, p.to) }} ({{ p.to }})
+              </p>
+
+              <p class="putovanje__meta">
+                {{ datum(p.checkIn) }} &ndash; {{ datum(p.checkOut) }} &middot;
+                {{ brojNoci(p) }} {{ opisNoci(brojNoci(p)) }} &middot;
+                {{ brojPutnika(p.passengers) }}
+              </p>
+            </div>
+
+            <div class="putovanje__desno">
+              <span
+                class="oznaka"
+                [class.oznaka--uspeh]="p.status === 'REZERVISANO'"
+                [class.oznaka--cekanje]="p.status === 'NACRT'"
+                [class.oznaka--zavrseno]="p.status === 'ZAVRSENO'"
+                [class.oznaka--otkazano]="p.status === 'OTKAZANO'"
+              >
+                {{ opisStatusa(p.status) }}
+              </span>
+
+              <!--
+                Trip Service cuva plansku cenu kao `budget` kada korisnik
+                budzet nije uneo, pa se prikaz vodi po planu: ono sto plan
+                kosta je „procenjen trosak", a „budzet" samo kada ga je
+                korisnik zaista postavio i kada se od cene razlikuje.
+              -->
+              <p class="putovanje__cena" data-testid="putovanje-cena">{{ novac(cena(p)) }}</p>
+              <p class="putovanje__kreirano">{{ opisCene(p) }}</p>
+              <p class="putovanje__kreirano">{{ 'mojaPutovanja.sacuvano' | t: { datum: datum(p.createdAt) } }}</p>
+            </div>
+          </div>
+
+          <div class="putovanje__dugmad">
+            <a class="dugme dugme--sporedno" data-testid="putovanje-otvori"
+               [routerLink]="['/moja-putovanja', p._id]">
+              {{ 'mojaPutovanja.otvori' | t }}
+            </a>
+
+            @if (menjaId() !== p._id) {
+              <button type="button" class="veza-dugme" (click)="pocniIzmenu(p)">
+                {{ 'mojaPutovanja.preimenuj' | t }}
+              </button>
+            }
+
+            @if (mozeDaSeOtkaze(p)) {
+              @if (otkazId() === p._id) {
+                <span class="potvrda">
+                  {{ (p.status === 'REZERVISANO' ? 'mojaPutovanja.otkazatiIRez' : 'mojaPutovanja.otkazati') | t }}
+                  <button type="button" class="veza-dugme veza-dugme--opasno"
+                          data-testid="putovanje-otkazi-potvrda" [disabled]="otkazuje()"
+                          (click)="otkazi(p)">
+                    {{ (otkazuje() ? 'mojaPutovanja.otkazujem' : 'mojaPutovanja.daOtkazi') | t }}
+                  </button>
+                  <button type="button" class="veza-dugme" (click)="odustaniOdOtkaza()">
+                    {{ 'mojaPutovanja.odustani' | t }}
+                  </button>
+                </span>
+              } @else {
+                <button type="button" class="veza-dugme" data-testid="putovanje-otkazi"
+                        (click)="potvrdiOtkaz(p._id)">
+                  {{ 'mojaPutovanja.otkazi' | t }}
+                </button>
+              }
+            }
+
+            @if (brisanjeId() === p._id) {
+              <span class="potvrda">
+                {{ 'mojaPutovanja.obrisatiTrajno' | t }}
+                <button type="button" class="veza-dugme veza-dugme--opasno" [disabled]="brise()"
+                        (click)="obrisi(p._id)">
+                  {{ (brise() ? 'mojaPutovanja.brisem' : 'mojaPutovanja.daObrisi') | t }}
+                </button>
+                <button type="button" class="veza-dugme" (click)="odustaniOdBrisanja()">
+                  {{ 'mojaPutovanja.odustani' | t }}
+                </button>
+              </span>
+            } @else {
+              <button type="button" class="veza-dugme veza-dugme--opasno"
+                      (click)="potvrdiBrisanje(p._id)">
+                {{ 'opste.obrisi' | t }}
+              </button>
+            }
+          </div>
+
+        </li>
+      }
+    </ul>
+  }
+</section>

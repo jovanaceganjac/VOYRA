@@ -1,0 +1,192 @@
+@if (parametri(); as p) {
+  <p class="korak-uvod" data-testid="korak3-uvod">
+    {{ nazivMesta(p.toCity, p.to) }} &middot; {{ datum(p.checkIn) }} &ndash; {{ datum(p.checkOut) }} &middot;
+    {{ brojGostiju(p.passengers) }}
+    @if (preostaliBudzet() !== null) {
+      &middot; {{ 'korak3.preostaliBudzet' | t: { iznos: novac(preostaliBudzet()) } }}
+    }
+  </p>
+
+  <!-- ---------- Filteri (§4.4) ---------- -->
+  <div class="alatke">
+    <fieldset class="grupa grupa--u-alatkama">
+      <legend>{{ 'korak3.tip' | t }}</legend>
+      <div class="potvrde">
+        @for (t of preferencije.shema().accommodationTypes; track t) {
+          <label class="potvrda">
+            <input
+              type="checkbox"
+              data-testid="korak3-tip"
+              [attr.data-vrednost]="t"
+              [checked]="jeTipIzabran(t)"
+              (change)="prebaciTip(t)" />
+            <span>{{ preferencije.naziv(t) }}</span>
+          </label>
+        }
+      </div>
+    </fieldset>
+
+    <div class="polje">
+      <label for="minOcena">{{ 'korak3.minOcena' | t }}</label>
+      <select id="minOcena" data-testid="korak3-min-ocena" [ngModel]="minOcena()" (ngModelChange)="minOcena.set($event); pretrazi()">
+        @for (o of ocene; track o.vrednost) {
+          <option [value]="o.vrednost">{{ o.vrednost === '' ? ('korak3.sveOcene' | t) : o.naziv }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="polje">
+      <label for="maxCena">{{ 'korak3.najvisePoNoci' | t }}</label>
+      <input
+        id="maxCena"
+        data-testid="korak3-max-cena"
+        type="number"
+        min="1"
+        step="10"
+        [ngModel]="maxCena()"
+        (ngModelChange)="maxCena.set($event); pretrazi()"
+      />
+    </div>
+  </div>
+
+  @if (demoPodaci()) {
+    <p class="poruka poruka--info">{{ 'carobnjak.demoPodaci' | t }}</p>
+  }
+
+  @for (u of upozorenja(); track u) {
+    <p class="poruka poruka--info">{{ i18n.server(u) }}</p>
+  }
+
+  @if (ucitava()) {
+    <p class="cekanje-tekst" data-testid="korak3-ucitava" role="status">{{ 'korak3.trazimo' | t }}</p>
+    <div class="skeleton" aria-hidden="true">
+      <div class="skeleton__red"></div>
+      <div class="skeleton__red"></div>
+      <div class="skeleton__red"></div>
+    </div>
+  } @else if (greska(); as g) {
+    <div class="poruka poruka--greska" data-testid="korak3-greska" role="alert">{{ g }}</div>
+    <button type="button" class="dugme dugme--sporedno" (click)="pretrazi()">{{ 'opste.pokusajPonovo' | t }}</button>
+  } @else if (ponude().length === 0) {
+    <div class="prazno" data-testid="korak3-bez-ponuda">
+      <h3>{{ 'korak3.nemaSmestaja' | t }}</h3>
+      <p>{{ 'korak3.bezSmestajaOpis' | t }}</p>
+      <button type="button" class="dugme" data-testid="korak3-bez-smestaja"
+              (click)="nastaviBezSmestaja()">{{ 'korak3.nastaviBezSmestaja' | t }}</button>
+    </div>
+  } @else {
+    <ul class="ponude" data-testid="korak3-ponude">
+      @for (s of ponude(); track s.id) {
+        <li>
+          <button
+            type="button"
+            class="ponuda"
+            data-testid="korak3-ponuda"
+            [attr.data-id]="s.id"
+            [attr.data-tip]="s.type"
+            [attr.data-izabrano]="izabrani()?.id === s.id ? 'true' : 'false'"
+            [class.ponuda--izabrana]="izabrani()?.id === s.id"
+            [attr.aria-pressed]="izabrani()?.id === s.id"
+            (click)="izaberi(s)"
+          >
+            <div class="ponuda__zaglavlje">
+              <div>
+                <p class="ponuda__naslov" data-testid="korak3-ponuda-naziv">
+                  {{ s.name }}
+                  @if (s.recommended) {
+                    <span class="oznaka oznaka--uspeh">{{ 'carobnjak.preporuceno' | t }}</span>
+                  }
+                  @if (s.overBudget) {
+                    <span class="oznaka oznaka--cekanje">{{ 'carobnjak.iznadBudzeta' | t }}</span>
+                  }
+                  @if (izabrani()?.id === s.id) {
+                    <span class="oznaka oznaka--izabrano">{{ 'carobnjak.izabrano' | t }}</span>
+                  }
+                </p>
+                <p class="ponuda__podnaslov">
+                  {{ preferencije.naziv(s.type) }}
+                  @if (s.stars) { &middot; {{ s.stars }}&#9733; }
+                  &middot; {{ s.address || s.city }}
+                </p>
+              </div>
+
+              <div>
+                <p class="ponuda__cena">{{ novac(s.totalPrice, s.currency) }}</p>
+                <p class="ponuda__cena-opis">
+                  {{ novac(s.pricePerNight ?? s.price, s.currency) }} &times; {{ s.nights }}
+                  {{ brojNoci(s.nights) }}
+                </p>
+              </div>
+            </div>
+
+            <div class="ponuda__podaci">
+              @if (s.ratingUnknown || !s.rating) {
+                <span class="bez-ocene">{{ 'korak3.bezOcene' | t }}</span>
+              } @else {
+                <span>{{ 'korak3.ocena' | t }} <strong>{{ s.rating }}</strong>/5</span>
+              }
+
+              @if (s.distanceToCenter !== undefined && s.distanceToCenter !== null) {
+                <span class="tacka">{{ 'korak3.odCentra' | t: { razdaljina: razdaljina(s.distanceToCenter) } }}</span>
+              }
+
+              @if (s.cancellation) {
+                <span class="tacka">{{ s.cancellation }}</span>
+              }
+            </div>
+
+            @if (s.scoreBreakdown; as b) {
+              <div class="bodovanje">
+                <div
+                  class="bodovanje__traka"
+                  role="img"
+                  [attr.aria-label]="'korak3.udeoAria' | t: { cena: udeo(s, 'cena'), udaljenost: udeo(s, 'distanca'), ocena: udeo(s, 'ocena') }"
+                >
+                  <span class="bodovanje__deo bodovanje__deo--cena" [style.width.%]="udeo(s, 'cena')"></span>
+                  <span class="bodovanje__deo bodovanje__deo--trajanje" [style.width.%]="udeo(s, 'distanca')"></span>
+                  <span class="bodovanje__deo bodovanje__deo--presedanja" [style.width.%]="udeo(s, 'ocena')"></span>
+                </div>
+
+                <p class="bodovanje__legenda">
+                  <span>{{ 'carobnjak.cena' | t: { broj: b.cena } }}</span>
+                  <span>{{ 'carobnjak.udaljenost' | t: { broj: b.distanca } }}</span>
+                  <span>{{ 'carobnjak.ocena' | t: { broj: b.ocena } }}</span>
+                  <span>{{ 'carobnjak.manjeJeBolje' | t: { broj: s.score } }}</span>
+                </p>
+              </div>
+            }
+          </button>
+
+          @if (s.bookingUrl) {
+            <p class="stavka__akcija">
+              <a class="dugme dugme--sporedno" data-testid="korak3-booking-link"
+                 [href]="s.bookingUrl" target="_blank" rel="noopener noreferrer">
+                {{ 'korak3.booking' | t }}
+              </a>
+              <span class="stavka__napomena">
+                {{ 'korak3.bookingNapomena' | t }}
+              </span>
+            </p>
+          }
+        </li>
+      }
+    </ul>
+  }
+
+  <div class="navigacija">
+    <button type="button" class="dugme dugme--sporedno" data-testid="korak3-nazad"
+            (click)="nazad()">{{ 'opste.nazad' | t }}</button>
+
+    <div class="navigacija__desno">
+      @if (ponude().length > 0) {
+        <button type="button" class="veza-dugme" (click)="nastaviBezSmestaja()">
+          {{ 'korak3.nastaviBezSmestaja' | t }}
+        </button>
+      }
+      <button type="button" class="dugme" data-testid="korak3-dalje"
+              [disabled]="!mozeDalje()" (click)="dalje()">
+        {{ 'korak3.dalje' | t }}
+      </button>
+    </div>
+  </div>
+}

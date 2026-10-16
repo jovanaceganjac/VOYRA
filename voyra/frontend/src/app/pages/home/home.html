@@ -1,0 +1,170 @@
+<section class="hero">
+  <!-- Mapa sveta: prelet aviona i tačke popularnih destinacija -->
+  <app-mapa-sveta [popularne]="popularne()" (izaberi)="planirajZa($event)" />
+
+  <div class="omotac hero__sadrzaj">
+    <p class="hero__nadnaslov">{{ 'pocetna.nadnaslov' | t }}</p>
+    <h1>{{ 'pocetna.naslov' | t }}</h1>
+    <p class="hero__opis" data-testid="hero-opis">{{ 'pocetna.opis' | t }}</p>
+  </div>
+</section>
+
+<section class="omotac pretraga-omotac">
+  <form class="kartica pretraga" data-testid="pretraga-forma" [formGroup]="forma"
+        (ngSubmit)="posalji()" novalidate>
+    <h2 class="pretraga__naslov">{{ 'pocetna.brzaPretraga' | t }}</h2>
+
+    <div class="red">
+      <app-grad-unos
+        idPolja="from"
+        [oznaka]="'pocetna.polaziste' | t"
+        [nevalidno]="poslato() && !polaziste()"
+        [(izabran)]="polaziste" />
+
+      <app-grad-unos
+        idPolja="to"
+        [oznaka]="'pocetna.odrediste' | t"
+        [nevalidno]="poslato() && !odrediste()"
+        [(izabran)]="odrediste" />
+    </div>
+
+    <div class="red">
+      <div class="polje">
+        <label for="checkIn">{{ 'pocetna.polazak' | t }}</label>
+        <input id="checkIn" data-testid="polje-polazak" type="date" formControlName="checkIn" [min]="danas"
+               [attr.aria-invalid]="forma.controls.checkIn.touched && forma.controls.checkIn.invalid" />
+        <app-field-error [kontrola]="forma.controls.checkIn"
+                         [poruke]="{ required: ('pocetna.izaberitePolazak' | t) }" />
+      </div>
+
+      <div class="polje">
+        <label for="checkOut">{{ 'pocetna.povratak' | t }}</label>
+        <input id="checkOut" data-testid="polje-povratak" type="date" formControlName="checkOut" [min]="danas"
+               [attr.aria-invalid]="forma.controls.checkOut.touched && forma.controls.checkOut.invalid" />
+        <app-field-error [kontrola]="forma.controls.checkOut"
+                         [poruke]="{ required: ('pocetna.izaberitePovratak' | t) }" />
+      </div>
+
+      <div class="polje">
+        <label for="passengers">{{ 'pocetna.putnika' | t }}</label>
+        <input id="passengers" data-testid="polje-putnika" type="number" min="1" formControlName="passengers"
+               [attr.aria-invalid]="forma.controls.passengers.touched && forma.controls.passengers.invalid" />
+        <app-field-error
+          [kontrola]="forma.controls.passengers"
+          [poruke]="{ min: ('pocetna.najmanjeJedanPutnik' | t) }" />
+      </div>
+
+      <div class="polje">
+        <label for="budget">{{ 'pocetna.budzet' | t }} <span class="opciono">{{ 'pocetna.budzetOpciono' | t }}</span></label>
+        <input id="budget" data-testid="polje-budzet" type="number" min="1" step="50" formControlName="budget"
+               [attr.aria-invalid]="forma.controls.budget.touched && forma.controls.budget.invalid" />
+        <app-field-error
+          [kontrola]="forma.controls.budget"
+          [poruke]="{ min: ('pocetna.budzetVeciOdNule' | t) }" />
+      </div>
+    </div>
+
+    @if (greska()) {
+      <p class="poruka poruka--greska" data-testid="greska-pretrage" role="alert">{{ greska() }}</p>
+    }
+
+    <div class="pretraga__dno">
+      <p class="polje__pomoc">{{ 'pocetna.najviseDana' | t: { broj: maxDana } }}</p>
+      <button type="submit" class="dugme" data-testid="dugme-pronadji">{{ 'pocetna.pronadji' | t }}</button>
+    </div>
+  </form>
+</section>
+
+<!--
+  Sekcije §4.1. Obe se prikazuju SAMO kada imaju sadržaj: prazna lista
+  znači da administrator još ništa nije istakao, odnosno da niko nije
+  pretraživao. Izmišljene destinacije se ne prikazuju.
+-->
+@if (istaknute().length > 0) {
+  <section class="omotac destinacije" data-testid="istaknute-sekcija">
+    <h2 class="destinacije__naslov">{{ 'pocetna.istaknute' | t }}</h2>
+
+    <ul class="kartice">
+      @for (d of istaknute(); track d.id) {
+        <li class="kartica-dest">
+          <button type="button" class="kartica-dest__dugme" data-testid="istaknuta-kartica"
+                  [attr.data-grad]="d.gradId" (click)="planirajZa(d.gradId)">
+            @if (d.slika?.url) {
+              <img
+                class="kartica-dest__slika"
+                [src]="d.slika!.url"
+                [alt]="'pocetna.fotografija' | t: { naziv: d.naslov }"
+                loading="lazy" />
+            } @else {
+              <span class="kartica-dest__slika kartica-dest__slika--prazna" aria-hidden="true"></span>
+            }
+
+            <span class="kartica-dest__telo">
+              <span class="kartica-dest__naziv" data-testid="istaknuta-naslov">{{ d.naslov }}</span>
+              <span class="kartica-dest__drzava">{{ d.drzavaNaziv }}</span>
+              @if (d.opis) {
+                <span class="kartica-dest__opis">{{ d.opis }}</span>
+              }
+            </span>
+          </button>
+
+          @if (d.slika?.credit) {
+            <p class="kartica-dest__izvor">
+              {{ 'pocetna.foto' | t }}
+              @if (d.slika?.sourceUrl) {
+                <a [href]="d.slika!.sourceUrl" target="_blank" rel="noopener noreferrer">
+                  {{ d.slika!.credit }}
+                </a>
+              } @else {
+                {{ d.slika!.credit }}
+              }
+            </p>
+          }
+        </li>
+      }
+    </ul>
+  </section>
+}
+
+@if (popularne().length > 0) {
+  <section class="omotac destinacije" data-testid="popularne-sekcija">
+    <h2 class="destinacije__naslov">{{ 'pocetna.popularno' | t }}</h2>
+
+    <ul class="kartice kartice--popularno">
+      @for (p of popularne(); track p.gradId) {
+        <li class="kartica-pop">
+          <button type="button" class="kartica-pop__dugme" data-testid="popularna-kartica"
+                  [attr.data-grad]="p.gradId" (click)="planirajZa(p.gradId)">
+            <span class="kartica-pop__naziv">{{ p.naziv }}</span>
+            <span class="kartica-pop__drzava">{{ p.drzavaNaziv }}</span>
+            <span class="kartica-pop__broj">{{ opisPretraga(p.brojPretraga) }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  </section>
+}
+
+<section class="omotac kako">
+  <h2 class="kako__naslov">{{ 'pocetna.kakoRadi' | t }}</h2>
+
+  <ol class="koraci">
+    <li class="korak">
+      <span class="korak__broj">01</span>
+      <h3>{{ 'pocetna.korak1Naslov' | t }}</h3>
+      <p>{{ 'pocetna.korak1Opis' | t }}</p>
+    </li>
+
+    <li class="korak">
+      <span class="korak__broj">02</span>
+      <h3>{{ 'pocetna.korak2Naslov' | t }}</h3>
+      <p>{{ 'pocetna.korak2Opis' | t }}</p>
+    </li>
+
+    <li class="korak">
+      <span class="korak__broj">03</span>
+      <h3>{{ 'pocetna.korak3Naslov' | t }}</h3>
+      <p>{{ 'pocetna.korak3Opis' | t }}</p>
+    </li>
+  </ol>
+</section>

@@ -1,0 +1,40 @@
+<section class="omotac">
+  <header class="naslov">
+    <h1>{{ 'carobnjak.naslov' | t }}</h1>
+  </header>
+
+  <!-- Traka napretka (spec §4.2) -->
+  <nav class="traka" data-testid="traka-koraka" [attr.aria-label]="'carobnjak.koraciAria' | t">
+    <ol class="traka__lista">
+      @for (k of koraci; track k.broj) {
+        <li
+          class="korak"
+          data-testid="traka-korak"
+          [attr.data-broj]="k.broj"
+          [attr.data-stanje]="trenutni() === k.broj ? 'aktivan' : (jeZavrsen(k.broj) ? 'zavrsen' : (jeDostupan(k.broj) ? 'dostupan' : 'nedostupan'))"
+          [class.korak--aktivan]="trenutni() === k.broj"
+          [class.korak--zavrsen]="jeZavrsen(k.broj)"
+          [class.korak--nedostupan]="!jeDostupan(k.broj)"
+        >
+          @if (jeDostupan(k.broj) && trenutni() !== k.broj) {
+            <a [routerLink]="['/planiranje', k.broj]" class="korak__veza">
+              <span class="korak__broj">{{ k.broj }}</span>
+              <span class="korak__naziv">{{ 'carobnjak.koraci.' + k.broj | t }}</span>
+            </a>
+          } @else {
+            <span
+              class="korak__veza"
+              [attr.aria-current]="trenutni() === k.broj ? 'step' : null"
+              [attr.aria-disabled]="!jeDostupan(k.broj) ? 'true' : null"
+            >
+              <span class="korak__broj">{{ k.broj }}</span>
+              <span class="korak__naziv">{{ 'carobnjak.koraci.' + k.broj | t }}</span>
+            </span>
+          }
+        </li>
+      }
+    </ol>
+  </nav>
+
+  <router-outlet />
+</section>

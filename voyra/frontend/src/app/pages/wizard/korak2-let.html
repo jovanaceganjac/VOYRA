@@ -1,0 +1,224 @@
+@if (parametri(); as p) {
+  <p class="korak-uvod" data-testid="korak2-uvod">
+    {{ nazivMesta(p.fromCity, p.from) }} &rarr; {{ nazivMesta(p.toCity, p.to) }} &middot;
+    {{ datum(p.checkIn) }} &ndash; {{ datum(p.checkOut) }} &middot;
+    {{ brojPutnika(p.passengers) }}
+  </p>
+
+  <!-- ---------- Filteri (§4.3) ---------- -->
+  <div class="alatke">
+    <div class="polje">
+      <label for="prioritet">{{ 'korak2.prioritet' | t }}</label>
+      <select
+        id="prioritet"
+        data-testid="korak2-prioritet"
+        [ngModel]="prioritet()"
+        (ngModelChange)="promeniPrioritet($event)"
+      >
+        @for (pr of preferencije.shema().transportPriority; track pr) {
+          <option [value]="pr">{{ preferencije.naziv(pr) }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="polje">
+      <label for="presedanja">{{ 'korak2.presedanja' | t }}</label>
+      <select id="presedanja" data-testid="korak2-presedanja" [ngModel]="maxStops()" (ngModelChange)="maxStops.set($event); pretrazi()">
+        <option value="">{{ 'korak2.svi' | t }}</option>
+        <option value="0">{{ 'korak2.direktan' | t }}</option>
+        <option value="1">{{ 'korak2.najvise1' | t }}</option>
+      </select>
+    </div>
+
+    <div class="polje">
+      <label for="odVremena">{{ 'korak2.polazakOd' | t }}</label>
+      <input
+        id="odVremena"
+        data-testid="korak2-polazak-od"
+        type="time"
+        [ngModel]="departureFrom()"
+        (ngModelChange)="departureFrom.set($event); pretrazi()"
+      />
+    </div>
+
+    <div class="polje">
+      <label for="doVremena">{{ 'korak2.polazakDo' | t }}</label>
+      <input
+        id="doVremena"
+        data-testid="korak2-polazak-do"
+        type="time"
+        [ngModel]="departureTo()"
+        (ngModelChange)="departureTo.set($event); pretrazi()"
+      />
+    </div>
+  </div>
+
+  @if (demoPodaci()) {
+    <p class="poruka poruka--info" data-testid="korak2-demo">{{ 'carobnjak.demoPodaci' | t }}</p>
+  }
+
+  <!-- ---------- Učitavanje ---------- -->
+  @if (ucitava()) {
+    <p class="cekanje-tekst" data-testid="korak2-ucitava" role="status">{{ 'korak2.trazimo' | t }}</p>
+    <div class="skeleton" aria-hidden="true">
+      <div class="skeleton__red"></div>
+      <div class="skeleton__red"></div>
+      <div class="skeleton__red"></div>
+    </div>
+  } @else if (greska(); as g) {
+    <div class="poruka poruka--greska" data-testid="korak2-greska" role="alert">{{ g }}</div>
+    <button type="button" class="dugme dugme--sporedno" (click)="pretrazi()">{{ 'opste.pokusajPonovo' | t }}</button>
+  } @else if (ponude().length === 0) {
+    <!-- ---------- Nema ponuda ---------- -->
+    <div class="prazno" data-testid="korak2-bez-ponuda">
+      <h3>{{ 'korak2.nemaLetova' | t }}</h3>
+      @if (demoPodaci()) {
+        <p>{{ 'korak2.demoRuta' | t }}</p>
+      }
+      <p>{{ 'korak2.bezLetaOpis' | t }}</p>
+      <button type="button" class="dugme" data-testid="korak2-bez-leta"
+              (click)="nastaviBezLeta()">{{ 'korak2.nastaviBezLeta' | t }}</button>
+    </div>
+  } @else {
+    <!-- ---------- Lista ponuda ---------- -->
+    <p class="cekanje-tekst" data-testid="korak2-objasnjenje">
+      {{ brojPonuda(ponude().length) }} &middot;
+      {{ objasnjenje() }}
+    </p>
+
+    <ul class="ponude" data-testid="korak2-ponude">
+      @for (f of ponude(); track f.offerId) {
+        <li>
+          <button
+            type="button"
+            class="ponuda"
+            data-testid="korak2-ponuda"
+            [attr.data-offer-id]="f.offerId"
+            [attr.data-preporuceno]="f.recommended ? 'true' : 'false'"
+            [attr.data-izabrano]="izabrani()?.offerId === f.offerId ? 'true' : 'false'"
+            [attr.data-cena]="f.priceEUR ?? f.price"
+            [class.ponuda--izabrana]="izabrani()?.offerId === f.offerId"
+            [attr.aria-pressed]="izabrani()?.offerId === f.offerId"
+            (click)="izaberi(f)"
+          >
+            <div class="ponuda__zaglavlje">
+              <div>
+                <p class="ponuda__naslov" data-testid="korak2-ponuda-kompanija">
+                  {{ f.airline }}
+                  @if (f.recommended) {
+                    <span class="oznaka oznaka--uspeh">{{ 'carobnjak.preporuceno' | t }}</span>
+                  }
+                  @if (f.overBudget) {
+                    <span class="oznaka oznaka--cekanje">{{ 'carobnjak.iznadBudzeta' | t }}</span>
+                  }
+                  @if (izabrani()?.offerId === f.offerId) {
+                    <span class="oznaka oznaka--izabrano">{{ 'carobnjak.izabrano' | t }}</span>
+                  }
+                </p>
+                <p class="ponuda__podnaslov">
+                  {{ f.from }} &rarr; {{ f.to }}
+                  @if (f.airlineIata) { &middot; {{ f.airlineIata }} }
+                  @if (f.expiresAt) {
+                    &middot; {{ 'korak2.vaziDo' | t: { vreme: vreme(f.expiresAt) } }}
+                  }
+                </p>
+              </div>
+
+              <div>
+                <p class="ponuda__cena" data-testid="korak2-ponuda-cena">
+                  {{ novac(f.priceEUR ?? f.price, f.currency) }}
+                </p>
+                <p class="ponuda__cena-opis">{{ 'korak2.zaSvePutnike' | t }}</p>
+              </div>
+            </div>
+
+            <!-- Odlazak i povratak -->
+            @for (noga of [{ oznaka: 'korak2.odlazak', p: f.outbound }, { oznaka: 'korak2.povratak', p: f.inbound }]; track noga.oznaka) {
+              @if (noga.p) {
+                <div class="noga">
+                  <span class="noga__oznaka">{{ noga.oznaka | t }}</span>
+                  <span class="noga__vreme">
+                    <time [attr.datetime]="noga.p.departure">{{ vreme(noga.p.departure) }}</time>
+                    &ndash;
+                    <time [attr.datetime]="noga.p.arrival">{{ vreme(noga.p.arrival) }}</time>
+                  </span>
+                  <span class="noga__datum">{{ datum(noga.p.departure) }}</span>
+                  <span class="tacka">{{ trajanje(noga.p.duration) }}</span>
+                  <span class="tacka">{{ presedanja(noga.p.stops) }}</span>
+                </div>
+              }
+            }
+
+            <!-- Bodovanje (§6.1) -->
+            @if (f.scoreBreakdown; as b) {
+              <div class="bodovanje">
+                <div
+                  class="bodovanje__traka"
+                  role="img"
+                  [attr.aria-label]="'korak2.udeoAria' | t: { cena: udeo(f, 'cena'), trajanje: udeo(f, 'trajanje'), presedanja: udeo(f, 'presedanja') }"
+                >
+                  <span class="bodovanje__deo bodovanje__deo--cena" [style.width.%]="udeo(f, 'cena')"></span>
+                  <span class="bodovanje__deo bodovanje__deo--trajanje" [style.width.%]="udeo(f, 'trajanje')"></span>
+                  <span class="bodovanje__deo bodovanje__deo--presedanja" [style.width.%]="udeo(f, 'presedanja')"></span>
+                </div>
+
+                <p class="bodovanje__legenda">
+                  <span>{{ 'carobnjak.cena' | t: { broj: b.cena } }}</span>
+                  <span>{{ 'carobnjak.trajanje' | t: { broj: b.trajanje } }}</span>
+                  <span>{{ 'carobnjak.presedanjaBod' | t: { broj: b.presedanja } }}</span>
+                  <span>{{ 'carobnjak.manjeJeBolje' | t: { broj: f.score } }}</span>
+                </p>
+              </div>
+            }
+          </button>
+
+          @if (f.outbound && f.outbound.segments.length > 1) {
+            <button
+              type="button"
+              class="veza-dugme"
+              [attr.aria-expanded]="otvoreniSegmenti() === f.offerId"
+              (click)="prebaciSegmente(f.offerId)"
+            >
+              {{ (otvoreniSegmenti() === f.offerId ? 'korak2.sakrijSegmente' : 'korak2.prikaziSegmente') | t }}
+            </button>
+          }
+
+          @if (otvoreniSegmenti() === f.offerId) {
+            <div class="segmenti">
+              @for (noga of [{ oznaka: 'korak2.odlazak', p: f.outbound }, { oznaka: 'korak2.povratak', p: f.inbound }]; track noga.oznaka) {
+                @if (noga.p) {
+                  <p class="segmenti__naslov">{{ noga.oznaka | t }}</p>
+                  <ol>
+                    @for (s of noga.p.segments; track $index) {
+                      <li>
+                        {{ s.from }} &rarr; {{ s.to }} &middot;
+                        {{ vreme(s.departure) }}&ndash;{{ vreme(s.arrival) }}
+                        &middot; {{ s.airline }}@if (s.number) { {{ s.number }} }
+                      </li>
+                    }
+                  </ol>
+                }
+              }
+            </div>
+          }
+        </li>
+      }
+    </ul>
+  }
+
+  <!-- ---------- Navigacija ---------- -->
+  <div class="navigacija">
+    <button type="button" class="dugme dugme--sporedno" data-testid="korak2-nazad"
+            (click)="nazad()">{{ 'opste.nazad' | t }}</button>
+
+    <div class="navigacija__desno">
+      @if (ponude().length > 0) {
+        <button type="button" class="veza-dugme" (click)="nastaviBezLeta()">{{ 'korak2.nastaviBezLeta' | t }}</button>
+      }
+      <button type="button" class="dugme" data-testid="korak2-dalje"
+              [disabled]="!mozeDalje()" (click)="dalje()">
+        {{ 'korak2.dalje' | t }}
+      </button>
+    </div>
+  </div>
+}

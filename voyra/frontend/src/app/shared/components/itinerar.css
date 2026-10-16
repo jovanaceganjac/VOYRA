@@ -1,0 +1,538 @@
+:host {
+  display: block;
+}
+
+/* ---------- Zaglavlje plana ---------- */
+.plan-zaglavlje {
+  margin-bottom: var(--razmak-2);
+  padding-bottom: var(--razmak-2);
+  border-bottom: 2px solid var(--boja-primarna);
+}
+
+.plan-zaglavlje__naslov {
+  margin: 0;
+}
+
+.plan-zaglavlje__podnaslov {
+  margin: 0.2rem 0 0;
+  font-size: 0.9rem;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Sažetak ---------- */
+.sazetak {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 1px;
+  margin-bottom: var(--razmak-2);
+  background: var(--boja-ivica);
+  border: 1px solid var(--boja-ivica);
+  border-radius: var(--radijus-veliki);
+  overflow: hidden;
+}
+
+.sazetak__stavka {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: var(--razmak-2);
+  background: var(--boja-povrsina);
+  text-align: center;
+}
+
+/* Ukupan trošak ide u svoj red - inače prazne ćelije poslednjeg reda
+   otkrivaju sivu podlogu mreže. */
+.sazetak__stavka--istaknuta {
+  grid-column: 1 / -1;
+  background: var(--boja-povrsina-2);
+}
+
+.sazetak__vrednost {
+  font-family: var(--font-naslov);
+  font-size: 1.35rem;
+  color: var(--boja-primarna);
+  line-height: 1.2;
+}
+
+.sazetak__opis {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Trošak ---------- */
+.trosak {
+  margin-bottom: var(--razmak-4);
+}
+
+.trosak h3 {
+  margin-top: 0;
+}
+
+.trosak__lista {
+  margin: 0;
+}
+
+.trosak__red {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--razmak-2);
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--boja-ivica);
+}
+
+.trosak__red dt,
+.trosak__red dd {
+  margin: 0;
+}
+
+.trosak__red dd {
+  font-variant-numeric: tabular-nums;
+}
+
+.trosak__red--ukupno {
+  border-bottom: 0;
+  padding-top: 0.75rem;
+  font-weight: 600;
+  color: var(--boja-primarna);
+}
+
+.trosak__napomena {
+  margin: var(--razmak-2) 0 0;
+  font-size: 0.83rem;
+  color: var(--boja-tekst-slab);
+}
+
+.trosak .poruka {
+  margin: var(--razmak-2) 0 0;
+}
+
+.poruka--upozorenje {
+  border-color: #e4d5b0;
+  background: #fbf6ea;
+  color: #6d5214;
+}
+
+/* ---------- Odeljci ---------- */
+.odeljak {
+  margin-bottom: var(--razmak-4);
+}
+
+.odeljak__naslov {
+  margin-bottom: var(--razmak-2);
+  font-size: 1.3rem;
+}
+
+.dani {
+  display: grid;
+  gap: var(--razmak-2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ---------- Kartica leta / smeštaja ---------- */
+.stavka {
+  padding: var(--razmak-2) var(--razmak-3);
+}
+
+.stavka__zaglavlje {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+}
+
+.stavka__ruta {
+  margin: 0;
+  font-family: var(--font-naslov);
+  font-size: 1.15rem;
+  color: var(--boja-primarna);
+}
+
+.stavka__podnaslov {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.stavka__cena-grupa {
+  text-align: right;
+}
+
+.stavka__cena {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.stavka__cena-opis {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--boja-tekst-slab);
+}
+
+.stavka__podaci {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.7rem;
+  font-size: 0.9rem;
+}
+
+.stavka__akcija {
+  display: flex;
+  align-items: center;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+  margin: var(--razmak-2) 0 0;
+}
+
+.stavka__akcija .dugme {
+  padding: 0.5rem 1rem;
+}
+
+.stavka__napomena {
+  font-size: 0.8rem;
+  color: var(--boja-tekst-slab);
+}
+
+.bez-ocene {
+  font-style: italic;
+  color: var(--boja-tekst-slab);
+}
+
+.noga {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.noga__oznaka {
+  flex: none;
+  min-width: 4.8rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--boja-tekst-slab);
+}
+
+.noga__vreme {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.noga__datum {
+  color: var(--boja-tekst-slab);
+}
+
+.tacka::before {
+  content: '·';
+  margin-right: 0.5rem;
+  color: var(--boja-ivica-jaka);
+}
+
+/* ---------- Dan ---------- */
+.dan {
+  padding: var(--razmak-2) var(--razmak-3);
+}
+
+.dan__zaglavlje {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--boja-ivica);
+}
+
+.dan__naslov {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin: 0;
+  font-family: var(--font-naslov);
+  font-weight: 400;
+  font-size: 1.2rem;
+}
+
+.dan__broj {
+  color: var(--boja-primarna);
+}
+
+.dan__datum {
+  font-family: var(--font);
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.dan__vreme {
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--boja-tekst-slab);
+}
+
+.dan__napomena,
+.dan__prazno,
+.dan__ukupno {
+  margin: 0.7rem 0 0;
+  font-size: 0.83rem;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Vremenska linija ---------- */
+.vremenska-linija {
+  list-style: none;
+  padding: 0;
+  margin: var(--razmak-2) 0 0;
+}
+
+.stavka-linije {
+  display: flex;
+  gap: var(--razmak-2);
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--boja-ivica);
+}
+
+.stavka-linije:first-child {
+  border-top: 0;
+}
+
+.stavka-linije__vreme {
+  flex: none;
+  width: 3.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--boja-primarna);
+  line-height: 1.35;
+}
+
+.stavka-linije__do {
+  font-weight: 400;
+  color: var(--boja-tekst-slab);
+}
+
+.stavka-linije__redni {
+  display: grid;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  background: var(--boja-primarna);
+  color: var(--boja-pozadina);
+  font-size: 0.8rem;
+}
+
+.stavka-linije__telo {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.stavka-linije__naziv {
+  margin: 0;
+  font-weight: 600;
+}
+
+.stavka-linije__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin: 0.2rem 0 0;
+  font-size: 0.82rem;
+  color: var(--boja-tekst-slab);
+}
+
+.stavka-linije__opis {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+}
+
+/* Prelaz između aktivnosti */
+.stavka-linije--prelaz {
+  border-top: 0;
+  padding: 0.15rem 0;
+}
+
+.stavka-linije__prelaz {
+  margin: 0;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--boja-tekst-slab);
+}
+
+.stavka-linije--rucak .stavka-linije__naziv,
+.stavka-linije--let .stavka-linije__naziv {
+  color: var(--boja-primarna);
+}
+
+.stavka-linije--let {
+  background: var(--boja-povrsina-2);
+  margin-inline: calc(-1 * var(--razmak-2));
+  padding-inline: var(--razmak-2);
+  border-radius: var(--radijus);
+}
+
+/* Kršenje radnog vremena (§4.6) - ivica, ikonica I tekst, ne samo boja */
+.stavka-linije--krsenje {
+  border-left: 3px solid var(--boja-upozorenje);
+  padding-left: 0.6rem;
+  margin-left: -0.6rem;
+}
+
+.krsenje {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.4rem 0 0;
+  font-size: 0.82rem;
+  color: var(--boja-upozorenje);
+}
+
+.krsenje__ikona {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  background: var(--boja-upozorenje);
+  color: var(--boja-pozadina);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.oznaka--kategorija {
+  padding: 0.1rem 0.5rem;
+  font-size: 0.72rem;
+  background: var(--boja-povrsina-2);
+}
+
+.procena {
+  font-style: italic;
+}
+
+/* ---------- Sklopivi delovi ---------- */
+.dodatno {
+  margin-bottom: var(--razmak-2);
+  border: 1px solid var(--boja-ivica);
+  border-radius: var(--radijus);
+  background: var(--boja-povrsina-2);
+}
+
+.dodatno summary {
+  padding: 0.7rem var(--razmak-2);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--boja-primarna);
+  cursor: pointer;
+}
+
+.dodatno__telo,
+.uklonjene {
+  padding: 0 var(--razmak-2) var(--razmak-2);
+  font-size: 0.88rem;
+  color: var(--boja-tekst-slab);
+}
+
+.uklonjene {
+  margin: 0;
+  padding-left: calc(var(--razmak-2) + 1.1rem);
+}
+
+.dodatno__telo p {
+  margin: 0 0 0.5rem;
+}
+
+.dodatno__objasnjenje {
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--boja-ivica);
+}
+
+@media (max-width: 560px) {
+  .stavka,
+  .dan {
+    padding-inline: var(--razmak-2);
+  }
+
+  .stavka__cena-grupa {
+    text-align: left;
+  }
+
+  /* Na uskom ekranu vreme ide iznad naziva, bez horizontalnog skrola */
+  .stavka-linije {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stavka-linije__vreme {
+    width: auto;
+  }
+
+  .stavka-linije__do::before {
+    content: '– ';
+  }
+
+  .stavka-linije--let {
+    margin-inline: 0;
+    padding-inline: 0.6rem;
+  }
+}
+
+/* ---------- Slika atrakcije ---------- */
+
+/*
+ * Na širokom ekranu slika stoji levo od teksta (sličica ~120 px), a na
+ * 360 px ide iznad njega - tekst bi inače ostao na 150 px širine.
+ */
+.stavka-linije__telo--sa-slikom {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.stavka-linije__tekst {
+  min-width: 0;
+  flex: 1;
+}
+
+.stavka-linije__potpis {
+  margin: 4px 0 0;
+  font-size: 0.72rem;
+  color: var(--boja-tekst-slab);
+}
+
+.stavka-linije__potpis a {
+  color: inherit;
+}
+
+.oznaka--dopuna {
+  background: var(--boja-povrsina-2);
+  color: var(--boja-tekst-slab);
+  border: 1px solid var(--boja-ivica);
+}
+
+.dan--slobodan .dan__zaglavlje {
+  opacity: 0.75;
+}
+
+@media (max-width: 560px) {
+  .stavka-linije__telo--sa-slikom {
+    flex-direction: column;
+  }
+
+  .stavka-linije__telo--sa-slikom app-slika-atrakcije {
+    width: 100%;
+  }
+}

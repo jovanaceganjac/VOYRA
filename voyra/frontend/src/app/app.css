@@ -1,0 +1,27 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.glavni {
+  flex: 1;
+  padding-block: var(--razmak-3);
+}
+
+/* Prva stavka za tastaturu - vidljiva tek kada dobije fokus */
+.preskoci {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1200;
+  padding: 0.6rem 1rem;
+  background: var(--boja-primarna);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 0 0 var(--radijus) 0;
+}
+
+.preskoci:focus {
+  left: 0;
+}

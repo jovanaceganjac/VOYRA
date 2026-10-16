@@ -1,0 +1,106 @@
+.naslov {
+  padding-block: var(--razmak-4) var(--razmak-2);
+}
+
+.naslov h1 {
+  margin: 0;
+}
+
+/* ---------- Traka napretka ---------- */
+.traka {
+  margin-bottom: var(--razmak-3);
+}
+
+.traka__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: korak;
+}
+
+.korak {
+  flex: 1 1 8rem;
+  min-width: 0;
+}
+
+.korak__veza {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.5rem;
+  border-top: 3px solid var(--boja-ivica);
+  color: var(--boja-tekst-slab);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color var(--prelaz), border-color var(--prelaz);
+}
+
+a.korak__veza:hover {
+  color: var(--boja-primarna);
+  border-top-color: var(--boja-primarna-svetla);
+}
+
+.korak__broj {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 999px;
+  background: var(--boja-povrsina-2);
+  color: var(--boja-tekst-slab);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.korak__naziv {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Trenutni korak */
+.korak--aktivan .korak__veza {
+  border-top-color: var(--boja-primarna);
+  color: var(--boja-tekst);
+  font-weight: 600;
+}
+
+.korak--aktivan .korak__broj {
+  background: var(--boja-primarna);
+  color: var(--boja-pozadina);
+}
+
+/* Završen korak */
+.korak--zavrsen .korak__veza {
+  border-top-color: var(--boja-primarna-svetla);
+  color: var(--boja-primarna);
+}
+
+.korak--zavrsen .korak__broj {
+  background: var(--boja-primarna-svetla);
+  color: var(--boja-pozadina);
+}
+
+/* Nedostupan korak - vidljivo prigušen, ne samo bledi tekst */
+.korak--nedostupan .korak__veza {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .korak {
+    flex: 1 1 4rem;
+  }
+
+  .korak__naziv {
+    display: none;
+  }
+
+  .korak--aktivan .korak__naziv {
+    display: inline;
+  }
+}

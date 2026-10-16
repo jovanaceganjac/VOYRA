@@ -1,0 +1,403 @@
+<!-- ---------- Zaglavlje ---------- -->
+@if (zahtev(); as z) {
+  <header class="plan-zaglavlje" data-testid="plan-zaglavlje">
+    <h2 class="plan-zaglavlje__naslov" data-testid="plan-ruta">
+      {{ nazivMesta(z.fromCity, z.from) }} &rarr; {{ nazivMesta(z.toCity, z.to) }}
+    </h2>
+    <p class="plan-zaglavlje__podnaslov">
+      {{ datum(z.checkIn) }} &ndash; {{ datum(z.checkOut) }} &middot;
+      {{ brojPutnika(z.passengers) }}
+      @if (z.budget) { &middot; {{ 'plan.budzet' | t: { iznos: novac(z.budget) } }} }
+    </p>
+  </header>
+}
+
+@for (u of svaUpozorenja(); track u) {
+  <p class="poruka poruka--info" role="status">{{ i18n.server(u) }}</p>
+}
+
+@if (bezSatnice()) {
+  <p class="poruka poruka--info">{{ 'plan.ranijaVerzija' | t }}</p>
+}
+
+<!-- ---------- Sažetak ---------- -->
+<section class="sazetak" data-testid="plan-sazetak" [attr.aria-label]="'plan.sazetakAria' | t">
+  <div class="sazetak__stavka">
+    <span class="sazetak__vrednost">{{ itinerar().totalDays }}</span>
+    <span class="sazetak__opis">{{ brojDana(itinerar().totalDays) }}</span>
+  </div>
+
+  <div class="sazetak__stavka">
+    <span class="sazetak__vrednost" data-testid="plan-broj-aktivnosti">{{ ukupnoAtrakcija() }}</span>
+    <span class="sazetak__opis">{{ 'plan.aktivnosti' | t }}</span>
+  </div>
+
+  <div class="sazetak__stavka sazetak__stavka--istaknuta">
+    <span class="sazetak__vrednost">{{ novac(itinerar().totalBudget.total) }}</span>
+    <span class="sazetak__opis">{{ 'plan.procenjenTrosak' | t }}</span>
+  </div>
+</section>
+
+<!-- ---------- Trošak (§4.7) ---------- -->
+<section class="kartica trosak">
+  <h3>{{ 'plan.strukturaTroska' | t }}</h3>
+
+  <dl class="trosak__lista">
+    <div class="trosak__red">
+      <dt>{{ 'plan.let' | t }}</dt>
+      <dd>{{ novac(itinerar().totalBudget.flights) }}</dd>
+    </div>
+    <div class="trosak__red">
+      <dt>{{ 'plan.smestaj' | t }}</dt>
+      <dd>{{ novac(itinerar().totalBudget.accommodations) }}</dd>
+    </div>
+    <div class="trosak__red">
+      <dt>{{ 'plan.ulaznice' | t }}</dt>
+      <dd>{{ novac(itinerar().totalBudget.attractions) }}</dd>
+    </div>
+    <div class="trosak__red trosak__red--ukupno">
+      <dt>{{ 'plan.ukupno' | t }}</dt>
+      <dd data-testid="plan-ukupno">{{ novac(itinerar().totalBudget.total) }}</dd>
+    </div>
+  </dl>
+
+  @if (ulazniceBezCene()) {
+    <p class="trosak__napomena">{{ 'plan.ulazniceBezCene' | t }}</p>
+  }
+
+  @if (itinerar().totalBudget.overBudget) {
+    <p class="poruka poruka--upozorenje">
+      {{ 'plan.premasuje' | t: { iznos: novac(itinerar().totalBudget.overBy) } }}
+    </p>
+  }
+
+  @if (procena(); as p) {
+    @if (p.issues.length > 0) {
+      <div class="poruka poruka--info">
+        <p class="poruka__stavka"><strong>{{ 'plan.napomeneRezervacija' | t }}</strong></p>
+        @for (i of p.issues; track i) {
+          <p class="poruka__stavka">{{ i18n.server(i) }}</p>
+        }
+      </div>
+    }
+  }
+</section>
+
+<!-- ---------- Izabrani let ---------- -->
+@if (let_(); as f) {
+  <section class="odeljak">
+    <h3 class="odeljak__naslov">{{ 'plan.izabraniLet' | t }}</h3>
+
+    <div class="kartica stavka" data-testid="plan-let" [attr.data-offer-id]="f.offerId">
+      <div class="stavka__zaglavlje">
+        <div>
+          <p class="stavka__ruta">{{ f.airline }}</p>
+          <p class="stavka__podnaslov">
+            {{ f.from }} &rarr; {{ f.to }}
+            @if (f.airlineIata) { &middot; {{ f.airlineIata }} }
+          </p>
+        </div>
+
+        <p class="stavka__cena" data-testid="plan-let-cena">
+          {{ novac(f.priceEUR ?? f.price, f.currency) }}
+        </p>
+      </div>
+
+      @for (noga of [{ oznaka: 'korak2.odlazak', p: f.outbound }, { oznaka: 'korak2.povratak', p: f.inbound }]; track noga.oznaka) {
+        @if (noga.p) {
+          <div class="noga">
+            <span class="noga__oznaka">{{ noga.oznaka | t }}</span>
+            <span class="noga__vreme">
+              <time [attr.datetime]="noga.p.departure">{{ vreme(noga.p.departure) }}</time>
+              &ndash;
+              <time [attr.datetime]="noga.p.arrival">{{ vreme(noga.p.arrival) }}</time>
+            </span>
+            <span class="noga__datum">{{ datum(noga.p.departure) }}</span>
+            <span class="tacka">{{ trajanje(noga.p.duration) }}</span>
+            <span class="tacka">{{ presedanja(noga.p.stops) }}</span>
+          </div>
+        }
+      }
+    </div>
+  </section>
+}
+
+<!-- ---------- Izabrani smeštaj ---------- -->
+@if (smestaj(); as s) {
+  <section class="odeljak">
+    <h3 class="odeljak__naslov">{{ 'plan.izabraniSmestaj' | t }}</h3>
+
+    <div class="kartica stavka">
+      <div class="stavka__zaglavlje">
+        <div>
+          <p class="stavka__ruta">{{ s.name }}</p>
+          <p class="stavka__podnaslov">
+            {{ naziv(s.type) }}@if (s.stars) { &middot; {{ s.stars }}&#9733; }
+            &middot; {{ s.address || s.city }}
+          </p>
+        </div>
+
+        <div class="stavka__cena-grupa">
+          <p class="stavka__cena">{{ novac(s.totalPrice, s.currency) }}</p>
+          <p class="stavka__cena-opis">
+            {{ novac(s.pricePerNight ?? s.price, s.currency) }} &times; {{ s.nights }}
+            {{ brojNoci(s.nights) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="stavka__podaci">
+        @if (s.ratingUnknown || !s.rating) {
+          <span class="bez-ocene">{{ 'korak3.bezOcene' | t }}</span>
+        } @else {
+          <span>{{ 'korak3.ocena' | t }} <strong>{{ s.rating }}</strong>/5</span>
+        }
+
+        @if (s.distanceToCenter !== undefined && s.distanceToCenter !== null) {
+          <span class="tacka">{{ 'korak3.odCentra' | t: { razdaljina: razdaljina(s.distanceToCenter) } }}</span>
+        }
+      </div>
+
+      @if (s.bookingUrl) {
+        <p class="stavka__akcija">
+          <a class="dugme dugme--sporedno" [href]="s.bookingUrl" target="_blank" rel="noopener noreferrer">
+            {{ 'korak3.booking' | t }}
+          </a>
+          <span class="stavka__napomena">
+            {{ 'korak3.bookingNapomena' | t }}
+          </span>
+        </p>
+      }
+    </div>
+  </section>
+}
+
+<!-- ---------- Plan po danima ---------- -->
+<section class="odeljak">
+  <h3 class="odeljak__naslov">{{ 'plan.planPoDanima' | t }}</h3>
+
+  <ol class="dani" data-testid="plan-dani">
+    @for (d of dani(); track d.day) {
+      <li
+        class="kartica dan"
+        data-testid="plan-dan"
+        [attr.data-dan]="d.day"
+        [attr.data-km]="d.totalDistance"
+        [class.dan--slobodan]="d.freeDay">
+        <div class="dan__zaglavlje">
+          <h4 class="dan__naslov">
+            <span class="dan__broj">{{ 'plan.danBroj' | t: { broj: d.day } }}</span>
+            @if (d.freeDay) {
+              <span class="oznaka oznaka--dopuna">{{ 'plan.slobodanDan' | t }}</span>
+            }
+            <span class="dan__datum">
+              <time [attr.datetime]="d.date">{{ datumSaDanom(d.date) }}</time>
+            </span>
+          </h4>
+
+          @if (d.availableFrom && d.availableTo) {
+            <span class="dan__vreme" data-testid="plan-dan-satnica">
+              {{ d.availableFrom }}&ndash;{{ d.availableTo }}
+            </span>
+          }
+        </div>
+
+        @if (d.note) {
+          <p class="dan__napomena">{{ i18n.server(d.note) }}</p>
+        }
+
+        <ol class="vremenska-linija">
+          <!-- Dolazak leta (prvi dan) -->
+          @if (prikaziDolazak(d)) {
+            <li class="stavka-linije stavka-linije--let" data-testid="plan-sletanje">
+              <span class="stavka-linije__vreme">
+                <time [attr.datetime]="let_()!.outbound!.arrival">
+                  {{ vreme(let_()!.outbound!.arrival) }}
+                </time>
+              </span>
+              <div class="stavka-linije__telo">
+                <p class="stavka-linije__naziv">{{ 'plan.sletanjeU' | t: { grad: nazivMesta(zahtev()?.toCity, d.accommodation?.city || let_()!.to) } }}</p>
+                <p class="stavka-linije__meta">{{ let_()!.airline }} &middot; {{ let_()!.from }} &rarr; {{ let_()!.to }}</p>
+              </div>
+            </li>
+          }
+
+          @for (a of d.attractions; track a.id) {
+            <!-- Prelaz do aktivnosti -->
+            @if (prelaz(a.travelMinutes, a.travelMode, a.travelKm); as p) {
+              @if (p) {
+                <li class="stavka-linije stavka-linije--prelaz">
+                  <span class="stavka-linije__vreme" aria-hidden="true"></span>
+                  <p class="stavka-linije__prelaz">{{ p }}</p>
+                </li>
+              }
+            }
+
+            <!-- Ručak pre aktivnosti ispred koje je ubačen -->
+            @if (d.lunch && a.startTime === d.lunch.endTime) {
+              <li class="stavka-linije stavka-linije--rucak" data-testid="plan-rucak">
+                <span class="stavka-linije__vreme">{{ d.lunch.startTime }}</span>
+                <div class="stavka-linije__telo">
+                  <p class="stavka-linije__naziv">{{ 'plan.pauzaRucak' | t }}</p>
+                  <p class="stavka-linije__meta">{{ d.lunch.startTime }}&ndash;{{ d.lunch.endTime }}</p>
+                </div>
+              </li>
+            }
+
+            <li
+              class="stavka-linije"
+              data-testid="plan-aktivnost"
+              [attr.data-id]="a.id"
+              [attr.data-pocetak]="a.startTime"
+              [attr.data-izvor]="a.source"
+              [attr.data-krsenje]="a.violation ? 'true' : 'false'"
+              [class.stavka-linije--krsenje]="a.violation">
+              <span class="stavka-linije__vreme">
+                @if (a.startTime) {
+                  {{ a.startTime }}<br /><span class="stavka-linije__do">{{ a.endTime }}</span>
+                } @else {
+                  <span class="stavka-linije__redni">{{ a.order }}</span>
+                }
+              </span>
+
+              <div class="stavka-linije__telo stavka-linije__telo--sa-slikom">
+                <app-slika-atrakcije [atrakcija]="a" [mala]="true" />
+
+                <div class="stavka-linije__tekst">
+                <p class="stavka-linije__naziv" data-testid="plan-aktivnost-naziv">
+                  {{ a.name }}
+                  @if (a.source === 'admin') {
+                    <span class="oznaka-voyra" data-testid="plan-oznaka-voyre"
+                          [title]="'plan.dodaoAdmin' | t">
+                      {{ 'plan.preporukaVoyre' | t }}
+                    </span>
+                  }
+                </p>
+
+                <p class="stavka-linije__meta">
+                  @for (k of kategorije(a); track k) {
+                    <span class="oznaka oznaka--kategorija">{{ naziv(k) }}</span>
+                  }
+                  @if (a.outsideInterests) {
+                    <span class="oznaka oznaka--dopuna" [title]="'plan.dodatoPopuna' | t">
+                      {{ 'plan.vanInteresovanja' | t }}
+                    </span>
+                  }
+                  <span>{{ trajanje(a.duration) }}</span>
+                  <span class="tacka">
+                    {{ a.price > 0 ? novac(a.price, a.currency) : ('plan.cenaNepoznata' | t) }}
+                  </span>
+                  @if (a.openingHours) {
+                    <span class="tacka">
+                      {{ 'plan.radnoVreme' | t: { od: a.openingHours.open, do: a.openingHours.close } }}
+                      @if (a.openingHoursEstimated) { <span class="procena">{{ 'plan.procena' | t }}</span> }
+                    </span>
+                  }
+                </p>
+
+                @if (a.description) {
+                  <p class="stavka-linije__opis">{{ a.description }}</p>
+                }
+
+                @if (a.violation) {
+                  <p class="krsenje" data-testid="plan-zatvoreno" role="note">
+                    <span class="krsenje__ikona" aria-hidden="true">!</span>
+                    {{ 'plan.zatvoreno' | t }}
+                  </p>
+                }
+
+                @if (a.image?.sourceUrl) {
+                  <p class="stavka-linije__potpis">
+                    <a [href]="a.image!.sourceUrl" target="_blank" rel="noopener noreferrer">
+                      {{ 'plan.slika' | t: { autor: a.image!.credit || 'Wikimedia Commons' } }}
+                    </a>
+                  </p>
+                }
+                </div>
+              </div>
+            </li>
+          }
+
+          <!-- Polazak (poslednji dan) -->
+          @if (prikaziPolazak(d)) {
+            <li class="stavka-linije stavka-linije--let">
+              <span class="stavka-linije__vreme">
+                <time [attr.datetime]="let_()!.inbound!.departure">
+                  {{ vreme(let_()!.inbound!.departure) }}
+                </time>
+              </span>
+              <div class="stavka-linije__telo">
+                <p class="stavka-linije__naziv">{{ 'plan.polazakKuci' | t }}</p>
+                <p class="stavka-linije__meta">
+                  {{ let_()!.airline }} &middot; {{ let_()!.to }} &rarr; {{ let_()!.from }}
+                </p>
+              </div>
+            </li>
+          }
+        </ol>
+
+        @if (d.attractions.length === 0 && !prikaziDolazak(d) && !prikaziPolazak(d)) {
+          <p class="dan__prazno">{{ d.note ? i18n.server(d.note) : ('plan.nemaAktivnosti' | t) }}</p>
+        }
+
+        @if (d.attractions.length > 1) {
+          <p class="dan__ukupno" data-testid="plan-dan-km">
+            {{ 'plan.kretanje' | t: { km: razdaljina(d.totalDistance) } }}
+          </p>
+        }
+      </li>
+    }
+  </ol>
+</section>
+
+<!-- ---------- Atrakcije koje nisu stale (§6.4) ---------- -->
+@if (uklonjene().length > 0) {
+  <details class="dodatno">
+    <summary>{{ 'plan.nisuStale' | t: { broj: uklonjene().length } }}</summary>
+
+    <ul class="uklonjene">
+      @for (a of uklonjene(); track a.id) {
+        <li>
+          <strong>{{ a.name }}</strong>
+          @if (a.day) { &middot; {{ 'plan.danMalo' | t: { broj: a.day } }} }
+          &mdash; {{ i18n.server(a.reason) }}
+        </li>
+      }
+    </ul>
+  </details>
+}
+
+<!-- ---------- Zašto ovakav plan ---------- -->
+@if (itinerar().meta; as meta) {
+  <details class="dodatno">
+    <summary>{{ 'plan.zastoOvakav' | t }}</summary>
+
+    <div class="dodatno__telo">
+      @if (itinerar().preferences; as pref) {
+        <p>
+          {{ 'plan.prioritet' | t }} <strong>{{ naziv(pref.transportPriority) }}</strong> &middot;
+          {{ 'plan.tempo' | t }} <strong>{{ naziv(pref.pace) }}</strong> &middot;
+          {{ 'plan.danOdDo' | t: { od: pref.dayStart, do: pref.dayEnd } }}
+        </p>
+        <p>
+          {{ 'plan.interesovanja' | t }}
+          @for (i of pref.interests; track i) {
+            <span class="oznaka oznaka--kategorija">{{ naziv(i) }}</span>
+          }
+        </p>
+      }
+
+      <p>
+        {{ 'plan.pronadjeno' | t: { broj: meta.attractionsFound } }}
+        @if (meta.attractionsSelected !== undefined) {
+          &middot; {{ 'plan.izabranoAtr' | t: { broj: meta.attractionsSelected } }}
+        }
+        @if (meta.targetActivities !== undefined) {
+          &middot; {{ 'plan.ciljniBroj' | t: { broj: meta.targetActivities } }}
+        }
+      </p>
+
+      <p class="dodatno__objasnjenje">{{ 'plan.objasnjenje' | t }}</p>
+    </div>
+  </details>
+}

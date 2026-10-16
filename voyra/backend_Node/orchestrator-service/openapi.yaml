@@ -1,0 +1,864 @@
+# GENERISANO skriptom backend_Node/shared/napravi-openapi.js
+# Opisi se menjaju u shared/openapi-opisi.js, pa se skripta pokrene ponovo.
+openapi: 3.0.3
+info:
+  title: Voyra Orchestrator Service
+  version: 1.0.0
+  description: >-
+    Jedinstveni `/v1` API: sklapa plan iz vise servisa u jedan odgovor.
+
+
+    Svi odgovori su JSON. Uspeh nosi `success: true`, a greska zajednicku semu `Greska`.
+    Dokumentacija se iskljucuje sa `DOCS_ENABLED=false`.
+servers:
+  - url: http://localhost:4008
+    description: Lokalni razvoj
+tags:
+  - name: Servis
+  - name: Planiranje
+  - name: Izmena plana
+  - name: Gradovi
+  - name: Destinacije
+  - name: Administracija
+paths:
+  /:
+    get:
+      summary: Spisak ruta servisa
+      tags:
+        - Servis
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": &a1
+          description: Neispravan zahtev (validacija)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: VALIDATION_ERROR
+                message: Neispravni podaci
+                errors:
+                  - checkIn je obavezan
+                statusCode: 400
+        "404": &a2
+          description: Resurs nije pronadjen
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: NOT_FOUND
+                message: Putovanje nije pronadjeno
+                statusCode: 404
+        "503": &a3
+          description: Servis iza gateway-a nije dostupan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: SERVICE_UNAVAILABLE
+                message: Ciljni servis trenutno nije dostupan
+                statusCode: 503
+  /health:
+    get:
+      summary: Provera da servis radi
+      tags:
+        - Servis
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+  /v1/accommodations:
+    get:
+      summary: Rangirane ponude smestaja (korak 3)
+      tags:
+        - Planiranje
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+  /v1/attractions:
+    get:
+      summary: Atrakcije za odrediste, sa ocenom
+      tags:
+        - Planiranje
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+  /v1/cities:
+    get:
+      summary: Pretraga gradova dok korisnik kuca
+      tags:
+        - Gradovi
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+  /v1/cities/{id}:
+    get:
+      summary: Jedan grad sa aerodromima
+      tags:
+        - Gradovi
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+  /v1/cities/by-iata/{kod}:
+    get:
+      summary: Grad kome pripada IATA kod
+      tags:
+        - Gradovi
+      parameters:
+        - name: kod
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `kod`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+  /v1/destinations/featured:
+    get:
+      summary: Istaknute destinacije za pocetnu stranu
+      tags:
+        - Destinacije
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+  /v1/destinations/popular:
+    get:
+      summary: Popularne destinacije poslednjih 30 dana
+      tags:
+        - Destinacije
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+  /v1/flights:
+    get:
+      summary: Rangirane ponude letova (korak 2)
+      tags:
+        - Planiranje
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "409": &a7
+          description: Sukob sa trenutnim stanjem (verzija, dvostruka rezervacija, prelaz statusa)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: VERSION_CONFLICT
+                message: Putovanje je u medjuvremenu izmenjeno
+                currentVersion: 2027-06-10T12:00:00.000Z
+                statusCode: 409
+        "410": &a4
+          description: Ponuda vise ne postoji (Duffel ponude vaze 15-20 min)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: SELECTION_EXPIRED
+                message: Izabrana ponuda je istekla - izaberite ponovo
+                statusCode: 410
+        "503": *a3
+  /v1/health:
+    get:
+      summary: Stanje svih servisa
+      tags:
+        - Servis
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+  /v1/plan:
+    post:
+      summary: Pravljenje plana putovanja
+      description: "Pet faza algoritma (§6). Zaglavlje `X-Save-Trip: true` cuva putovanje (zahteva
+        prijavu), a `X-Trip-ID` azurira postojece."
+      tags:
+        - Planiranje
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "410": *a4
+        "503": *a3
+  /v1/plan/{sessionId}:
+    get:
+      summary: Ranije napravljen plan (vazi 24 h)
+      tags:
+        - Planiranje
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `sessionId`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "410": *a4
+        "503": *a3
+  /v1/plan/{sessionId}/save:
+    post:
+      summary: Cuvanje tacno onog plana koji je korisnik video
+      tags:
+        - Planiranje
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `sessionId`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": &a5
+          description: Nedostaje token, token je nevazeci ili je opozvan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: TOKEN_REVOKED
+                message: Sesija je istekla ili je nalog promenjen. Prijavite se ponovo.
+                statusCode: 401
+        "403": &a6
+          description: Nalog nema pravo pristupa (uloga ili status)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: FORBIDDEN
+                message: Samo administratori mogu da pristupe ovom resursu
+                statusCode: 403
+        "404": *a2
+        "410": *a4
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /v1/preferences/schema:
+    get:
+      summary: Dozvoljene vrednosti preferencija i nazivi kategorija
+      tags:
+        - Planiranje
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+  /v1/stats:
+    get:
+      summary: Statistika planiranja
+      tags:
+        - Administracija
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a5
+        "403": *a6
+        "404": *a2
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /v1/trips/{id}:
+    get:
+      summary: Sacuvano putovanje sa verzijom za izmenu
+      tags:
+        - Izmena plana
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a5
+        "403": *a6
+        "404": *a2
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /v1/trips/{id}/days:
+    put:
+      summary: Cuvanje izmenjenog plana, uz proveru verzije
+      tags:
+        - Izmena plana
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a5
+        "403": *a6
+        "404": *a2
+        "409": *a7
+        "410": *a4
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /v1/trips/{id}/days/{day}/optimize:
+    post:
+      summary: Optimizacija redosleda obilaska za jedan dan
+      tags:
+        - Izmena plana
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+        - name: day
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `day`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a5
+        "403": *a6
+        "404": *a2
+        "409": *a7
+        "410": *a4
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /v1/trips/{id}/days/preview:
+    post:
+      summary: Nova vremena posle izmene, bez cuvanja
+      tags:
+        - Izmena plana
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a5
+        "403": *a6
+        "404": *a2
+        "409": *a7
+        "410": *a4
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /v1/trips/{id}/flight:
+    put:
+      summary: Zamena izabranog leta
+      tags:
+        - Izmena plana
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a5
+        "403": *a6
+        "404": *a2
+        "409": *a7
+        "410": *a4
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /v1/trips/{id}/flight/refresh:
+    post:
+      summary: Osvezavanje istekle ponude leta
+      tags:
+        - Izmena plana
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a5
+        "403": *a6
+        "404": *a2
+        "409": *a7
+        "410": *a4
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /v1/trips/{id}/regenerate:
+    post:
+      summary: Ponovno pravljenje plana za isto putovanje
+      tags:
+        - Izmena plana
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a5
+        "403": *a6
+        "404": *a2
+        "409": *a7
+        "410": *a4
+        "503": *a3
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT iz `POST /api/users/login`. Vazi 24 h, a prestaje da vazi ranije kada se promeni
+        lozinka, uloga ili status naloga (claim `tv`).
+    internalKey:
+      type: apiKey
+      in: header
+      name: X-Internal-Key
+      description: Zajednicki kljuc iz `.env`-a. Ove rute NISU dostupne spolja - gateway ih ne prosledjuje.
+  schemas:
+    Greska:
+      type: object
+      required:
+        - success
+        - error
+        - message
+        - statusCode
+      properties:
+        success:
+          type: boolean
+          enum:
+            - false
+          description: Uvek `false` kod greske
+        error:
+          type: string
+          description: Masinski citljiv kod greske
+          example: VALIDATION_ERROR
+        message:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+          description: Poruka za korisnika; Joi validacija vraca listu poruka
+        statusCode:
+          type: integer
+          example: 400
+        errors:
+          type: array
+          items:
+            type: string
+          description: Pojedinacne greske validacije, kada ih servis salje
+        attemptsLeft:
+          type: integer
+          description: Koliko pokusaja ostaje pre zakljucavanja (prijava, SMS kod, lozinka)
+        retryAfter:
+          type: integer
+          description: Sekundi do isteka zakljucavanja (uz 429)
+        currentVersion:
+          type: string
+          description: Trenutna verzija putovanja kod 409 VERSION_CONFLICT

@@ -1,0 +1,17 @@
+node_modules/
+.env
+.env.local
+.DS_Store
+*.log
+*.log.*
+dist/
+build/
+.angular/
+.vscode/
+.idea/
+mongo_data/
+backup/
+*.swp
+*.swo
+*~
+confirmations/

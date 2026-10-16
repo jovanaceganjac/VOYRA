@@ -1,0 +1,145 @@
+<div class="odeljak__zaglavlje">
+  <div>
+    <h2>{{ 'admin.odeljci.korisnici' | t }}</h2>
+    <p class="odeljak__opis">{{ 'adminKorisnici.opis' | t }}</p>
+  </div>
+  <button type="button" class="dugme dugme--sporedno dugme--malo" (click)="ucitaj()">{{ 'admin.osvezi' | t }}</button>
+</div>
+
+<div class="korisnici__alatke">
+  <input
+    type="search"
+    [placeholder]="'adminKorisnici.pretragaPlaceholder' | t"
+    [attr.aria-label]="'adminKorisnici.pretragaAria' | t"
+    [ngModel]="pretraga()"
+    (ngModelChange)="pretraga.set($event)" />
+
+  <select
+    [attr.aria-label]="'adminKorisnici.filterStatusa' | t"
+    [ngModel]="filterStatusa()"
+    (ngModelChange)="filterStatusa.set($event)">
+    <option value="">{{ 'adminKorisnici.sviStatusi' | t }}</option>
+    @for (st of statusi; track st) {
+      <option [value]="st">{{ opisStatusa(st) }}</option>
+    }
+  </select>
+
+  <select
+    [attr.aria-label]="'adminKorisnici.filterUloge' | t"
+    [ngModel]="filterUloge()"
+    (ngModelChange)="filterUloge.set($event)">
+    <option value="">{{ 'adminKorisnici.sveUloge' | t }}</option>
+    <option value="korisnik">{{ 'statusi.uloga.korisnik' | t }}</option>
+    <option value="admin">{{ 'statusi.uloga.admin' | t }}</option>
+  </select>
+</div>
+
+@if (ucitava()) {
+  <p class="stanje" role="status">{{ 'adminKorisnici.ucitavamo' | t }}</p>
+} @else if (greska(); as g) {
+  <p class="poruka poruka--greska" role="alert">{{ g }}</p>
+  <button type="button" class="dugme dugme--sporedno" (click)="ucitaj()">{{ 'opste.pokusajPonovo' | t }}</button>
+} @else {
+  <p class="stanje">{{ 'adminKorisnici.prikazano' | t: { broj: prikazani().length, ukupno: korisnici().length } }}</p>
+
+  <ul class="stavke">
+    @for (k of prikazani(); track k._id) {
+      <li class="stavka" [class.stavka--neaktivna]="k.status === 'blokiran'">
+        <div class="stavka__telo">
+          <p class="stavka__naslov">
+            {{ k.ime }} {{ k.prezime }}
+            @if (jaSam(k)) {
+              <span class="oznaka">{{ 'adminKorisnici.vi' | t }}</span>
+            }
+          </p>
+
+          <p class="stavka__meta">
+            &#64;{{ k.korisnickoIme }} &middot; {{ k.email }}<br />
+            {{ opisStatusa(k.status) }} &middot;
+            {{ (k.uloga === 'admin' ? 'adminKorisnici.administrator' : 'adminKorisnici.korisnik') | t }} &middot;
+            {{ 'adminKorisnici.od' | t: { datum: datum(k.createdAt) } }}
+          </p>
+
+          @if (odluka(); as o) {
+            @if (o.id === k._id) {
+              <div class="razlog">
+                <label [attr.for]="'razlog-' + k._id">
+                  {{ 'adminKorisnici.razlog' | t }} <span class="opciono">{{ 'adminKorisnici.razlogOpis' | t }}</span>
+                </label>
+                <textarea
+                  [attr.id]="'razlog-' + k._id"
+                  rows="2"
+                  maxlength="500"
+                  [(ngModel)]="razlog"
+                  name="razlog"></textarea>
+              </div>
+            }
+          }
+        </div>
+
+        <div class="stavka__akcije">
+          @if (odluka()?.id === k._id) {
+            <button
+              type="button"
+              class="dugme dugme--opasno dugme--malo"
+              [disabled]="uToku() === k._id"
+              (click)="promeniStatus(k, odluka()!.status)">
+              {{ 'adminKorisnici.potvrdi' | t }}
+            </button>
+            <button type="button" class="dugme dugme--sporedno dugme--malo" (click)="odustani()">
+              {{ 'admin.odustani' | t }}
+            </button>
+          } @else if (brisanjeId() === k._id) {
+            <button
+              type="button"
+              class="dugme dugme--opasno dugme--malo"
+              [disabled]="uToku() === k._id"
+              (click)="obrisi(k)">
+              {{ 'adminKorisnici.obrisiNalog' | t }}
+            </button>
+            <button
+              type="button"
+              class="dugme dugme--sporedno dugme--malo"
+              (click)="odustaniOdBrisanja()">
+              {{ 'admin.odustani' | t }}
+            </button>
+          } @else {
+            @for (st of moguciPrelazi(k); track st) {
+              <button
+                type="button"
+                class="dugme dugme--malo"
+                [class.dugme--sporedno]="st !== 'odobren'"
+                [disabled]="uToku() === k._id"
+                (click)="zapocni(k, st)">
+                {{ nazivPrelaza(k, st) }}
+              </button>
+            }
+
+            <label class="samo-za-citace" [attr.for]="'uloga-' + k._id">
+              {{ 'adminKorisnici.ulogaKorisnika' | t: { ime: k.korisnickoIme } }}
+            </label>
+            <select
+              class="izbor-uloge"
+              [class.izbor-uloge--admin]="k.uloga === 'admin'"
+              [attr.id]="'uloga-' + k._id"
+              [ngModel]="k.uloga"
+              (ngModelChange)="promeniUlogu(k, $event)"
+              [disabled]="uToku() === k._id">
+              <option value="korisnik">{{ 'statusi.uloga.korisnik' | t }}</option>
+              <option value="admin">{{ 'statusi.uloga.admin' | t }}</option>
+            </select>
+
+            @if (!jaSam(k)) {
+              <button
+                type="button"
+                class="dugme dugme--sporedno dugme--malo"
+                (click)="potvrdiBrisanje(k._id)">
+                {{ 'admin.obrisi' | t }}
+              </button>
+            }
+          }
+        </div>
+      </li>
+    }
+  </ul>
+}

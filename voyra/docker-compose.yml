@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: voyra_mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: users_db
+    volumes:
+      - mongo_data:/data/db
+      - ./scripts/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
+    command: mongod --auth --bind_ip_all
+
+volumes:
+  mongo_data:
+    driver: local

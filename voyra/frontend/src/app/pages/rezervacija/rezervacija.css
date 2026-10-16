@@ -1,0 +1,345 @@
+.stranica {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+/* ---------- Traka test režima ---------- */
+
+.test-traka {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0 0 20px;
+  padding: 10px 14px;
+  border: 1px solid var(--boja-ivica-jaka);
+  border-radius: 10px;
+  background: var(--boja-povrsina-2);
+  font-size: 0.9rem;
+}
+
+.test-traka__oznaka {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--boja-primarna);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.naslov {
+  margin: 0 0 16px;
+}
+
+/* ---------- Koraci ---------- */
+
+.koraci {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding: 0;
+}
+
+.korak {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 3px solid var(--boja-ivica);
+  color: var(--boja-tekst-slab);
+  font-size: 0.9rem;
+}
+
+.korak--tekuci,
+.korak--zavrsen {
+  border-top-color: var(--boja-primarna);
+  color: var(--boja-tekst);
+}
+
+.korak__broj {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--boja-ivica);
+  color: var(--boja-tekst);
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex: 0 0 26px;
+}
+
+.korak--tekuci .korak__broj,
+.korak--zavrsen .korak__broj {
+  background: var(--boja-primarna);
+  color: #fff;
+}
+
+.korak-naslov {
+  margin: 0 0 12px;
+  font-size: 1.3rem;
+}
+
+/* Fokus na naslovu koraka - ulazak u korak se vidi i bez miša */
+.korak-naslov:focus-visible {
+  outline: 3px solid var(--boja-primarna);
+  outline-offset: 4px;
+}
+
+.uvod {
+  margin: 0 0 16px;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Let ---------- */
+
+.let {
+  margin-bottom: 16px;
+}
+
+.let__zaglavlje {
+  margin-bottom: 8px;
+}
+
+.let__naslov {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.let__ruta {
+  margin: 2px 0 0;
+  color: var(--boja-tekst-slab);
+}
+
+.let__noga {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+}
+
+.let__oznaka {
+  min-width: 72px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Promena cene ---------- */
+
+.cena-promena {
+  margin: 16px 0;
+  padding: 14px;
+  border: 1px solid var(--boja-ivica-jaka);
+  border-radius: 10px;
+  background: var(--boja-povrsina-2);
+}
+
+.cena-promena__naslov {
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.cena-promena__red {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin: 0 0 10px;
+}
+
+.cena-promena__stara {
+  text-decoration: line-through;
+  color: var(--boja-tekst-slab);
+}
+
+.cena-promena__nova {
+  font-size: 1.2rem;
+}
+
+.cena-promena__razlika {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--boja-povrsina);
+  border: 1px solid var(--boja-ivica);
+  font-size: 0.85rem;
+}
+
+/* ---------- Ponude (alternative) ---------- */
+
+.ponude {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ponuda__zaglavlje {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.ponuda__naslov {
+  margin: 0;
+  font-weight: 600;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ponuda__cena {
+  margin: 0;
+  font-weight: 700;
+}
+
+.ponuda__podaci {
+  margin: 6px 0 12px;
+  color: var(--boja-tekst-slab);
+  font-size: 0.9rem;
+}
+
+/* ---------- Putnici ---------- */
+
+.putnik {
+  margin: 0 0 16px;
+  border: 1px solid var(--boja-ivica);
+}
+
+.putnik__naslov {
+  padding: 0 6px;
+  font-weight: 600;
+}
+
+.putnik__napomena {
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.polja {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.polje__greska {
+  display: block;
+  margin-top: 4px;
+  color: var(--boja-greska);
+  font-size: 0.82rem;
+}
+
+.greske {
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* ---------- Pregled i uspeh ---------- */
+
+.pregled__naslov {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.pregled__lista {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.ukupno {
+  margin: 16px 0;
+  font-size: 1.1rem;
+}
+
+.potvrda--istaknuta {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px;
+  border: 1px solid var(--boja-ivica-jaka);
+  border-radius: 10px;
+  background: var(--boja-povrsina-2);
+}
+
+.uspeh {
+  text-align: center;
+}
+
+.uspeh__oznaka {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--boja-tekst-slab);
+}
+
+.uspeh__pnr {
+  margin: 6px 0 12px;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.uspeh__status,
+.uspeh__napomena {
+  margin: 4px 0;
+  color: var(--boja-tekst-slab);
+}
+
+.uspeh__dugmad {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.navigacija {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.navigacija .dugme:last-child {
+  margin-left: auto;
+}
+
+/* ---------- Telefon ---------- */
+
+@media (max-width: 560px) {
+  /* Jedna kolona: dva polja u redu na 360 px postaju neupotrebljiva */
+  .polja {
+    grid-template-columns: 1fr;
+  }
+
+  .korak__naziv {
+    display: none;
+  }
+
+  .navigacija .dugme:last-child {
+    margin-left: 0;
+  }
+
+  .navigacija .dugme,
+  .navigacija .veza-dugme {
+    width: 100%;
+  }
+}

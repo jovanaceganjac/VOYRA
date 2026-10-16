@@ -1,0 +1,37 @@
+.pravila {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.pravila li::before {
+  content: '○ ';
+  color: var(--boja-tekst-slab);
+}
+
+.pravila--ok {
+  color: var(--boja-uspeh);
+}
+
+.pravila--ok::before {
+  content: '✓ ';
+  color: var(--boja-uspeh);
+}
+
+.poruka__stavka {
+  margin: 0 0 0.25rem;
+}
+
+.poruka__stavka:last-child {
+  margin-bottom: 0;
+}
+
+.opciono {
+  font-weight: 400;
+  color: var(--boja-tekst-slab);
+}

@@ -1,0 +1,64 @@
+@if (radi()) {
+  <p class="cekanje-tekst" data-testid="korak4-radi" role="status">{{ 'korak4.pravimo' | t }}</p>
+  <div class="skeleton" aria-hidden="true">
+    <div class="skeleton__red"></div>
+    <div class="skeleton__red"></div>
+  </div>
+} @else if (isteklo(); as sta) {
+  <!-- 410 SELECTION_EXPIRED -->
+  <div class="prazno" data-testid="korak4-isteklo" [attr.data-sta]="sta">
+    <h3>{{ (sta === 'let' ? 'korak4.letIstekao' : 'korak4.smestajIstekao') | t }}</h3>
+    <p>{{ 'korak4.isteklo' | t }}</p>
+    <button type="button" class="dugme" data-testid="korak4-izaberi-ponovo" (click)="izaberiPonovo()">
+      {{ (sta === 'let' ? 'korak4.nazadNaLet' : 'korak4.nazadNaSmestaj') | t }}
+    </button>
+  </div>
+} @else if (greske(); as g) {
+  <div class="poruka poruka--greska" data-testid="korak4-greske" role="alert">
+    @for (p of g; track p) {
+      <p class="poruka__stavka">{{ p }}</p>
+    }
+  </div>
+
+  <div class="navigacija">
+    <button type="button" class="dugme dugme--sporedno" (click)="nazad()">{{ 'opste.nazad' | t }}</button>
+    <button type="button" class="dugme" (click)="napravi()">{{ 'opste.pokusajPonovo' | t }}</button>
+  </div>
+} @else if (plan(); as p) {
+  <app-itinerar
+    [itinerar]="p.itinerary"
+    [procena]="p.bookingEstimate"
+    [zahtev]="p.request"
+    [upozorenja]="p.warnings"
+  />
+
+  <!-- ---------- Dno ---------- -->
+  <div class="navigacija">
+    <button type="button" class="dugme dugme--sporedno" (click)="nazad()">{{ 'opste.nazad' | t }}</button>
+
+    <div class="navigacija__desno">
+      <button type="button" class="veza-dugme" (click)="ispocetka()">{{ 'korak4.pocniIspocetka' | t }}</button>
+
+      @if (sacuvano(); as tripId) {
+        <!-- Vodi pravo na stranicu tog putovanja -->
+        <a [routerLink]="['/moja-putovanja', tripId]" class="dugme dugme--sporedno"
+           data-testid="korak4-otvori-putovanje" [attr.data-trip-id]="tripId">
+          {{ 'korak4.otvoriPutovanje' | t }}
+        </a>
+      } @else {
+        <button type="button" class="dugme" data-testid="korak4-sacuvaj"
+                [disabled]="cuva()" (click)="sacuvaj()">
+          {{ (cuva() ? 'opste.cuvam' : auth.isLoggedIn() ? 'korak4.sacuvaj' : 'korak4.prijaviSacuvaj') | t }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (parametri(); as par) {
+    <p class="korak-uvod">
+      <a [routerLink]="['/atrakcije']" [queryParams]="{ toCityId: par.toCityId, to: par.to }">
+        {{ 'korak4.sveAtrakcije' | t: { grad: nazivMesta(par.toCity, par.to) } }}
+      </a>
+    </p>
+  }
+}

@@ -1,0 +1,186 @@
+<form class="kartica korak-forma" data-testid="korak1-forma" [formGroup]="forma"
+      (ngSubmit)="dalje()" novalidate>
+  <h2 class="korak-forma__naslov">{{ 'korak1.naslov' | t }}</h2>
+
+  <div class="red">
+    <app-grad-unos
+      idPolja="from"
+      [oznaka]="'pocetna.polaziste' | t"
+      [nevalidno]="poslato() && !polaziste()"
+      [(izabran)]="polaziste" />
+
+    <app-grad-unos
+      idPolja="to"
+      [oznaka]="'pocetna.odrediste' | t"
+      [nevalidno]="poslato() && !odrediste()"
+      [(izabran)]="odrediste" />
+  </div>
+
+  <div class="red">
+    <div class="polje">
+      <label for="checkIn">{{ 'pocetna.polazak' | t }}</label>
+      <input id="checkIn" data-testid="korak1-polazak" type="date" formControlName="checkIn" [min]="danas"
+             [attr.aria-invalid]="forma.controls.checkIn.touched && forma.controls.checkIn.invalid" />
+      <app-field-error [kontrola]="forma.controls.checkIn"
+                       [poruke]="{ required: ('pocetna.izaberitePolazak' | t) }" />
+    </div>
+
+    <div class="polje">
+      <label for="checkOut">{{ 'pocetna.povratak' | t }}</label>
+      <input id="checkOut" data-testid="korak1-povratak" type="date" formControlName="checkOut" [min]="danas"
+             [attr.aria-invalid]="forma.controls.checkOut.touched && forma.controls.checkOut.invalid" />
+      <app-field-error [kontrola]="forma.controls.checkOut"
+                       [poruke]="{ required: ('pocetna.izaberitePovratak' | t) }" />
+      <p class="polje__pomoc">{{ 'korak1.najviseDana' | t: { broj: maxDana() } }}</p>
+    </div>
+  </div>
+
+  <div class="red">
+    <div class="polje">
+      <label for="passengers">{{ 'korak1.brojPutnika' | t }}</label>
+      <input id="passengers" data-testid="korak1-putnika" type="number" min="1" formControlName="passengers"
+             [attr.aria-invalid]="forma.controls.passengers.touched && forma.controls.passengers.invalid" />
+      <app-field-error [kontrola]="forma.controls.passengers"
+                       [poruke]="{ min: ('pocetna.najmanjeJedanPutnik' | t) }" />
+      @if (mnogoPutnika()) {
+        <p class="polje__pomoc polje__pomoc--isticaj">
+          {{ 'korak1.viseDelova' | t: { broj: putnikaPoRezervaciji } }}
+        </p>
+      }
+    </div>
+
+    <div class="polje">
+      <label for="budget">{{ 'pocetna.budzet' | t }} <span class="opciono">{{ 'pocetna.budzetOpciono' | t }}</span></label>
+      <input id="budget" data-testid="korak1-budzet" type="number" min="1" step="50"
+             formControlName="budget" />
+      <p class="polje__pomoc">{{ 'korak1.budzetOrijentir' | t }}</p>
+    </div>
+  </div>
+
+  <!-- ---------- Preferencije (sklopljene) ---------- -->
+  <details class="preferencije" data-testid="korak1-preferencije" [open]="prosireno()">
+    <summary class="preferencije__naslov" data-testid="korak1-preferencije-otvori">
+      {{ 'korak1.prilagodi' | t }}
+    </summary>
+
+    <div class="preferencije__telo">
+      <!-- Prioritet prevoza -->
+      <fieldset class="grupa">
+        <legend>{{ 'korak1.prioritet' | t }}</legend>
+
+        <div class="izbor-dugmad">
+          @for (p of shema().transportPriority; track p) {
+            <button
+              type="button"
+              class="izbor-dugme"
+              data-testid="korak1-prioritet"
+              [attr.data-vrednost]="p"
+              [class.izbor-dugme--aktivno]="forma.controls.transportPriority.value === p"
+              [attr.aria-pressed]="forma.controls.transportPriority.value === p"
+              (click)="forma.controls.transportPriority.setValue(p)"
+            >
+              {{ preferencije.naziv(p) }}
+            </button>
+          }
+        </div>
+      </fieldset>
+
+      <!-- Tip smeštaja -->
+      <fieldset class="grupa">
+        <legend>{{ 'korak1.tipSmestaja' | t }}</legend>
+
+        <div class="potvrde">
+          @for (t of shema().accommodationTypes; track t) {
+            <label class="potvrda">
+              <input
+                type="checkbox"
+                data-testid="korak1-tip-smestaja"
+                [attr.data-vrednost]="t"
+                [checked]="jeIzabran('accommodationTypes', t)"
+                (change)="prebaci('accommodationTypes', t)"
+              />
+              <span>{{ preferencije.naziv(t) }}</span>
+            </label>
+          }
+        </div>
+      </fieldset>
+
+      <!-- Minimalna ocena -->
+      <div class="polje">
+        <label for="minRating">{{ 'korak1.minOcena' | t }}</label>
+        <select id="minRating" formControlName="minAccommodationRating">
+          @for (o of ocene; track o.naziv) {
+            <option [ngValue]="o.vrednost">{{ o.vrednost === null ? ('korak1.bezOgranicenja' | t) : o.naziv }}</option>
+          }
+        </select>
+        <p class="polje__pomoc">{{ 'korak1.bezOceneUlazi' | t }}</p>
+      </div>
+
+      <!-- Interesovanja -->
+      <fieldset class="grupa">
+        <legend>{{ 'korak1.interesovanja' | t }}</legend>
+
+        <div class="potvrde">
+          @for (i of shema().interests; track i) {
+            <label class="potvrda">
+              <input
+                type="checkbox"
+                data-testid="korak1-interesovanje"
+                [attr.data-vrednost]="i"
+                [checked]="jeIzabran('interests', i)"
+                (change)="prebaci('interests', i)"
+              />
+              <span>{{ preferencije.naziv(i) }}</span>
+            </label>
+          }
+        </div>
+      </fieldset>
+
+      <!-- Tempo -->
+      <fieldset class="grupa">
+        <legend>{{ 'korak1.tempo' | t }}</legend>
+
+        <div class="izbor-dugmad izbor-dugmad--siroko">
+          @for (t of shema().pace; track t) {
+            <button
+              type="button"
+              class="izbor-dugme"
+              data-testid="korak1-tempo"
+              [attr.data-vrednost]="t"
+              [class.izbor-dugme--aktivno]="forma.controls.pace.value === t"
+              [attr.aria-pressed]="forma.controls.pace.value === t"
+              (click)="forma.controls.pace.setValue(t)"
+            >
+              {{ preferencije.opisTempa(t) }}
+            </button>
+          }
+        </div>
+      </fieldset>
+
+      <!-- Radni dan -->
+      <div class="red">
+        <div class="polje">
+          <label for="dayStart">{{ 'korak1.pocetakDana' | t }}</label>
+          <input id="dayStart" type="time" formControlName="dayStart" />
+        </div>
+
+        <div class="polje">
+          <label for="dayEnd">{{ 'korak1.krajDana' | t }}</label>
+          <input id="dayEnd" type="time" formControlName="dayEnd" />
+        </div>
+      </div>
+    </div>
+  </details>
+
+  @if (greske(); as g) {
+    <div class="poruka poruka--greska" data-testid="korak1-greske" role="alert">
+      @for (p of g; track p) {
+        <p class="poruka__stavka">{{ p }}</p>
+      }
+    </div>
+  }
+
+  <div class="korak-forma__dno">
+    <button type="submit" class="dugme" data-testid="korak1-dalje">{{ 'korak1.dalje' | t }}</button>
+  </div>
+</form>

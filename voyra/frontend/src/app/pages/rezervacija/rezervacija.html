@@ -1,0 +1,416 @@
+<section class="stranica">
+  <!--
+    Test režim stoji na SVAKOM koraku (spec §4.8): tok je potpun, ali
+    bez stvarne kupovine i naplate.
+  -->
+  <p class="test-traka" role="note">
+    <span class="test-traka__oznaka">{{ 'rezervacija.testRezim' | t }}</span>
+    {{ 'rezervacija.testOpis' | t }}
+  </p>
+
+  @if (greska()) {
+    <div class="poruka poruka--greska" data-testid="rez-greska" role="alert">{{ greska() }}</div>
+    <a class="dugme dugme--sporedno" [routerLink]="['/moja-putovanja', tripId()]">
+      {{ 'rezervacija.nazadNaPutovanje' | t }}
+    </a>
+  } @else if (previseputnika()) {
+    <!-- Spec §4.8: iznad 9 putnika nema forme, samo poruka -->
+    <h1 class="naslov">{{ 'rezervacija.naslov' | t }}</h1>
+    <div class="poruka poruka--upozorenje" data-testid="rez-previse-putnika" role="alert">
+      {{ 'rezervacija.previsePutnika' | t: { broj: brojPutnika() } }}
+    </div>
+    <a class="dugme dugme--sporedno" [routerLink]="['/moja-putovanja', tripId()]">
+      {{ 'rezervacija.nazadNaPutovanje' | t }}
+    </a>
+  } @else {
+    <h1 class="naslov">{{ 'rezervacija.naslov' | t }}</h1>
+
+    <!-- ---------- Traka napretka ---------- -->
+    <ol class="koraci" data-testid="rez-koraci" [attr.aria-label]="'rezervacija.koraciAria' | t">
+      @for (k of [1, 2, 3]; track k) {
+        <li
+          class="korak"
+          data-testid="rez-korak"
+          [attr.data-broj]="k"
+          [attr.data-stanje]="korak() === k ? 'tekuci' : (korak() > k ? 'zavrsen' : 'buduci')"
+          [class.korak--tekuci]="korak() === k"
+          [class.korak--zavrsen]="korak() > k"
+          [attr.aria-current]="korak() === k ? 'step' : null"
+        >
+          <span class="korak__broj">{{ k }}</span>
+          <span class="korak__naziv">
+            {{ 'rezervacija.koraci.' + k | t }}
+          </span>
+        </li>
+      }
+    </ol>
+
+    @if (greskeServera().length > 0) {
+      <div class="poruka poruka--greska" data-testid="rez-greske-servera" role="alert">
+        <ul class="greske">
+          @for (g of greskeServera(); track g) {
+            <li>{{ g }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <!-- ================= KORAK 1: provera ponude ================= -->
+    @if (korak() === 1) {
+      <h2 class="korak-naslov" tabindex="-1" data-korak-naslov>{{ 'rezervacija.proveraPonude' | t }}</h2>
+
+      @if (ucitava()) {
+        <p class="cekanje-tekst" data-testid="rez-proverava" role="status">{{ 'rezervacija.proveravamo' | t }}</p>
+      } @else if (osvezava()) {
+        <p class="cekanje-tekst" data-testid="rez-osvezava" role="status">
+          {{ 'rezervacija.osvezavamo' | t }}
+        </p>
+      } @else if (alternative().length > 0) {
+        <div class="poruka poruka--upozorenje" data-testid="rez-alternative" role="status">
+          {{ 'rezervacija.istiNijeDostupan' | t }}
+          <strong>{{ 'rezervacija.promenaLetaMenja' | t }}</strong>
+        </div>
+
+        <ul class="ponude">
+          @for (a of alternative(); track a.offerId) {
+            <li class="kartica ponuda">
+              <div class="ponuda__zaglavlje">
+                <p class="ponuda__naslov">
+                  {{ a.airline }}
+                  @if (a.recommended) {
+                    <span class="oznaka oznaka--uspeh">{{ 'carobnjak.preporuceno' | t }}</span>
+                  }
+                </p>
+                <p class="ponuda__cena">{{ novac(a.price, a.currency) }}</p>
+              </div>
+
+              <p class="ponuda__podaci">
+                @if (a.outbound) {
+                  <span>{{ vreme(a.outbound.departure) }} &ndash; {{ vreme(a.outbound.arrival) }}</span>
+                  <span class="tacka">{{ trajanje(a.outbound.duration) }}</span>
+                  <span class="tacka">{{ presedanja(a.outbound.stops) }}</span>
+                }
+              </p>
+
+              <button
+                type="button"
+                class="dugme"
+                data-testid="rez-izaberi-alternativu"
+                [attr.data-offer-id]="a.offerId"
+                [attr.aria-label]="'rezervacija.izaberiLetAria' | t: { naziv: a.airline }"
+                (click)="izaberiAlternativu(a)"
+              >
+                {{ 'rezervacija.izaberiOvaj' | t }}
+              </button>
+            </li>
+          }
+        </ul>
+      } @else if (provera(); as p) {
+        @if (!p.explicit) {
+          <p class="poruka poruka--info">
+            {{ 'rezervacija.nijeSacuvanIzbor' | t }}
+          </p>
+        }
+
+        @if (promenjeniDani().length > 0) {
+          <p class="poruka poruka--info" role="status">
+            {{ 'rezervacija.preracunato' | t }}
+            @for (d of promenjeniDani(); track d.day) {
+              <span class="tacka">{{ 'rezervacija.danVreme' | t: { broj: d.day, od: d.availableFrom, do: d.availableTo } }}</span>
+            }
+          </p>
+        }
+
+        <div class="kartica let">
+          <div class="let__zaglavlje">
+            <p class="let__naslov">{{ p.flight.airline }}</p>
+            <p class="let__ruta">
+              {{ nazivMesta(putovanje()?.fromCity, p.flight.from) }} &rarr;
+              {{ nazivMesta(putovanje()?.toCity, p.flight.to) }}
+            </p>
+          </div>
+
+          @if (p.flight.outbound; as o) {
+            <p class="let__noga">
+              <span class="let__oznaka">{{ 'korak2.odlazak' | t }}</span>
+              <strong>{{ vreme(o.departure) }} &ndash; {{ vreme(o.arrival) }}</strong>
+              <span class="tacka">{{ datum(o.departure) }}</span>
+              <span class="tacka">{{ trajanje(o.duration) }}</span>
+              <span class="tacka">{{ presedanja(o.stops) }}</span>
+            </p>
+          }
+
+          @if (p.flight.inbound; as i) {
+            <p class="let__noga">
+              <span class="let__oznaka">{{ 'korak2.povratak' | t }}</span>
+              <strong>{{ vreme(i.departure) }} &ndash; {{ vreme(i.arrival) }}</strong>
+              <span class="tacka">{{ datum(i.departure) }}</span>
+              <span class="tacka">{{ trajanje(i.duration) }}</span>
+              <span class="tacka">{{ presedanja(i.stops) }}</span>
+            </p>
+          }
+        </div>
+
+        @if (p.priceChanged) {
+          <div class="cena-promena" data-testid="rez-cena-promena" role="status">
+            <p class="cena-promena__naslov">{{ 'rezervacija.cenaPromenjena' | t }}</p>
+
+            <p class="cena-promena__red">
+              <span class="cena-promena__stara">{{ novac(p.oldPrice, p.currency) }}</span>
+              <span aria-hidden="true">&rarr;</span>
+              <strong class="cena-promena__nova">{{ novac(p.newPrice, p.currency) }}</strong>
+              <span class="cena-promena__razlika">
+                {{ p.newPrice > p.oldPrice ? '+' : '' }}{{ novac(p.newPrice - p.oldPrice, p.currency) }}
+              </span>
+            </p>
+
+            <label class="potvrda">
+              <input
+                type="checkbox"
+                data-testid="rez-prihvati-cenu"
+                [checked]="prihvacenaCena()"
+                (change)="prihvacenaCena.set($any($event.target).checked)"
+              />
+              <span>{{ 'rezervacija.prihvatam' | t }}</span>
+            </label>
+          </div>
+        } @else {
+          <p class="poruka poruka--uspeh" data-testid="rez-cena-potvrdjena" role="status">
+            {{ 'rezervacija.cenaPotvrdjena' | t }} <strong>{{ novac(p.newPrice, p.currency) }}</strong>
+            {{ zaPutnika(brojPutnika()) }}.
+          </p>
+        }
+
+        <div class="navigacija">
+          <button type="button" class="veza-dugme" (click)="odustani()">{{ 'rezervacija.odustani' | t }}</button>
+          <button type="button" class="dugme" data-testid="rez-dalje-putnici"
+                  [disabled]="!mozeNaPutnike()" (click)="dalje()">
+            {{ 'rezervacija.daljePutnici' | t }}
+          </button>
+        </div>
+      }
+    }
+
+    <!-- ================= KORAK 2: putnici ================= -->
+    @if (korak() === 2) {
+      <h2 class="korak-naslov" tabindex="-1" data-korak-naslov>{{ 'rezervacija.podaciPutnika' | t }}</h2>
+
+      <p class="uvod">
+        {{ 'rezervacija.uvodPutnici' | t }}
+      </p>
+
+      <form [formGroup]="forma" (ngSubmit)="dalje()" novalidate>
+        <div formArrayName="putnici">
+          @for (g of putnici.controls; track $index; let i = $index) {
+            <fieldset class="kartica putnik" data-testid="rez-putnik" [attr.data-broj]="i + 1"
+                      [formGroupName]="i">
+              <legend class="putnik__naslov">{{ 'rezervacija.putnikOd' | t: { broj: i + 1, ukupno: brojPutnika() } }}</legend>
+
+              @if (i === 0 && izProfila()) {
+                <p class="putnik__napomena">{{ 'rezervacija.izProfila' | t }}</p>
+              }
+
+              <div class="polja">
+                <label class="polje">
+                  <span class="polje__oznaka">{{ 'rezervacija.titula' | t }}</span>
+                  <select class="polje__unos" data-testid="rez-titula" formControlName="title"
+                          [attr.aria-describedby]="'t' + i">
+                    <option value="">{{ 'rezervacija.izaberite' | t }}</option>
+                    @for (t of titule; track t.vrednost) {
+                      <option [value]="t.vrednost">{{ t.naziv | t }}</option>
+                    }
+                  </select>
+                  @if (greskaPolja(i, 'title'); as g) {
+                    <span class="polje__greska" data-testid="rez-greska-polja"
+                          data-polje="title" [id]="'t' + i">{{ g }}</span>
+                  }
+                </label>
+
+                <label class="polje">
+                  <span class="polje__oznaka">{{ 'rezervacija.pol' | t }}</span>
+                  <select class="polje__unos" data-testid="rez-pol" formControlName="gender"
+                          [attr.aria-describedby]="'p' + i">
+                    <option value="">{{ 'rezervacija.izaberite' | t }}</option>
+                    @for (p of polovi; track p.vrednost) {
+                      <option [value]="p.vrednost">{{ p.naziv | t }}</option>
+                    }
+                  </select>
+                  @if (greskaPolja(i, 'gender'); as g) {
+                    <span class="polje__greska" data-testid="rez-greska-polja"
+                          data-polje="gender" [id]="'p' + i">{{ g }}</span>
+                  }
+                </label>
+
+                <label class="polje">
+                  <span class="polje__oznaka">{{ 'rezervacija.ime' | t }}</span>
+                  <input
+                    type="text"
+                    class="polje__unos"
+                    data-testid="rez-ime"
+                    formControlName="givenName"
+                    autocomplete="given-name"
+                    [attr.aria-describedby]="'i' + i"
+                  />
+                  @if (greskaPolja(i, 'givenName'); as g) {
+                    <span class="polje__greska" data-testid="rez-greska-polja"
+                          data-polje="givenName" [id]="'i' + i">{{ g }}</span>
+                  }
+                </label>
+
+                <label class="polje">
+                  <span class="polje__oznaka">{{ 'rezervacija.prezime' | t }}</span>
+                  <input
+                    type="text"
+                    class="polje__unos"
+                    data-testid="rez-prezime"
+                    formControlName="familyName"
+                    autocomplete="family-name"
+                    [attr.aria-describedby]="'pr' + i"
+                  />
+                  @if (greskaPolja(i, 'familyName'); as g) {
+                    <span class="polje__greska" data-testid="rez-greska-polja"
+                          data-polje="familyName" [id]="'pr' + i">{{ g }}</span>
+                  }
+                </label>
+
+                <label class="polje">
+                  <span class="polje__oznaka">{{ 'rezervacija.datumRodjenja' | t }}</span>
+                  <input
+                    type="date"
+                    class="polje__unos"
+                    data-testid="rez-rodjen"
+                    formControlName="bornOn"
+                    [attr.aria-describedby]="'d' + i"
+                  />
+                  @if (greskaPolja(i, 'bornOn'); as g) {
+                    <span class="polje__greska" data-testid="rez-greska-polja"
+                          data-polje="bornOn" [id]="'d' + i">{{ g }}</span>
+                  }
+                </label>
+
+                <label class="polje">
+                  <span class="polje__oznaka">{{ 'rezervacija.email' | t }}</span>
+                  <input
+                    type="email"
+                    class="polje__unos"
+                    data-testid="rez-email"
+                    formControlName="email"
+                    autocomplete="email"
+                    [attr.aria-describedby]="'e' + i"
+                  />
+                  @if (greskaPolja(i, 'email'); as g) {
+                    <span class="polje__greska" data-testid="rez-greska-polja"
+                          data-polje="email" [id]="'e' + i">{{ g }}</span>
+                  }
+                </label>
+
+                <label class="polje">
+                  <span class="polje__oznaka">{{ 'rezervacija.telefon' | t }}</span>
+                  <input
+                    type="tel"
+                    class="polje__unos"
+                    data-testid="rez-telefon"
+                    formControlName="phoneNumber"
+                    placeholder="+381641234567"
+                    autocomplete="tel"
+                    [attr.aria-describedby]="'tel' + i"
+                  />
+                  @if (greskaPolja(i, 'phoneNumber'); as g) {
+                    <span class="polje__greska" data-testid="rez-greska-polja"
+                          data-polje="phoneNumber" [id]="'tel' + i">{{ g }}</span>
+                  }
+                </label>
+              </div>
+
+              @if (greskaGrupe(i); as g) {
+                <p class="polje__greska" data-testid="rez-greska-putnika" role="alert">{{ g }}</p>
+              }
+            </fieldset>
+          }
+        </div>
+
+        <div class="navigacija">
+          <button type="button" class="dugme dugme--sporedno" data-testid="rez-nazad-putnici"
+                  (click)="nazad()">{{ 'opste.nazad' | t }}</button>
+          <button type="submit" class="dugme" data-testid="rez-dalje-pregled">{{ 'rezervacija.daljePregled' | t }}</button>
+        </div>
+      </form>
+    }
+
+    <!-- ================= KORAK 3: pregled ================= -->
+    @if (korak() === 3) {
+      <h2 class="korak-naslov" tabindex="-1" data-korak-naslov>{{ 'rezervacija.pregledPotvrda' | t }}</h2>
+
+      @if (provera(); as p) {
+        <div class="kartica let">
+          <p class="let__naslov">{{ p.flight.airline }}</p>
+          <p class="let__ruta">
+            {{ nazivMesta(putovanje()?.fromCity, p.flight.from) }} &rarr;
+              {{ nazivMesta(putovanje()?.toCity, p.flight.to) }} &middot;
+            {{ datum(putovanje()?.checkIn) }} &ndash; {{ datum(putovanje()?.checkOut) }}
+          </p>
+        </div>
+      }
+
+      <div class="kartica">
+        <h3 class="pregled__naslov">{{ 'rezervacija.putnici' | t }}</h3>
+        <ul class="pregled__lista">
+          @for (ime of imenaPutnika(); track ime) {
+            <li>{{ ime }}</li>
+          }
+        </ul>
+      </div>
+
+      <p class="ukupno">
+        {{ 'rezervacija.ukupno' | t }} <strong>{{ novac(cena(), valuta()) }}</strong>
+      </p>
+
+      <label class="potvrda potvrda--istaknuta">
+        <input
+          type="checkbox"
+          data-testid="rez-potvrda-test"
+          [checked]="potvrdaTestRezima()"
+          (change)="potvrdaTestRezima.set($any($event.target).checked)"
+        />
+        <span>{{ 'rezervacija.razumem' | t }}</span>
+      </label>
+
+      <div class="navigacija">
+        <button type="button" class="dugme dugme--sporedno" (click)="nazad()">{{ 'opste.nazad' | t }}</button>
+        <button type="button" class="dugme" data-testid="rez-potvrdi"
+                [disabled]="!mozeDaPotvrdi()" (click)="potvrdi()">
+          {{ (salje() ? 'rezervacija.rezervisem' : 'rezervacija.potvrdi') | t }}
+        </button>
+      </div>
+    }
+
+    <!-- ================= USPEH ================= -->
+    @if (korak() === 4 && rezultat(); as r) {
+      <h2 class="korak-naslov" tabindex="-1" data-korak-naslov>{{ 'rezervacija.potvrdjena' | t }}</h2>
+
+      <div class="kartica uspeh" data-testid="rez-uspeh">
+        <p class="uspeh__oznaka">{{ 'rezervacija.kodRezervacije' | t }}</p>
+        <p class="uspeh__pnr" data-testid="rez-pnr">{{ r.bookingReference }}</p>
+
+        <p class="uspeh__status" data-testid="rez-status"
+           [attr.data-status]="r.tripStatus || 'REZERVISANO'">
+          {{ 'rezervacija.statusPutovanja' | t }} <strong>{{ 'statusi.putovanje.' + (r.tripStatus || 'REZERVISANO') | t }}</strong>
+        </p>
+
+        @if (r.emailSent) {
+          <p class="uspeh__napomena">{{ 'rezervacija.emailPoslat' | t }}</p>
+        }
+
+        <div class="uspeh__dugmad">
+          <button type="button" class="dugme" data-testid="rez-preuzmi-pdf"
+                  (click)="preuzmiPotvrdu()">
+            {{ 'rezervacija.preuzmiPdf' | t }}
+          </button>
+          <a class="dugme dugme--sporedno" [routerLink]="['/moja-putovanja', tripId()]">
+            {{ 'rezervacija.nazadNaPutovanje' | t }}
+          </a>
+        </div>
+      </div>
+    }
+  }
+</section>

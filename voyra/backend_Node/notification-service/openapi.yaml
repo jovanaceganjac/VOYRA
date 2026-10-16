@@ -1,0 +1,431 @@
+# GENERISANO skriptom backend_Node/shared/napravi-openapi.js
+# Opisi se menjaju u shared/openapi-opisi.js, pa se skripta pokrene ponovo.
+openapi: 3.0.3
+info:
+  title: Voyra Notification Service
+  version: 1.0.0
+  description: >-
+    E-posta i SMS sa redom cekanja i ponovnim pokusajima.
+
+
+    Svi odgovori su JSON. Uspeh nosi `success: true`, a greska zajednicku semu `Greska`.
+    Dokumentacija se iskljucuje sa `DOCS_ENABLED=false`.
+servers:
+  - url: http://localhost:4007
+    description: Lokalni razvoj
+tags:
+  - name: Servis
+  - name: Obavestenja
+  - name: Administracija
+  - name: Interno
+paths:
+  /:
+    get:
+      summary: Spisak ruta servisa
+      tags:
+        - Servis
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": &a1
+          description: Neispravan zahtev (validacija)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: VALIDATION_ERROR
+                message: Neispravni podaci
+                errors:
+                  - checkIn je obavezan
+                statusCode: 400
+        "404": &a2
+          description: Resurs nije pronadjen
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: NOT_FOUND
+                message: Putovanje nije pronadjeno
+                statusCode: 404
+        "503": &a3
+          description: Servis iza gateway-a nije dostupan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: SERVICE_UNAVAILABLE
+                message: Ciljni servis trenutno nije dostupan
+                statusCode: 503
+  /api/admin/notifications:
+    get:
+      summary: Sva obavestenja u sistemu
+      tags:
+        - Administracija
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": &a4
+          description: Nedostaje token, token je nevazeci ili je opozvan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: TOKEN_REVOKED
+                message: Sesija je istekla ili je nalog promenjen. Prijavite se ponovo.
+                statusCode: 401
+        "403": &a5
+          description: Nalog nema pravo pristupa (uloga ili status)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: FORBIDDEN
+                message: Samo administratori mogu da pristupe ovom resursu
+                statusCode: 403
+        "404": *a2
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /api/admin/notifications/stats:
+    get:
+      summary: Brojke o svim obavestenjima
+      tags:
+        - Administracija
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "403": *a5
+        "404": *a2
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /api/notifications:
+    get:
+      summary: Obavestenja prijavljenog korisnika
+      tags:
+        - Obavestenja
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "403": *a5
+        "404": *a2
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /api/notifications/{id}:
+    get:
+      summary: Jedno obavestenje
+      tags:
+        - Obavestenja
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "403": *a5
+        "404": *a2
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /api/notifications/{id}/cancel:
+    patch:
+      summary: Otkazivanje zakazanog obavestenja
+      tags:
+        - Obavestenja
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "403": *a5
+        "404": *a2
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /api/notifications/{id}/retry:
+    post:
+      summary: Ponovni pokusaj slanja
+      tags:
+        - Obavestenja
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "403": *a5
+        "404": *a2
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /api/notifications/send:
+    post:
+      summary: Slanje obavestenja
+      tags:
+        - Interno
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "404": *a2
+        "503": *a3
+      security:
+        - internalKey: []
+      description: "**Interno.** Poziva ga drugi servis, ne klijent."
+  /api/notifications/stats:
+    get:
+      summary: Brojke o obavestenjima korisnika
+      tags:
+        - Obavestenja
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "403": *a5
+        "404": *a2
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /health:
+    get:
+      summary: Provera da servis radi
+      tags:
+        - Servis
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT iz `POST /api/users/login`. Vazi 24 h, a prestaje da vazi ranije kada se promeni
+        lozinka, uloga ili status naloga (claim `tv`).
+    internalKey:
+      type: apiKey
+      in: header
+      name: X-Internal-Key
+      description: Zajednicki kljuc iz `.env`-a. Ove rute NISU dostupne spolja - gateway ih ne prosledjuje.
+  schemas:
+    Greska:
+      type: object
+      required:
+        - success
+        - error
+        - message
+        - statusCode
+      properties:
+        success:
+          type: boolean
+          enum:
+            - false
+          description: Uvek `false` kod greske
+        error:
+          type: string
+          description: Masinski citljiv kod greske
+          example: VALIDATION_ERROR
+        message:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+          description: Poruka za korisnika; Joi validacija vraca listu poruka
+        statusCode:
+          type: integer
+          example: 400
+        errors:
+          type: array
+          items:
+            type: string
+          description: Pojedinacne greske validacije, kada ih servis salje
+        attemptsLeft:
+          type: integer
+          description: Koliko pokusaja ostaje pre zakljucavanja (prijava, SMS kod, lozinka)
+        retryAfter:
+          type: integer
+          description: Sekundi do isteka zakljucavanja (uz 429)
+        currentVersion:
+          type: string
+          description: Trenutna verzija putovanja kod 409 VERSION_CONFLICT

@@ -1,0 +1,157 @@
+<section class="omotac">
+  <h1>{{ 'profil.naslov' | t }}</h1>
+
+  @if (ucitavanje()) {
+    <p>{{ 'opste.ucitavanje' | t }}...</p>
+  } @else if (profil(); as p) {
+    <div class="profil-mreza">
+      <!-- ---------- Lični podaci ---------- -->
+      <form class="kartica" [formGroup]="podaciForma" (ngSubmit)="sacuvajPodatke()" novalidate>
+        <h2>{{ 'profil.licniPodaci' | t }}</h2>
+
+        <dl class="samo-citanje">
+          <dt>{{ 'prijava.korisnickoIme' | t }}</dt>
+          <dd>{{ p.korisnickoIme }}</dd>
+
+          <dt>{{ 'registracija.email' | t }}</dt>
+          <dd>{{ p.email }}</dd>
+
+          <dt>{{ 'profil.statusNaloga' | t }}</dt>
+          <dd>
+            <span class="oznaka" [class.oznaka--uspeh]="p.status === 'odobren'"
+                  [class.oznaka--cekanje]="p.status === 'na_cekanju'">
+              {{ opisStatusa(p.status) }}
+            </span>
+          </dd>
+
+          <dt>{{ 'profil.uloga' | t }}</dt>
+          <dd>{{ (p.uloga === 'admin' ? 'statusi.uloga.admin' : 'statusi.uloga.korisnik') | t }}</dd>
+        </dl>
+
+        <div class="red">
+          <div class="polje">
+            <label for="ime">{{ 'registracija.ime' | t }}</label>
+            <input id="ime" type="text" formControlName="ime"
+                   [attr.aria-invalid]="podaciForma.controls.ime.touched && podaciForma.controls.ime.invalid" />
+            <app-field-error [kontrola]="podaciForma.controls.ime"
+                             [poruke]="{ required: ('registracija.unesiteIme' | t), minlength: ('registracija.najmanje2' | t) }" />
+          </div>
+
+          <div class="polje">
+            <label for="prezime">{{ 'registracija.prezime' | t }}</label>
+            <input id="prezime" type="text" formControlName="prezime"
+                   [attr.aria-invalid]="podaciForma.controls.prezime.touched && podaciForma.controls.prezime.invalid" />
+            <app-field-error [kontrola]="podaciForma.controls.prezime"
+                             [poruke]="{ required: ('registracija.unesitePrezime' | t), minlength: ('registracija.najmanje2' | t) }" />
+          </div>
+        </div>
+
+        <div class="polje">
+          <label for="phone">{{ 'registracija.telefon' | t }}</label>
+          <input id="phone" type="tel" formControlName="phone" placeholder="+381601234567"
+                 [attr.aria-invalid]="podaciForma.controls.phone.touched && podaciForma.controls.phone.invalid" />
+          <p class="polje__pomoc">{{ 'profil.telefonPomoc' | t }}</p>
+          <app-field-error [kontrola]="podaciForma.controls.phone" />
+        </div>
+
+        <button type="submit" class="dugme" [disabled]="cuvaPodatke()">
+          {{ (cuvaPodatke() ? 'profil.cuvanje' : 'profil.sacuvajIzmene') | t }}
+        </button>
+      </form>
+
+      <!-- ---------- Telefon i SMS obaveštenja (bez SMS potvrde broja) ---------- -->
+      <div class="kartica">
+        <h2>{{ 'profil.telefonIObavestenja' | t }}</h2>
+
+        @if (!imaTelefon()) {
+          <p class="polje__pomoc">{{ 'profil.bezTelefona' | t }}</p>
+        } @else {
+          <p class="poruka poruka--info">{{ 'profil.broj' | t: { broj: p.phone?.number } }}</p>
+
+          <div class="prekidac">
+            <input id="sms" type="checkbox" [checked]="smsUkljucen()" (change)="prebaciSms($event)" />
+            <label for="sms">{{ 'profil.primajSms' | t }}</label>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Promena lozinke (spec §4.10) -->
+    <div class="kartica">
+      <h2>{{ 'profil.promenaLozinke' | t }}</h2>
+      <p class="opis">{{ 'profil.promenaOpis' | t }}</p>
+
+      <form [formGroup]="formaLozinke" (ngSubmit)="promeniLozinku()" novalidate>
+        <div class="polje">
+          <label for="trenutnaLozinka">{{ 'profil.trenutnaLozinka' | t }}</label>
+          <input
+            id="trenutnaLozinka"
+            data-testid="profil-trenutna-lozinka"
+            type="password"
+            formControlName="trenutnaLozinka"
+            autocomplete="current-password"
+            [attr.aria-invalid]="
+              formaLozinke.controls.trenutnaLozinka.touched &&
+              formaLozinke.controls.trenutnaLozinka.invalid
+            " />
+          <app-field-error
+            [kontrola]="formaLozinke.controls.trenutnaLozinka"
+            [poruke]="{ required: ('profil.unesiteTrenutnu' | t) }" />
+        </div>
+
+        <div class="polje">
+          <label for="novaLozinka">{{ 'profil.novaLozinka' | t }}</label>
+          <input
+            id="novaLozinka"
+            data-testid="profil-nova-lozinka"
+            type="password"
+            formControlName="novaLozinka"
+            autocomplete="new-password"
+            [attr.aria-invalid]="
+              formaLozinke.controls.novaLozinka.touched &&
+              formaLozinke.controls.novaLozinka.invalid
+            " />
+          <app-pravila-lozinke [lozinka]="formaLozinke.controls.novaLozinka.value" />
+        </div>
+
+        <div class="polje">
+          <label for="potvrdaLozinke">{{ 'profil.potvrdaNove' | t }}</label>
+          <input
+            id="potvrdaLozinke"
+            data-testid="profil-potvrda-lozinke"
+            type="password"
+            formControlName="potvrda"
+            autocomplete="new-password"
+            [attr.aria-invalid]="lozinkeSeNePoklapaju()" />
+          @if (lozinkeSeNePoklapaju()) {
+            <p class="polje-greska" role="alert">{{ 'registracija.nePoklapajuSe' | t }}</p>
+          }
+        </div>
+
+        @if (cekanjeSek() > 0) {
+          <p class="poruka poruka--greska" role="alert">
+            {{ 'profil.previsePokusaja' | t: { vreme: opisCekanja() } }}
+          </p>
+        } @else if (greskaLozinke(); as g) {
+          <p class="poruka poruka--greska" data-testid="profil-greska-lozinke" role="alert">{{ g }}</p>
+        }
+
+        @if (greskeLozinke().length > 0) {
+          <ul class="poruka poruka--greska" role="alert">
+            @for (g of greskeLozinke(); track g) {
+              <li class="poruka__stavka">{{ g }}</li>
+            }
+          </ul>
+        }
+
+        <button
+          type="submit"
+          class="dugme"
+          data-testid="profil-promeni-lozinku"
+          [disabled]="cuvaLozinku() || cekanjeSek() > 0">
+          {{ (cuvaLozinku() ? 'profil.menjamo' : 'profil.promeniLozinku') | t }}
+        </button>
+      </form>
+    </div>
+  }
+</section>

@@ -1,0 +1,22 @@
+/** Naslovi stranica (tab pregledača). */
+export const naslovi = {
+  pocetna: 'Voyra - planiranje putovanja',
+  prijava: 'Prijava - Voyra',
+  registracija: 'Registracija - Voyra',
+  profil: 'Profil - Voyra',
+  korak1: 'Parametri putovanja - Voyra',
+  korak2: 'Izbor leta - Voyra',
+  korak3: 'Izbor smeštaja - Voyra',
+  korak4: 'Plan putovanja - Voyra',
+  rezervacija: 'Rezervacija leta - Voyra',
+  atrakcije: 'Atrakcije - Voyra',
+  mojaPutovanja: 'Moja putovanja - Voyra',
+  putovanje: 'Putovanje - Voyra',
+  admin: 'Admin panel - Voyra',
+  adminZahtevi: 'Zahtevi za registraciju - Voyra',
+  adminKorisnici: 'Korisnici - Voyra',
+  adminDestinacije: 'Istaknute destinacije - Voyra',
+  adminKategorije: 'Kategorije interesovanja - Voyra',
+  adminStatistika: 'Statistika - Voyra',
+  nijePronadjena: 'Stranica nije pronađena - Voyra',
+};

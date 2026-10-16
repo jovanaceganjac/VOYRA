@@ -1,0 +1,48 @@
+.profil-mreza {
+  display: grid;
+  gap: var(--razmak-3);
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  align-items: start;
+}
+
+.samo-citanje {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem var(--razmak-2);
+  margin: 0 0 var(--razmak-3);
+  padding-bottom: var(--razmak-2);
+  border-bottom: 1px solid var(--boja-ivica);
+  font-size: 0.92rem;
+}
+
+.samo-citanje dt {
+  color: var(--boja-tekst-slab);
+}
+
+.samo-citanje dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.prekidac {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: var(--razmak-2);
+}
+
+.prekidac input {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.prekidac label {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.dugmad {
+  display: flex;
+  gap: var(--razmak-1);
+  flex-wrap: wrap;
+}

@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.angular/
+_backup/
+*.log
+confirmations/
+
+# Snimci .env fajlova iz ranijih sesija - nikada ne ulaze u repozitorijum
+*.env
+!*.env.example
+
+# Veliki fajlovi koji ne idu u repozitorijum
+voyra_snimak.mp4
+Prezentacija_LuckyTails.pptx

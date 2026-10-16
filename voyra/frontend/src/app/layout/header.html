@@ -1,0 +1,71 @@
+<header class="zaglavlje">
+  <div class="omotac zaglavlje__sadrzaj">
+    <a routerLink="/" class="logo" (click)="zatvoriMeni()" [attr.aria-label]="'nav.pocetnaAria' | t">
+      <!-- Desktop: natpis; mobilni: znak aplikacije (isti fajl, bez izmena) -->
+      <span class="logotip logo__slika"></span>
+      <img class="logo__mobilni" src="/voyra-logo-mobilni.jpg" alt="" width="40" height="40"
+           decoding="async" />
+    </a>
+
+    <!-- Izbor jezika je van menija, pa je na telefonu vidljiv i kada je meni zatvoren -->
+    <div class="jezik" role="group" [attr.aria-label]="'opste.jezik' | t" data-testid="izbor-jezika">
+      @for (j of i18n.jezici; track j) {
+        <button
+          type="button"
+          class="jezik__dugme"
+          [class.jezik__dugme--aktivno]="i18n.jezik() === j"
+          [attr.aria-pressed]="i18n.jezik() === j"
+          [attr.lang]="j"
+          [attr.title]="'opste.jezici.' + j | t"
+          [attr.data-testid]="'jezik-' + j"
+          (click)="i18n.promeni(j)"
+        >
+          {{ 'opste.jeziciKratko.' + j | t }}
+        </button>
+      }
+    </div>
+
+    <button
+      type="button"
+      class="hamburger"
+      [attr.aria-expanded]="meniOtvoren()"
+      aria-controls="glavni-meni"
+      [attr.aria-label]="'nav.meni' | t"
+      (click)="prebaciMeni()"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav id="glavni-meni" class="meni" [class.meni--otvoren]="meniOtvoren()">
+      <a routerLink="/" routerLinkActive="aktivno" [routerLinkActiveOptions]="{ exact: true }"
+         (click)="zatvoriMeni()">{{ 'nav.pocetna' | t }}</a>
+
+      <a routerLink="/planiranje" data-testid="nav-planiranje" routerLinkActive="aktivno"
+         (click)="zatvoriMeni()">{{ 'nav.planiraj' | t }}</a>
+      <a routerLink="/atrakcije" routerLinkActive="aktivno" (click)="zatvoriMeni()">{{ 'nav.atrakcije' | t }}</a>
+
+      @if (auth.isLoggedIn()) {
+        <a routerLink="/moja-putovanja" data-testid="nav-moja-putovanja"
+           routerLinkActive="aktivno" (click)="zatvoriMeni()">
+          {{ 'nav.mojaPutovanja' | t }}
+        </a>
+
+        @if (auth.isAdmin()) {
+          <a routerLink="/admin" data-testid="nav-admin" routerLinkActive="aktivno"
+             (click)="zatvoriMeni()">{{ 'nav.admin' | t }}</a>
+        }
+
+        <a routerLink="/profil" data-testid="nav-profil" routerLinkActive="aktivno"
+           (click)="zatvoriMeni()">{{ 'nav.profil' | t }}</a>
+
+        <button type="button" class="meni__dugme" data-testid="nav-odjava"
+                (click)="odjava()">{{ 'nav.odjava' | t }}</button>
+      } @else {
+        <a routerLink="/prijava" data-testid="nav-prijava" routerLinkActive="aktivno"
+           (click)="zatvoriMeni()">{{ 'nav.prijava' | t }}</a>
+        <a routerLink="/registracija" data-testid="nav-registracija" routerLinkActive="aktivno"
+           class="meni__istaknuto" (click)="zatvoriMeni()">{{ 'nav.registracija' | t }}</a>
+      }
+    </nav>
+  </div>
+</header>

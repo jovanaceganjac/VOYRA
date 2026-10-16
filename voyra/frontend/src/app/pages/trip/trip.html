@@ -1,0 +1,460 @@
+<section class="stranica">
+  @if (ucitava()) {
+    <p class="cekanje-tekst" data-testid="putovanje-ucitava" role="status">{{ 'putovanje.ucitavam' | t }}</p>
+  } @else if (greska()) {
+    <div class="poruka poruka--greska" data-testid="putovanje-greska" role="alert">{{ greska() }}</div>
+    <a class="dugme dugme--sporedno" routerLink="/moja-putovanja">{{ 'putovanje.nazadNaMoja' | t }}</a>
+  } @else if (putovanje(); as p) {
+    <!-- ---------- Zaglavlje ---------- -->
+    <header class="zaglavlje">
+      <p class="putanja">
+        <a routerLink="/moja-putovanja">{{ 'mojaPutovanja.naslov' | t }}</a>
+        <span aria-hidden="true">&rsaquo;</span>
+        <span>{{ p.title }}</span>
+      </p>
+
+      <div class="zaglavlje__red" data-testid="putovanje-zaglavlje" [attr.data-status]="p.status">
+        <h1 class="naslov" data-testid="putovanje-naslov">{{ p.title }}</h1>
+
+        <span
+          class="oznaka"
+          data-testid="putovanje-status"
+          [class.oznaka--uspeh]="p.status === 'REZERVISANO'"
+          [class.oznaka--cekanje]="p.status === 'NACRT'"
+          [class.oznaka--zavrseno]="p.status === 'ZAVRSENO'"
+          [class.oznaka--otkazano]="p.status === 'OTKAZANO'"
+        >
+          {{ opisStatusa() }}
+        </span>
+      </div>
+
+      <p class="podnaslov">
+        {{ nazivMesta(p.fromCity, p.from) }} &rarr; {{ nazivMesta(p.toCity, p.to) }} &middot;
+        {{ datum(p.checkIn) }} &ndash; {{ datum(p.checkOut) }} &middot;
+        {{ brojPutnika(p.passengers) }}
+        @if (izmena.trosak(); as t) {
+          &middot; <strong>{{ novac(t.total, t.currency) }}</strong>
+          <span class="sitno">{{ 'plan.procenjenTrosak' | t }}</span>
+        }
+      </p>
+
+      @if (!moguceIzmeniti()) {
+        <p class="poruka poruka--info">
+          {{ 'putovanje.seNeMenja' | t: { status: opisStatusa() } }}
+        </p>
+      }
+    </header>
+
+    <!-- ---------- Akcije ---------- -->
+    <div class="akcije">
+      @if (moguceIzmeniti() && !uIzmeni()) {
+        <button type="button" class="dugme" data-testid="trip-izmeni"
+                (click)="pocniIzmenu()">{{ 'putovanje.izmeniPlan' | t }}</button>
+
+        <button
+          type="button"
+          class="dugme dugme--sporedno"
+          [disabled]="generise()"
+          (click)="potvrdaGenerisanja.set(true)"
+        >
+          {{ (generise() ? 'putovanje.pravimPlan' : 'putovanje.generisiPonovo') | t }}
+        </button>
+      }
+
+      @if (uIzmeni()) {
+        <button
+          type="button"
+          class="dugme"
+          data-testid="trip-sacuvaj"
+          [disabled]="!izmena.imaIzmena() || cuva()"
+          (click)="sacuvaj()"
+        >
+          {{ (cuva() ? 'opste.cuvam' : 'putovanje.sacuvajIzmene') | t }}
+        </button>
+
+        <button
+          type="button"
+          class="dugme dugme--sporedno"
+          [disabled]="!izmena.mozePonistiti()"
+          (click)="izmena.ponisti()"
+        >
+          {{ 'putovanje.ponisti' | t }}
+        </button>
+
+        <button type="button" class="veza-dugme" data-testid="trip-odbaci"
+                (click)="odbaciIzmene()">{{ 'putovanje.odbaciIzmene' | t }}</button>
+      }
+
+      @if (mozeDaSeRezervise() && !uIzmeni()) {
+        <a class="dugme dugme--sporedno" data-testid="trip-rezervisi"
+           [routerLink]="['/moja-putovanja', p._id, 'rezervacija']">
+          {{ 'putovanje.rezervisiLet' | t }}
+        </a>
+      }
+
+      @if (mozeDaSeOtkaze() && !uIzmeni()) {
+        <button type="button" class="dugme dugme--sporedno dugme--otkazivanje" data-testid="trip-otkazi"
+                (click)="potvrdaOtkazivanja.set(true)">
+          {{ 'putovanje.otkaziPutovanje' | t }}
+        </button>
+      }
+
+      @if (mozeDaSeObrise() && !uIzmeni()) {
+        <button type="button" class="dugme dugme--sporedno dugme--otkazivanje" data-testid="trip-obrisi"
+                (click)="potvrdaBrisanja.set(true)">
+          {{ 'opste.obrisi' | t }}
+        </button>
+      }
+    </div>
+
+    <!-- Najave za čitač ekrana -->
+    <p class="samo-za-citac" data-testid="izmena-najava" role="status" aria-live="polite">
+      {{ izmena.najava() }}
+    </p>
+
+    @if (uIzmeni() && izmena.greska(); as g) {
+      <p class="poruka poruka--greska" role="alert">{{ g }}</p>
+    }
+
+    @if (uIzmeni() && izmena.brojKrsenja() > 0) {
+      <p class="poruka poruka--upozorenje" data-testid="trip-krsenja" role="status">
+        {{ opisKrsenjaBroj(izmena.brojKrsenja()) }}
+      </p>
+    }
+
+    <!-- ---------- Rezervacija leta (spec §4.8) ---------- -->
+    @if (rezervacija(); as r) {
+      <section class="kartica rezervacija" data-testid="trip-rezervacija">
+        <h2 class="rezervacija__naslov">{{ 'putovanje.rezervacijaLeta' | t }}</h2>
+
+        <p class="rezervacija__red">
+          <span class="rezervacija__oznaka">{{ 'putovanje.kodRezervacije' | t }}</span>
+          <strong class="rezervacija__pnr" data-testid="trip-pnr">{{ pnr() }}</strong>
+        </p>
+
+        <p class="rezervacija__red">
+          <span class="rezervacija__oznaka">{{ 'putovanje.rezervisano' | t }}</span>
+          <span>{{ datum(r.createdAt) }}</span>
+        </p>
+
+        <p class="rezervacija__red">
+          <span class="rezervacija__oznaka">{{ 'putovanje.iznos' | t }}</span>
+          <span>{{ novac(r.totalPrice, r.currency) }}</span>
+        </p>
+
+        <p class="rezervacija__napomena">
+          {{ 'putovanje.testRezim' | t }}
+        </p>
+
+        <div class="rezervacija__dugmad">
+          <button type="button" class="dugme dugme--sporedno" data-testid="trip-preuzmi-pdf"
+                  (click)="preuzmiPotvrdu()">
+            {{ 'putovanje.preuzmiPdf' | t }}
+          </button>
+
+          @if (mozeDaSeOtkaze()) {
+            <button type="button" class="dugme dugme--sporedno dugme--otkazivanje"
+                    (click)="potvrdaOtkazivanja.set(true)">
+              {{ 'putovanje.otkaziILet' | t }}
+            </button>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- ---------- Prikaz plana ---------- -->
+    @if (!uIzmeni()) {
+      @if (planZaPrikaz(); as plan) {
+        <app-itinerar [itinerar]="plan" [zahtev]="null" />
+      }
+    } @else {
+      <!-- ---------- Režim izmene ---------- -->
+      <ol class="dani-izmena" data-testid="izmena-dani">
+        @for (d of izmena.dani(); track d.day) {
+          <li
+            class="kartica dan-izmena"
+            data-testid="izmena-dan"
+            [attr.data-dan]="d.day"
+            [attr.data-km]="d.totalDistance">
+            <div class="dan-izmena__zaglavlje">
+              <h2 class="dan-izmena__naslov">
+                <span class="dan-izmena__broj">{{ 'plan.danBroj' | t: { broj: d.day } }}</span>
+                <span class="dan-izmena__datum">{{ datumSaDanom(d.date) }}</span>
+              </h2>
+
+              <span class="dan-izmena__vreme">
+                {{ d.availableFrom }}&ndash;{{ d.availableTo }}
+                @if (d.totalDistance) {
+                  &middot; {{ razdaljina(d.totalDistance) }}
+                }
+              </span>
+            </div>
+
+            @if (izmena.racuna() && izmena.jeIzmenjen(d.day)) {
+              <p class="racunam" data-testid="izmena-racuna" role="status">{{ 'putovanje.racunam' | t }}</p>
+            }
+
+            @if (d.attractions.length === 0) {
+              <p class="dan-izmena__prazno">{{ 'putovanje.danPrazan' | t }}</p>
+            }
+
+            <ol class="aktivnosti">
+              @for (a of d.attractions; track a.id) {
+                <li
+                  class="aktivnost"
+                  data-testid="izmena-aktivnost"
+                  [attr.data-id]="a.id"
+                  [attr.data-pocetak]="a.startTime"
+                  [attr.data-krsenje]="a.violation ? 'true' : 'false'"
+                  [class.aktivnost--krsenje]="a.violation">
+                  <span class="aktivnost__vreme">
+                    @if (a.startTime) {
+                      {{ a.startTime }}<br /><span class="sitno">{{ a.endTime }}</span>
+                    } @else {
+                      &mdash;
+                    }
+                  </span>
+
+                  <app-slika-atrakcije [atrakcija]="a" [mala]="true" />
+
+                  <div class="aktivnost__telo">
+                    <p class="aktivnost__naziv" data-testid="izmena-aktivnost-naziv">{{ a.name }}</p>
+
+                    <p class="aktivnost__meta">
+                      @for (k of kategorije(a); track k) {
+                        <span class="oznaka oznaka--kategorija">{{ naziv(k) }}</span>
+                      }
+                      <span>{{ trajanje(a.duration) }}</span>
+                      @if (a.openingHours) {
+                        <span class="tacka">
+                          {{ 'plan.radnoVreme' | t: { od: a.openingHours.open, do: a.openingHours.close } }}
+                        </span>
+                      }
+                    </p>
+
+                    @if (a.violation) {
+                      <p class="krsenje" data-testid="izmena-zatvoreno" role="note">
+                        <span class="krsenje__ikona" aria-hidden="true">!</span>
+                        {{ opisKrsenja(a.violation) }}
+                      </p>
+                    }
+                  </div>
+
+                  <div class="aktivnost__akcije">
+                    <button
+                      type="button"
+                      class="ikonica"
+                      [attr.data-fokus]="a.id"
+                      [attr.aria-label]="'putovanje.pomeriGore' | t: { naziv: a.name }"
+                      [disabled]="$first"
+                      (click)="gore(d.day, a)"
+                    >
+                      &uarr;
+                    </button>
+
+                    <button
+                      type="button"
+                      class="ikonica"
+                      [attr.aria-label]="'putovanje.pomeriDole' | t: { naziv: a.name }"
+                      [disabled]="$last"
+                      (click)="dole(d.day, a)"
+                    >
+                      &darr;
+                    </button>
+
+                    <label class="premesti">
+                      <span class="samo-za-citac">{{ 'putovanje.premestiU' | t: { naziv: a.name } }}</span>
+                      <select
+                        class="premesti__izbor"
+                        data-testid="izmena-premesti"
+                        [value]="''"
+                        (change)="premesti(d.day, a, $any($event.target).value); $any($event.target).value = ''"
+                      >
+                        <option value="">{{ 'putovanje.premestiUDan' | t }}</option>
+                        @for (drugi of drugiDani(d.day); track drugi) {
+                          <option [value]="drugi">{{ 'plan.danBroj' | t: { broj: drugi } }}</option>
+                        }
+                      </select>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="ikonica ikonica--opasno"
+                      [attr.aria-label]="'putovanje.ukloniAria' | t: { naziv: a.name }"
+                      (click)="ukloni(d.day, a)"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                </li>
+              }
+            </ol>
+
+            <div class="dan-izmena__akcije">
+              <button type="button" class="dugme dugme--sporedno" (click)="otvoriDodavanje(d.day)">
+                {{ 'putovanje.dodajAktivnost' | t }}
+              </button>
+
+              <button
+                type="button"
+                class="dugme dugme--sporedno"
+                data-testid="izmena-optimizuj"
+                [disabled]="d.attractions.length < 2 || optimizujeDan() === d.day"
+                (click)="optimizuj(d.day)"
+              >
+                {{ (optimizujeDan() === d.day ? 'putovanje.optimizujem' : 'putovanje.optimizuj') | t }}
+              </button>
+            </div>
+          </li>
+        }
+      </ol>
+    }
+  }
+</section>
+
+<!-- ---------- Panel za dodavanje ---------- -->
+@if (dodavanjeZaDan() !== null) {
+  <div class="dijalog-pozadina" (click)="zatvoriDodavanje()"></div>
+
+  <div class="panel" role="dialog" aria-modal="true" [attr.aria-label]="'putovanje.dodajAktivnost' | t">
+    <div class="panel__zaglavlje">
+      <h2 class="panel__naslov">{{ 'putovanje.dodajUDan' | t: { broj: dodavanjeZaDan() } }}</h2>
+      <button type="button" class="ikonica" [attr.aria-label]="'opste.zatvori' | t" (click)="zatvoriDodavanje()">
+        &times;
+      </button>
+    </div>
+
+    <div class="panel__alatke">
+      <label class="polje">
+        <span class="polje__oznaka">{{ 'putovanje.pretraga' | t }}</span>
+        <input
+          type="search"
+          class="polje__unos"
+          [placeholder]="'putovanje.nazivAtrakcije' | t"
+          [value]="pretraga()"
+          (input)="pretraga.set($any($event.target).value)"
+        />
+      </label>
+
+      <label class="polje">
+        <span class="polje__oznaka">{{ 'putovanje.kategorija' | t }}</span>
+        <select
+          class="polje__unos"
+          [value]="kategorijaFilter()"
+          (change)="kategorijaFilter.set($any($event.target).value)"
+        >
+          <option value="">{{ 'putovanje.sve' | t }}</option>
+          @for (k of kategorijeUPonudi(); track k) {
+            <option [value]="k">{{ naziv(k) }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    @if (ucitavaPonude()) {
+      <p class="cekanje-tekst" role="status">{{ 'putovanje.ucitavamAtrakcije' | t }}</p>
+    } @else if (prikazanePonude().length === 0) {
+      <p class="panel__prazno">{{ 'putovanje.nemaPretraga' | t }}</p>
+    } @else {
+      <ul class="ponude-lista">
+        @for (a of prikazanePonude(); track a.id) {
+          <li class="ponuda-atrakcija">
+            <app-slika-atrakcije [atrakcija]="a" [mala]="true" />
+
+            <div class="ponuda-atrakcija__telo">
+              <p class="ponuda-atrakcija__naziv">{{ a.name }}</p>
+              <p class="ponuda-atrakcija__meta">
+                @for (k of kategorije(a); track k) {
+                  <span class="oznaka oznaka--kategorija">{{ naziv(k) }}</span>
+                }
+                <span>{{ trajanje(a.duration) }}</span>
+              </p>
+            </div>
+
+            @if (uPlanu().has(a.id)) {
+              <span class="oznaka oznaka--dopuna">{{ 'putovanje.vecUPlanu' | t }}</span>
+            } @else {
+              <button
+                type="button"
+                class="dugme dugme--sporedno"
+                [attr.aria-label]="'putovanje.dodajAria' | t: { naziv: a.name, broj: dodavanjeZaDan() }"
+                (click)="dodaj(a)"
+              >
+                {{ 'putovanje.dodaj' | t }}
+              </button>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </div>
+}
+
+<!-- ---------- Dijalozi ---------- -->
+@if (potvrdaGenerisanja()) {
+  <div class="dijalog-pozadina" (click)="potvrdaGenerisanja.set(false)"></div>
+
+  <div class="dijalog" role="alertdialog" aria-modal="true" aria-labelledby="naslov-generisanja">
+    <h2 class="dijalog__naslov" id="naslov-generisanja">{{ 'putovanje.generisatiNaslov' | t }}</h2>
+    <p class="dijalog__tekst">{{ 'putovanje.generisatiTekst' | t }}</p>
+
+    <div class="dijalog__dugmad">
+      <button type="button" class="dugme" (click)="generisiPonovo()">{{ 'putovanje.generisiPonovo' | t }}</button>
+      <button type="button" class="dugme dugme--sporedno" (click)="potvrdaGenerisanja.set(false)">
+        {{ 'putovanje.odustani' | t }}
+      </button>
+    </div>
+  </div>
+}
+
+@if (konflikt()) {
+  <div class="dijalog-pozadina"></div>
+
+  <div class="dijalog" data-testid="dijalog-konflikt" role="alertdialog" aria-modal="true"
+       aria-labelledby="naslov-konflikta">
+    <h2 class="dijalog__naslov" id="naslov-konflikta">{{ 'putovanje.konfliktNaslov' | t }}</h2>
+    <p class="dijalog__tekst">{{ 'putovanje.konfliktTekst' | t }}</p>
+
+    <div class="dijalog__dugmad">
+      <button type="button" class="dugme" data-testid="konflikt-zadrzi"
+              (click)="zadrziMojeIzmene()">{{ 'putovanje.zadrzi' | t }}</button>
+      <button type="button" class="dugme dugme--sporedno" (click)="ucitajNovuVerziju()">
+        {{ 'putovanje.ucitajNovu' | t }}
+      </button>
+    </div>
+  </div>
+}
+
+@if (potvrdaOtkazivanja()) {
+  <div class="dijalog-pozadina" (click)="potvrdaOtkazivanja.set(false)"></div>
+
+  <div class="dijalog" data-testid="dijalog-otkazivanje" role="alertdialog" aria-modal="true"
+       aria-labelledby="naslov-otkazivanja">
+    <h2 class="dijalog__naslov" id="naslov-otkazivanja">{{ 'putovanje.otkazatiNaslov' | t }}</h2>
+    <p class="dijalog__tekst">{{ 'putovanje.otkazatiTekst' | t }}</p>
+
+    <div class="dijalog__dugmad">
+      <button type="button" class="dugme" data-testid="otkazivanje-potvrdi"
+              (click)="otkazi()">{{ 'putovanje.otkaziPutovanje' | t }}</button>
+      <button type="button" class="dugme dugme--sporedno" (click)="potvrdaOtkazivanja.set(false)">
+        {{ 'putovanje.odustani' | t }}
+      </button>
+    </div>
+  </div>
+}
+
+@if (potvrdaBrisanja()) {
+  <div class="dijalog-pozadina" (click)="potvrdaBrisanja.set(false)"></div>
+
+  <div class="dijalog" role="alertdialog" aria-modal="true" aria-labelledby="naslov-brisanja">
+    <h2 class="dijalog__naslov" id="naslov-brisanja">{{ 'putovanje.obrisatiNaslov' | t }}</h2>
+    <p class="dijalog__tekst">{{ 'putovanje.obrisatiTekst' | t }}</p>
+
+    <div class="dijalog__dugmad">
+      <button type="button" class="dugme dugme--opasno" (click)="obrisi()">{{ 'opste.obrisi' | t }}</button>
+      <button type="button" class="dugme dugme--sporedno" (click)="potvrdaBrisanja.set(false)">
+        {{ 'putovanje.odustani' | t }}
+      </button>
+    </div>
+  </div>
+}

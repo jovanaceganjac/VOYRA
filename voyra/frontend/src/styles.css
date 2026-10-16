@@ -1,0 +1,377 @@
+/* ============================================================
+   Voyra - globalni stilovi
+
+   Paleta je uzeta direktno iz logotipa (uzorkovane vrednosti):
+     pozadina  #FEFBF6  (topla slonovaca)
+     mastilo   #284870  (mornarsko plava)
+     najtamnije #021F38
+
+   Bez UI biblioteka i bez spoljnih fontova - sve je CSS.
+   ============================================================ */
+
+:root {
+  /* --- Boje iz logotipa --- */
+  --boja-primarna: #284870;
+  --boja-primarna-tamna: #1b3450;
+  --boja-primarna-svetla: #3d6394;
+
+  --boja-pozadina: #fefbf6;
+  --boja-povrsina: #ffffff;
+  --boja-povrsina-2: #f6f1e7;
+
+  --boja-tekst: #14293f;
+  --boja-tekst-slab: #6c7a8a;
+  --boja-ivica: #e7e0d2;
+  --boja-ivica-jaka: #d3cab6;
+
+  --boja-uspeh: #2f6b4f;
+  --boja-greska: #a8392c;
+  --boja-upozorenje: #8a6420;
+
+  /* --- Razmaci --- */
+  --razmak-1: 0.5rem;
+  --razmak-2: 1rem;
+  --razmak-3: 1.75rem;
+  --razmak-4: 3rem;
+  --razmak-5: 5rem;
+
+  /* --- Oblik --- */
+  --radijus: 10px;
+  --radijus-veliki: 18px;
+  --senka: 0 1px 2px rgba(20, 41, 63, 0.04), 0 8px 24px rgba(20, 41, 63, 0.06);
+  --senka-jaka: 0 2px 4px rgba(20, 41, 63, 0.06), 0 16px 40px rgba(20, 41, 63, 0.1);
+
+  /* --- Tipografija ---
+     Naslovi u serifu prate visoki kontrast slova iz logotipa,
+     telo teksta u sistemskom sans-u zbog citljivosti. */
+  --font-naslov: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --sirina-sadrzaja: 70rem;
+  --prelaz: 160ms ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--boja-tekst);
+  background: var(--boja-pozadina);
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-naslov);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  margin: 0 0 var(--razmak-2);
+}
+
+h1 {
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem);
+}
+
+h2 {
+  font-size: clamp(1.35rem, 1.15rem + 0.9vw, 1.8rem);
+}
+
+h3 {
+  font-size: 1.15rem;
+}
+
+p {
+  margin: 0 0 var(--razmak-2);
+}
+
+a {
+  color: var(--boja-primarna);
+  text-underline-offset: 3px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--boja-primarna);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.omotac {
+  width: 100%;
+  max-width: var(--sirina-sadrzaja);
+  margin-inline: auto;
+  padding-inline: var(--razmak-2);
+}
+
+.omotac.uski {
+  max-width: 32rem;
+}
+
+/* ---------- Natpis iz logotipa ----------
+   Logotip je kvadratna slika sa mnogo praznog prostora; ovde se
+   prikazuje samo natpis (izracunat okvir mastila 177,415 899x304).
+   Pozadina slike je ista kao pozadina stranice, pa se stapa. */
+.logotip {
+  display: block;
+  aspect-ratio: 899 / 304;
+  background-image: url('/voyra-logo.jpg');
+  background-repeat: no-repeat;
+  background-size: 139.49% 412.5%;
+  background-position: 49.86% 43.68%;
+}
+
+/* ---------- Kartice ---------- */
+.kartica {
+  background: var(--boja-povrsina);
+  border: 1px solid var(--boja-ivica);
+  border-radius: var(--radijus-veliki);
+  padding: var(--razmak-3);
+  box-shadow: var(--senka);
+}
+
+/* ---------- Forme ---------- */
+.polje {
+  margin-bottom: var(--razmak-2);
+}
+
+.polje label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--boja-tekst-slab);
+}
+
+.polje input,
+.polje select,
+.polje textarea {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  font: inherit;
+  color: inherit;
+  background: var(--boja-povrsina);
+  border: 1px solid var(--boja-ivica-jaka);
+  border-radius: var(--radijus);
+  transition: border-color var(--prelaz), box-shadow var(--prelaz);
+}
+
+.polje input::placeholder {
+  color: #a9b2bd;
+}
+
+.polje input:hover,
+.polje select:hover {
+  border-color: var(--boja-primarna-svetla);
+}
+
+.polje input:focus,
+.polje select:focus {
+  outline: none;
+  border-color: var(--boja-primarna);
+  box-shadow: 0 0 0 3px rgba(40, 72, 112, 0.12);
+}
+
+.polje input[aria-invalid='true'] {
+  border-color: var(--boja-greska);
+}
+
+.polje input[aria-invalid='true']:focus {
+  box-shadow: 0 0 0 3px rgba(168, 57, 44, 0.12);
+}
+
+.polje__pomoc {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  color: var(--boja-tekst-slab);
+}
+
+.polje-greska {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  color: var(--boja-greska);
+}
+
+.red {
+  display: grid;
+  gap: var(--razmak-2);
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+
+/* ---------- Dugmad ---------- */
+.dugme {
+  display: inline-block;
+  padding: 0.72rem 1.6rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-align: center;
+  color: var(--boja-pozadina);
+  background: var(--boja-primarna);
+  border: 1px solid var(--boja-primarna);
+  border-radius: var(--radijus);
+  cursor: pointer;
+  transition: background var(--prelaz), border-color var(--prelaz), transform var(--prelaz);
+}
+
+.dugme:hover:not(:disabled) {
+  background: var(--boja-primarna-tamna);
+  border-color: var(--boja-primarna-tamna);
+}
+
+.dugme:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.dugme:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.dugme--sporedno {
+  color: var(--boja-primarna);
+  background: transparent;
+  border-color: var(--boja-ivica-jaka);
+}
+
+.dugme--sporedno:hover:not(:disabled) {
+  background: var(--boja-povrsina-2);
+  border-color: var(--boja-primarna);
+}
+
+.dugme--puna-sirina {
+  width: 100%;
+}
+
+/* ---------- Poruke ---------- */
+.poruka {
+  padding: 0.8rem 1rem;
+  border-radius: var(--radijus);
+  border: 1px solid;
+  margin-bottom: var(--razmak-2);
+  font-size: 0.9rem;
+}
+
+.poruka--greska {
+  border-color: #e4c3bd;
+  background: #fbf1ef;
+  color: #7e2a20;
+}
+
+.poruka--uspeh {
+  border-color: #bcd6c7;
+  background: #f0f7f3;
+  color: #24503c;
+}
+
+.poruka--info {
+  border-color: #c9d6e5;
+  background: #f1f5fa;
+  color: #1f3d5e;
+}
+
+.poruka__stavka {
+  margin: 0 0 0.3rem;
+}
+
+.poruka__stavka:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Pomocne ---------- */
+.samo-za-citace {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.oznaka {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: var(--boja-povrsina-2);
+  color: var(--boja-tekst-slab);
+}
+
+.oznaka--uspeh {
+  background: #eaf3ee;
+  color: var(--boja-uspeh);
+}
+
+.oznaka--cekanje {
+  background: #f7efdf;
+  color: var(--boja-upozorenje);
+}
+
+.ispod {
+  margin: var(--razmak-2) 0 0;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--boja-tekst-slab);
+}
+
+.opciono {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--boja-tekst-slab);
+}
+
+/* Tanka linija sa razmakom, umesto obicnog <hr> */
+.crta {
+  height: 1px;
+  background: var(--boja-ivica);
+  border: 0;
+  margin-block: var(--razmak-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/*
+ * Atrakcija koju je uneo administrator (spec §4.5). Oznaka je diskretna:
+ * korisniku govori odakle podatak dolazi, a ne odvlaci paznju sa naziva.
+ */
+.oznaka-voyra {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--boja-primarna);
+  border-radius: 999px;
+  color: var(--boja-primarna);
+  font-family: var(--font-osnovni);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+  white-space: nowrap;
+}

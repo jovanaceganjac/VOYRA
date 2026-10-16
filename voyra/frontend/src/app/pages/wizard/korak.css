@@ -1,0 +1,494 @@
+/* Zajednički stilovi svih koraka čarobnjaka. */
+
+.korak-forma {
+  margin-bottom: var(--razmak-4);
+}
+
+.korak-forma__naslov {
+  margin-top: 0;
+  margin-bottom: var(--razmak-3);
+  padding-bottom: var(--razmak-2);
+  border-bottom: 1px solid var(--boja-ivica);
+  font-size: 1.05rem;
+  font-family: var(--font);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--boja-tekst-slab);
+}
+
+.korak-forma__dno {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+  margin-top: var(--razmak-3);
+  padding-top: var(--razmak-2);
+  border-top: 1px solid var(--boja-ivica);
+}
+
+.polje__pomoc--isticaj {
+  color: var(--boja-upozorenje);
+}
+
+/* ---------- Preferencije ---------- */
+.preferencije {
+  margin-top: var(--razmak-2);
+  border: 1px solid var(--boja-ivica);
+  border-radius: var(--radijus);
+  background: var(--boja-povrsina-2);
+}
+
+.preferencije__naslov {
+  padding: 0.7rem var(--razmak-2);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--boja-primarna);
+  cursor: pointer;
+}
+
+.preferencije__telo {
+  padding: 0 var(--razmak-2) var(--razmak-2);
+}
+
+.grupa {
+  margin: 0 0 var(--razmak-2);
+  padding: 0;
+  border: 0;
+}
+
+.grupa legend {
+  padding: 0;
+  margin-bottom: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Dugmad izbora ---------- */
+.izbor-dugmad {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.izbor-dugme {
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-size: 0.88rem;
+  color: var(--boja-tekst);
+  background: var(--boja-povrsina);
+  border: 1px solid var(--boja-ivica-jaka);
+  border-radius: var(--radijus);
+  cursor: pointer;
+  transition: background var(--prelaz), border-color var(--prelaz), color var(--prelaz);
+}
+
+.izbor-dugme:hover {
+  border-color: var(--boja-primarna);
+}
+
+.izbor-dugme--aktivno {
+  color: var(--boja-pozadina);
+  background: var(--boja-primarna);
+  border-color: var(--boja-primarna);
+  font-weight: 600;
+}
+
+.izbor-dugmad--siroko .izbor-dugme {
+  flex: 1 1 12rem;
+}
+
+/* ---------- Polja za potvrdu ---------- */
+.potvrde {
+  display: flex;
+  gap: 0.4rem 1.1rem;
+  flex-wrap: wrap;
+}
+
+.potvrda {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.potvrda input {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--boja-primarna);
+}
+
+/* ---------- Lista ponuda (koraci 2 i 3) ---------- */
+.alatke {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--razmak-2);
+  padding: var(--razmak-2);
+  border: 1px solid var(--boja-ivica);
+  border-radius: var(--radijus);
+  background: var(--boja-povrsina-2);
+}
+
+.alatke .polje {
+  margin-bottom: 0;
+}
+
+.alatke label {
+  font-size: 0.78rem;
+}
+
+.alatke select,
+.alatke input {
+  padding: 0.45rem 0.65rem;
+  font: inherit;
+  font-size: 0.88rem;
+  color: inherit;
+  background: var(--boja-povrsina);
+  border: 1px solid var(--boja-ivica-jaka);
+  border-radius: var(--radijus);
+}
+
+.ponude {
+  display: grid;
+  gap: var(--razmak-2);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--razmak-3);
+}
+
+/* Kartica ponude je dugme - ceo blok se bira mišem i tastaturom */
+.ponuda {
+  display: block;
+  width: 100%;
+  padding: var(--razmak-2) var(--razmak-3);
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: var(--boja-povrsina);
+  border: 1px solid var(--boja-ivica);
+  border-radius: var(--radijus-veliki);
+  box-shadow: var(--senka);
+  cursor: pointer;
+  transition: border-color var(--prelaz), box-shadow var(--prelaz);
+}
+
+.ponuda:hover {
+  border-color: var(--boja-primarna-svetla);
+}
+
+.ponuda--izabrana {
+  border-color: var(--boja-primarna);
+  box-shadow: 0 0 0 2px rgba(40, 72, 112, 0.15), var(--senka);
+}
+
+.ponuda__zaglavlje {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+}
+
+.ponuda__naslov {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 0;
+  font-family: var(--font-naslov);
+  font-size: 1.15rem;
+  color: var(--boja-primarna);
+}
+
+.ponuda__podnaslov {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.ponuda__cena {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.ponuda__cena-opis {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Bodovanje (vidljiv trag algoritma §6.1) ---------- */
+.bodovanje {
+  margin-top: 0.7rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--boja-ivica);
+}
+
+.bodovanje__traka {
+  display: flex;
+  height: 6px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--boja-povrsina-2);
+}
+
+.bodovanje__deo {
+  height: 100%;
+}
+
+.bodovanje__deo--cena {
+  background: var(--boja-primarna);
+}
+
+.bodovanje__deo--trajanje {
+  background: var(--boja-primarna-svetla);
+}
+
+.bodovanje__deo--presedanja {
+  background: var(--boja-upozorenje);
+}
+
+.bodovanje__legenda {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin: 0.4rem 0 0;
+  font-size: 0.78rem;
+  color: var(--boja-tekst-slab);
+}
+
+.bodovanje__objasnjenje {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Skeleton dok se čeka ---------- */
+.skeleton {
+  display: grid;
+  gap: var(--razmak-2);
+  margin-bottom: var(--razmak-3);
+}
+
+.skeleton__red {
+  height: 6.5rem;
+  border-radius: var(--radijus-veliki);
+  background: linear-gradient(
+    90deg,
+    var(--boja-povrsina-2) 25%,
+    #f0ebe0 37%,
+    var(--boja-povrsina-2) 63%
+  );
+  background-size: 400% 100%;
+  animation: talas 1.4s ease infinite;
+}
+
+@keyframes talas {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton__red {
+    animation: none;
+  }
+}
+
+.cekanje-tekst {
+  margin: 0 0 var(--razmak-2);
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Prazno stanje ---------- */
+.prazno {
+  padding: var(--razmak-4) var(--razmak-2);
+  margin-bottom: var(--razmak-3);
+  text-align: center;
+  border: 1px dashed var(--boja-ivica-jaka);
+  border-radius: var(--radijus-veliki);
+  background: var(--boja-povrsina-2);
+}
+
+.prazno h3 {
+  margin-top: 0;
+}
+
+.prazno p {
+  max-width: 34rem;
+  margin-inline: auto;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Navigacija koraka ---------- */
+.navigacija {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--razmak-5);
+  padding-top: var(--razmak-2);
+  border-top: 1px solid var(--boja-ivica);
+}
+
+.navigacija__desno {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 560px) {
+  .navigacija,
+  .navigacija__desno {
+    width: 100%;
+  }
+
+  .navigacija .dugme {
+    flex: 1 1 100%;
+  }
+
+  .ponuda {
+    padding-inline: var(--razmak-2);
+  }
+
+  .ponuda__cena {
+    text-align: left;
+  }
+}
+
+/* ---------- Uvodni red koraka ---------- */
+.korak-uvod {
+  margin: 0 0 var(--razmak-2);
+  font-size: 0.92rem;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Noge puta u kartici leta ---------- */
+.noga {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.noga__oznaka {
+  flex: none;
+  min-width: 4.8rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--boja-tekst-slab);
+}
+
+.noga__vreme {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.noga__datum {
+  color: var(--boja-tekst-slab);
+}
+
+.tacka::before {
+  content: '·';
+  margin-right: 0.5rem;
+  color: var(--boja-ivica-jaka);
+}
+
+/* ---------- Segmenti ---------- */
+.segmenti {
+  margin: 0.4rem 0 0;
+  padding: 0.6rem var(--razmak-2);
+  border: 1px solid var(--boja-ivica);
+  border-radius: var(--radijus);
+  background: var(--boja-povrsina-2);
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.segmenti__naslov {
+  margin: 0.3rem 0 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.segmenti ol {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+/* ---------- Sporedno dugme kao link ---------- */
+.veza-dugme {
+  padding: 0.35rem 0;
+  font: inherit;
+  font-size: 0.87rem;
+  color: var(--boja-tekst-slab);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.veza-dugme:hover:not(:disabled) {
+  color: var(--boja-primarna);
+}
+
+.oznaka--izabrano {
+  background: var(--boja-primarna);
+  color: var(--boja-pozadina);
+}
+
+/* ---------- Podaci u kartici ponude ---------- */
+.ponuda__podaci {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.7rem;
+  font-size: 0.9rem;
+}
+
+.bez-ocene {
+  font-style: italic;
+  color: var(--boja-tekst-slab);
+}
+
+.grupa--u-alatkama {
+  margin-bottom: 0;
+}
+
+/* ---------- Booking.com ---------- */
+.stavka__akcija {
+  display: flex;
+  align-items: center;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+  margin: 0.5rem 0 0;
+}
+
+.stavka__akcija .dugme {
+  padding: 0.5rem 1rem;
+}
+
+.stavka__napomena {
+  font-size: 0.8rem;
+  color: var(--boja-tekst-slab);
+}

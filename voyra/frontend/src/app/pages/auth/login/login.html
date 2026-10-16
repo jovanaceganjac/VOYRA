@@ -1,0 +1,53 @@
+<section class="omotac uski">
+  <form class="kartica" data-testid="prijava-forma" [formGroup]="forma"
+        (ngSubmit)="posalji()" novalidate>
+    <h1>{{ 'prijava.naslov' | t }}</h1>
+
+    @if (greska()) {
+      <p class="poruka poruka--greska" data-testid="prijava-greska" role="alert">{{ greska() }}</p>
+    }
+
+    <div class="polje">
+      <label for="korisnickoIme">{{ 'prijava.korisnickoIme' | t }}</label>
+      <input
+        id="korisnickoIme"
+        data-testid="prijava-korisnicko-ime"
+        type="text"
+        formControlName="korisnickoIme"
+        autocomplete="username"
+        autocapitalize="none"
+        [attr.aria-invalid]="forma.controls.korisnickoIme.touched && forma.controls.korisnickoIme.invalid"
+      />
+      <app-field-error
+        [kontrola]="forma.controls.korisnickoIme"
+        [poruke]="{ required: ('prijava.unesiteKorisnickoIme' | t) }"
+      />
+    </div>
+
+    <div class="polje">
+      <label for="lozinka">{{ 'prijava.lozinka' | t }}</label>
+      <input
+        id="lozinka"
+        data-testid="prijava-lozinka"
+        type="password"
+        formControlName="lozinka"
+        autocomplete="current-password"
+        [attr.aria-invalid]="forma.controls.lozinka.touched && forma.controls.lozinka.invalid"
+      />
+      <app-field-error
+        [kontrola]="forma.controls.lozinka"
+        [poruke]="{ required: ('prijava.unesiteLozinku' | t) }"
+      />
+    </div>
+
+    <button
+      type="submit"
+      class="dugme dugme--puna-sirina"
+      data-testid="prijava-dugme"
+      [disabled]="salje() || cekanjeSek() > 0">
+      {{ (salje() ? 'prijava.prijavljivanje' : 'prijava.prijaviSe') | t }}
+    </button>
+
+    <p class="ispod">{{ 'prijava.nemateNalog' | t }} <a routerLink="/registracija">{{ 'prijava.registrujteSe' | t }}</a></p>
+  </form>
+</section>

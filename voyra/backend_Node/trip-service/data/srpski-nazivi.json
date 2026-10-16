@@ -1,0 +1,594 @@
+{
+  "BEG": {
+    "naziv": "Beograd",
+    "drzava": "Srbija"
+  },
+  "INI": {
+    "naziv": "Niš",
+    "drzava": "Srbija"
+  },
+  "ATH": {
+    "naziv": "Atina",
+    "drzava": "Grčka"
+  },
+  "SKG": {
+    "naziv": "Solun",
+    "drzava": "Grčka"
+  },
+  "HER": {
+    "naziv": "Iraklion",
+    "drzava": "Grčka"
+  },
+  "RHO": {
+    "naziv": "Rodos",
+    "drzava": "Grčka"
+  },
+  "CFU": {
+    "naziv": "Krf",
+    "drzava": "Grčka"
+  },
+  "CHQ": {
+    "naziv": "Hanja",
+    "drzava": "Grčka"
+  },
+  "JTR": {
+    "naziv": "Santorini",
+    "drzava": "Grčka"
+  },
+  "JMK": {
+    "naziv": "Mikonos",
+    "drzava": "Grčka"
+  },
+  "KGS": {
+    "naziv": "Kos",
+    "drzava": "Grčka"
+  },
+  "ZTH": {
+    "naziv": "Zakintos",
+    "drzava": "Grčka"
+  },
+  "FCO": {
+    "naziv": "Rim",
+    "drzava": "Italija"
+  },
+  "MXP": {
+    "naziv": "Milano",
+    "drzava": "Italija"
+  },
+  "VCE": {
+    "naziv": "Venecija",
+    "drzava": "Italija"
+  },
+  "NAP": {
+    "naziv": "Napulj",
+    "drzava": "Italija"
+  },
+  "BLQ": {
+    "naziv": "Bolonja",
+    "drzava": "Italija"
+  },
+  "FLR": {
+    "naziv": "Firenca",
+    "drzava": "Italija"
+  },
+  "PSA": {
+    "naziv": "Piza",
+    "drzava": "Italija"
+  },
+  "VRN": {
+    "naziv": "Verona",
+    "drzava": "Italija"
+  },
+  "TRN": {
+    "naziv": "Torino",
+    "drzava": "Italija"
+  },
+  "BRI": {
+    "naziv": "Bari",
+    "drzava": "Italija"
+  },
+  "CTA": {
+    "naziv": "Katanija",
+    "drzava": "Italija"
+  },
+  "PMO": {
+    "naziv": "Palermo",
+    "drzava": "Italija"
+  },
+  "CAG": {
+    "naziv": "Kaljari",
+    "drzava": "Italija"
+  },
+  "CDG": {
+    "naziv": "Pariz",
+    "drzava": "Francuska"
+  },
+  "NCE": {
+    "naziv": "Nica",
+    "drzava": "Francuska"
+  },
+  "LYS": {
+    "naziv": "Lion",
+    "drzava": "Francuska"
+  },
+  "MRS": {
+    "naziv": "Marsej",
+    "drzava": "Francuska"
+  },
+  "TLS": {
+    "naziv": "Tuluz",
+    "drzava": "Francuska"
+  },
+  "BOD": {
+    "naziv": "Bordo",
+    "drzava": "Francuska"
+  },
+  "NTE": {
+    "naziv": "Nant",
+    "drzava": "Francuska"
+  },
+  "MAD": {
+    "naziv": "Madrid",
+    "drzava": "Španija"
+  },
+  "BCN": {
+    "naziv": "Barselona",
+    "drzava": "Španija"
+  },
+  "AGP": {
+    "naziv": "Malaga",
+    "drzava": "Španija"
+  },
+  "VLC": {
+    "naziv": "Valensija",
+    "drzava": "Španija"
+  },
+  "SVQ": {
+    "naziv": "Sevilja",
+    "drzava": "Španija"
+  },
+  "BIO": {
+    "naziv": "Bilbao",
+    "drzava": "Španija"
+  },
+  "PMI": {
+    "naziv": "Palma de Majorka",
+    "drzava": "Španija"
+  },
+  "ALC": {
+    "naziv": "Alikante",
+    "drzava": "Španija"
+  },
+  "IBZ": {
+    "naziv": "Ibica",
+    "drzava": "Španija"
+  },
+  "LPA": {
+    "naziv": "Las Palmas",
+    "drzava": "Španija"
+  },
+  "TFS": {
+    "naziv": "Tenerife",
+    "drzava": "Španija"
+  },
+  "ACE": {
+    "naziv": "Lansarote",
+    "drzava": "Španija"
+  },
+  "FUE": {
+    "naziv": "Fuerteventura",
+    "drzava": "Španija"
+  },
+  "LIS": {
+    "naziv": "Lisabon",
+    "drzava": "Portugal"
+  },
+  "OPO": {
+    "naziv": "Porto",
+    "drzava": "Portugal"
+  },
+  "FAO": {
+    "naziv": "Faro",
+    "drzava": "Portugal"
+  },
+  "FNC": {
+    "naziv": "Funšal",
+    "drzava": "Portugal"
+  },
+  "PDL": {
+    "naziv": "Ponta Delgada",
+    "drzava": "Portugal"
+  },
+  "LHR": {
+    "naziv": "London",
+    "drzava": "Velika Britanija"
+  },
+  "MAN": {
+    "naziv": "Mančester",
+    "drzava": "Velika Britanija"
+  },
+  "EDI": {
+    "naziv": "Edinburg",
+    "drzava": "Velika Britanija"
+  },
+  "GLA": {
+    "naziv": "Glazgov",
+    "drzava": "Velika Britanija"
+  },
+  "BHX": {
+    "naziv": "Birmingem",
+    "drzava": "Velika Britanija"
+  },
+  "BRS": {
+    "naziv": "Bristol",
+    "drzava": "Velika Britanija"
+  },
+  "LPL": {
+    "naziv": "Liverpul",
+    "drzava": "Velika Britanija"
+  },
+  "NCL": {
+    "naziv": "Njukasl",
+    "drzava": "Velika Britanija"
+  },
+  "BFS": {
+    "naziv": "Belfast",
+    "drzava": "Velika Britanija"
+  },
+  "DUB": {
+    "naziv": "Dablin",
+    "drzava": "Irska"
+  },
+  "ORK": {
+    "naziv": "Kork",
+    "drzava": "Irska"
+  },
+  "AMS": {
+    "naziv": "Amsterdam",
+    "drzava": "Holandija"
+  },
+  "EIN": {
+    "naziv": "Ajndhoven",
+    "drzava": "Holandija"
+  },
+  "RTM": {
+    "naziv": "Roterdam",
+    "drzava": "Holandija"
+  },
+  "BRU": {
+    "naziv": "Brisel",
+    "drzava": "Belgija"
+  },
+  "LUX": {
+    "naziv": "Luksemburg",
+    "drzava": "Luksemburg"
+  },
+  "FRA": {
+    "naziv": "Frankfurt",
+    "drzava": "Nemačka"
+  },
+  "MUC": {
+    "naziv": "Minhen",
+    "drzava": "Nemačka"
+  },
+  "BER": {
+    "naziv": "Berlin",
+    "drzava": "Nemačka"
+  },
+  "HAM": {
+    "naziv": "Hamburg",
+    "drzava": "Nemačka"
+  },
+  "DUS": {
+    "naziv": "Diseldorf",
+    "drzava": "Nemačka"
+  },
+  "CGN": {
+    "naziv": "Keln",
+    "drzava": "Nemačka"
+  },
+  "STR": {
+    "naziv": "Štutgart",
+    "drzava": "Nemačka"
+  },
+  "NUE": {
+    "naziv": "Nirnberg",
+    "drzava": "Nemačka"
+  },
+  "LEJ": {
+    "naziv": "Lajpcig",
+    "drzava": "Nemačka"
+  },
+  "HAJ": {
+    "naziv": "Hanover",
+    "drzava": "Nemačka"
+  },
+  "BRE": {
+    "naziv": "Bremen",
+    "drzava": "Nemačka"
+  },
+  "VIE": {
+    "naziv": "Beč",
+    "drzava": "Austrija"
+  },
+  "SZG": {
+    "naziv": "Salcburg",
+    "drzava": "Austrija"
+  },
+  "INN": {
+    "naziv": "Inzbruk",
+    "drzava": "Austrija"
+  },
+  "GRZ": {
+    "naziv": "Grac",
+    "drzava": "Austrija"
+  },
+  "ZRH": {
+    "naziv": "Cirih",
+    "drzava": "Švajcarska"
+  },
+  "GVA": {
+    "naziv": "Ženeva",
+    "drzava": "Švajcarska"
+  },
+  "BSL": {
+    "naziv": "Bazel",
+    "drzava": "Švajcarska"
+  },
+  "PRG": {
+    "naziv": "Prag",
+    "drzava": "Češka"
+  },
+  "BRQ": {
+    "naziv": "Brno",
+    "drzava": "Češka"
+  },
+  "BTS": {
+    "naziv": "Bratislava",
+    "drzava": "Slovačka"
+  },
+  "KSC": {
+    "naziv": "Košice",
+    "drzava": "Slovačka"
+  },
+  "BUD": {
+    "naziv": "Budimpešta",
+    "drzava": "Mađarska"
+  },
+  "DEB": {
+    "naziv": "Debrecin",
+    "drzava": "Mađarska"
+  },
+  "WAW": {
+    "naziv": "Varšava",
+    "drzava": "Poljska"
+  },
+  "KRK": {
+    "naziv": "Krakov",
+    "drzava": "Poljska"
+  },
+  "GDN": {
+    "naziv": "Gdanjsk",
+    "drzava": "Poljska"
+  },
+  "WRO": {
+    "naziv": "Vroclav",
+    "drzava": "Poljska"
+  },
+  "POZ": {
+    "naziv": "Poznanj",
+    "drzava": "Poljska"
+  },
+  "KTW": {
+    "naziv": "Katovice",
+    "drzava": "Poljska"
+  },
+  "OTP": {
+    "naziv": "Bukurešt",
+    "drzava": "Rumunija"
+  },
+  "CLJ": {
+    "naziv": "Kluž",
+    "drzava": "Rumunija"
+  },
+  "TSR": {
+    "naziv": "Temišvar",
+    "drzava": "Rumunija"
+  },
+  "IAS": {
+    "naziv": "Jaši",
+    "drzava": "Rumunija"
+  },
+  "SOF": {
+    "naziv": "Sofija",
+    "drzava": "Bugarska"
+  },
+  "VAR": {
+    "naziv": "Varna",
+    "drzava": "Bugarska"
+  },
+  "BOJ": {
+    "naziv": "Burgas",
+    "drzava": "Bugarska"
+  },
+  "ZAG": {
+    "naziv": "Zagreb",
+    "drzava": "Hrvatska"
+  },
+  "SPU": {
+    "naziv": "Split",
+    "drzava": "Hrvatska"
+  },
+  "DBV": {
+    "naziv": "Dubrovnik",
+    "drzava": "Hrvatska"
+  },
+  "ZAD": {
+    "naziv": "Zadar",
+    "drzava": "Hrvatska"
+  },
+  "PUY": {
+    "naziv": "Pula",
+    "drzava": "Hrvatska"
+  },
+  "RJK": {
+    "naziv": "Rijeka",
+    "drzava": "Hrvatska"
+  },
+  "LJU": {
+    "naziv": "Ljubljana",
+    "drzava": "Slovenija"
+  },
+  "SJJ": {
+    "naziv": "Sarajevo",
+    "drzava": "Bosna i Hercegovina"
+  },
+  "TZL": {
+    "naziv": "Tuzla",
+    "drzava": "Bosna i Hercegovina"
+  },
+  "BNX": {
+    "naziv": "Banja Luka",
+    "drzava": "Bosna i Hercegovina"
+  },
+  "TGD": {
+    "naziv": "Podgorica",
+    "drzava": "Crna Gora"
+  },
+  "TIV": {
+    "naziv": "Tivat",
+    "drzava": "Crna Gora"
+  },
+  "SKP": {
+    "naziv": "Skoplje",
+    "drzava": "Severna Makedonija"
+  },
+  "OHD": {
+    "naziv": "Ohrid",
+    "drzava": "Severna Makedonija"
+  },
+  "TIA": {
+    "naziv": "Tirana",
+    "drzava": "Albanija"
+  },
+  "PRN": {
+    "naziv": "Priština",
+    "drzava": "Kosovo"
+  },
+  "CPH": {
+    "naziv": "Kopenhagen",
+    "drzava": "Danska"
+  },
+  "BLL": {
+    "naziv": "Bilund",
+    "drzava": "Danska"
+  },
+  "AAR": {
+    "naziv": "Arhus",
+    "drzava": "Danska"
+  },
+  "ARN": {
+    "naziv": "Stokholm",
+    "drzava": "Švedska"
+  },
+  "GOT": {
+    "naziv": "Geteborg",
+    "drzava": "Švedska"
+  },
+  "MMX": {
+    "naziv": "Malme",
+    "drzava": "Švedska"
+  },
+  "OSL": {
+    "naziv": "Oslo",
+    "drzava": "Norveška"
+  },
+  "BGO": {
+    "naziv": "Bergen",
+    "drzava": "Norveška"
+  },
+  "TRD": {
+    "naziv": "Trondhajm",
+    "drzava": "Norveška"
+  },
+  "SVG": {
+    "naziv": "Stavanger",
+    "drzava": "Norveška"
+  },
+  "TOS": {
+    "naziv": "Tromse",
+    "drzava": "Norveška"
+  },
+  "HEL": {
+    "naziv": "Helsinki",
+    "drzava": "Finska"
+  },
+  "TMP": {
+    "naziv": "Tampere",
+    "drzava": "Finska"
+  },
+  "OUL": {
+    "naziv": "Oulu",
+    "drzava": "Finska"
+  },
+  "RVN": {
+    "naziv": "Rovanijemi",
+    "drzava": "Finska"
+  },
+  "KEF": {
+    "naziv": "Rejkjavik",
+    "drzava": "Island"
+  },
+  "TLL": {
+    "naziv": "Talin",
+    "drzava": "Estonija"
+  },
+  "RIX": {
+    "naziv": "Riga",
+    "drzava": "Letonija"
+  },
+  "VNO": {
+    "naziv": "Vilnjus",
+    "drzava": "Litvanija"
+  },
+  "KUN": {
+    "naziv": "Kaunas",
+    "drzava": "Litvanija"
+  },
+  "IST": {
+    "naziv": "Istanbul",
+    "drzava": "Turska"
+  },
+  "ESB": {
+    "naziv": "Ankara",
+    "drzava": "Turska"
+  },
+  "ADB": {
+    "naziv": "Izmir",
+    "drzava": "Turska"
+  },
+  "AYT": {
+    "naziv": "Antalija",
+    "drzava": "Turska"
+  },
+  "BJV": {
+    "naziv": "Bodrum",
+    "drzava": "Turska"
+  },
+  "DLM": {
+    "naziv": "Dalaman",
+    "drzava": "Turska"
+  },
+  "MLA": {
+    "naziv": "Malta",
+    "drzava": "Malta"
+  },
+  "LCA": {
+    "naziv": "Larnaka",
+    "drzava": "Kipar"
+  },
+  "PFO": {
+    "naziv": "Pafos",
+    "drzava": "Kipar"
+  }
+}

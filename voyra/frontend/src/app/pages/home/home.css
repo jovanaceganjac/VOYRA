@@ -1,0 +1,279 @@
+/* ---------- Naslovni deo ---------- */
+/*
+ * Naslovni deo: svetla pozadina stranice, a iza nje veliki bledi globus
+ * (komponenta `app-mapa-sveta`) kao vodeni žig.
+ */
+.hero {
+  position: relative;
+  isolation: isolate;
+  padding-block: calc(var(--razmak-5) * 1.4) calc(var(--razmak-5) * 1.6);
+  text-align: center;
+}
+
+/* Tekst je između mape (ispod) i tačaka (iznad) */
+.hero__sadrzaj {
+  position: relative;
+  z-index: 1;
+}
+
+/* Mapa se naslanja direktno na zaglavlje - poništava gornji razmak <main>-a */
+:host {
+  display: block;
+  margin-top: calc(var(--razmak-3) * -1);
+}
+
+/* Forma pretrage „plovi" preko donje ivice mape */
+.hero + .pretraga-omotac {
+  position: relative;
+  margin-top: calc(var(--razmak-5) * -1);
+}
+
+.hero__sadrzaj {
+  max-width: 46rem;
+}
+
+.hero__nadnaslov {
+  margin: 0 0 var(--razmak-2);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--boja-tekst-slab);
+}
+
+.hero h1 {
+  margin-bottom: var(--razmak-3);
+  text-wrap: balance;
+}
+
+.hero__opis {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--boja-tekst-slab);
+  text-wrap: pretty;
+}
+
+/* ---------- Forma pretrage ---------- */
+.pretraga-omotac {
+  max-width: 54rem;
+}
+
+.pretraga {
+  box-shadow: var(--senka-jaka);
+}
+
+.pretraga__naslov {
+  margin-top: 0;
+  margin-bottom: var(--razmak-3);
+  padding-bottom: var(--razmak-2);
+  border-bottom: 1px solid var(--boja-ivica);
+  font-size: 1.05rem;
+  font-family: var(--font);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--boja-tekst-slab);
+}
+
+.pretraga__dno {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+  margin-top: var(--razmak-3);
+  padding-top: var(--razmak-2);
+  border-top: 1px solid var(--boja-ivica);
+}
+
+.pretraga__dno .polje__pomoc {
+  margin: 0;
+}
+
+/* ---------- Kako radi ---------- */
+.kako {
+  padding-block: var(--razmak-5);
+}
+
+.kako__naslov {
+  text-align: center;
+  margin-bottom: var(--razmak-4);
+}
+
+.koraci {
+  display: grid;
+  gap: var(--razmak-3);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.korak {
+  padding-top: var(--razmak-2);
+  border-top: 2px solid var(--boja-primarna);
+}
+
+.korak__broj {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-naslov);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  color: var(--boja-primarna);
+}
+
+.korak h3 {
+  margin-bottom: 0.4rem;
+  font-size: 1.05rem;
+}
+
+.korak p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--boja-tekst-slab);
+}
+
+@media (max-width: 560px) {
+  .hero {
+    padding-block: var(--razmak-4) calc(var(--razmak-4) * 1.8);
+  }
+
+  .pretraga__dno {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pretraga__dno .dugme {
+    width: 100%;
+  }
+}
+
+/* ---------- Istaknute i popularne destinacije (§4.1) ---------- */
+
+.destinacije {
+  padding-block: var(--razmak-5);
+}
+
+.destinacije__naslov {
+  margin: 0 0 0.35rem;
+  font-size: 1.5rem;
+}
+
+.destinacije__opis {
+  margin: 0 0 var(--razmak-3);
+  color: var(--boja-tekst-slab);
+}
+
+.kartice {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: var(--razmak-3);
+  margin: var(--razmak-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kartice--popularno {
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+}
+
+.kartica-dest,
+.kartica-pop {
+  display: flex;
+  flex-direction: column;
+  background: var(--boja-povrsina);
+  border: 1px solid var(--boja-ivica);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Cela kartica je dugme - klik bilo gde vodi u planiranje */
+.kartica-dest__dugme,
+.kartica-pop__dugme {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.kartica-dest__dugme:hover .kartica-dest__naziv,
+.kartica-pop__dugme:hover .kartica-pop__naziv {
+  color: var(--boja-primarna);
+}
+
+.kartica-dest__dugme:focus-visible,
+.kartica-pop__dugme:focus-visible {
+  outline: 2px solid var(--boja-primarna);
+  outline-offset: -2px;
+}
+
+.kartica-dest__slika {
+  display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.kartica-dest__slika--prazna {
+  background: linear-gradient(135deg, var(--boja-pozadina), var(--boja-ivica));
+}
+
+.kartica-dest__telo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.8rem 0.9rem;
+}
+
+.kartica-dest__naziv,
+.kartica-pop__naziv {
+  font-weight: 700;
+}
+
+.kartica-dest__drzava,
+.kartica-pop__drzava {
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.kartica-dest__opis {
+  margin-top: 0.25rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.kartica-dest__izvor {
+  margin: 0;
+  padding: 0 0.9rem 0.7rem;
+  font-size: 0.72rem;
+  color: var(--boja-tekst-slab);
+}
+
+.kartica-dest__izvor a {
+  color: inherit;
+}
+
+.kartica-pop__dugme {
+  padding: 0.9rem;
+}
+
+.kartica-pop__broj {
+  margin-top: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--boja-tekst-slab);
+}
+
+@media (max-width: 480px) {
+  .kartice,
+  .kartice--popularno {
+    grid-template-columns: 1fr;
+  }
+}

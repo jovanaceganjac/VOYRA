@@ -1,0 +1,17 @@
+{
+  "name": "voyra-e2e",
+  "version": "1.0.0",
+  "description": "Selenium end-to-end testovi za Voyra",
+  "private": true,
+  "scripts": {
+    "test": "mocha --config .mocharc.json",
+    "test:vidljivo": "mocha --config .mocharc.json -- --vidljivo",
+    "test:izvestaj": "mocha --config .mocharc.json --reporter json --reporter-option output=izvestaj/mocha.json"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.27.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.8.2"
+  }
+}

@@ -1,0 +1,147 @@
+<section class="omotac uski">
+  <form class="kartica" data-testid="registracija-forma" [formGroup]="forma"
+        (ngSubmit)="posalji()" novalidate>
+    <h1>{{ 'registracija.naslov' | t }}</h1>
+
+    @if (uspeh()) {
+      <p class="poruka poruka--uspeh" data-testid="registracija-uspeh" role="status">{{ uspeh() }}</p>
+    }
+
+    @if (greska()) {
+      <div class="poruka poruka--greska" data-testid="registracija-greska" role="alert">
+        @for (g of greska(); track g) {
+          <p class="poruka__stavka">{{ g }}</p>
+        }
+      </div>
+    }
+
+    <div class="red">
+      <div class="polje">
+        <label for="ime">{{ 'registracija.ime' | t }}</label>
+        <input
+          id="ime"
+          data-testid="registracija-ime"
+          type="text"
+          formControlName="ime"
+          autocomplete="given-name"
+          [attr.aria-invalid]="forma.controls.ime.touched && forma.controls.ime.invalid"
+        />
+        <app-field-error
+          [kontrola]="forma.controls.ime"
+          [poruke]="{ required: ('registracija.unesiteIme' | t), minlength: ('registracija.najmanje2' | t) }"
+        />
+      </div>
+
+      <div class="polje">
+        <label for="prezime">{{ 'registracija.prezime' | t }}</label>
+        <input
+          id="prezime"
+          data-testid="registracija-prezime"
+          type="text"
+          formControlName="prezime"
+          autocomplete="family-name"
+          [attr.aria-invalid]="forma.controls.prezime.touched && forma.controls.prezime.invalid"
+        />
+        <app-field-error
+          [kontrola]="forma.controls.prezime"
+          [poruke]="{ required: ('registracija.unesitePrezime' | t), minlength: ('registracija.najmanje2' | t) }"
+        />
+      </div>
+    </div>
+
+    <div class="polje">
+      <label for="email">{{ 'registracija.email' | t }}</label>
+      <input
+        id="email"
+        data-testid="registracija-email"
+        type="email"
+        formControlName="email"
+        autocomplete="email"
+        [attr.aria-invalid]="forma.controls.email.touched && forma.controls.email.invalid"
+      />
+      <app-field-error
+        [kontrola]="forma.controls.email"
+        [poruke]="{ required: ('registracija.unesiteEmail' | t) }"
+      />
+    </div>
+
+    <div class="polje">
+      <label for="korisnickoIme">{{ 'prijava.korisnickoIme' | t }}</label>
+      <input
+        id="korisnickoIme"
+        data-testid="registracija-korisnicko-ime"
+        type="text"
+        formControlName="korisnickoIme"
+        autocomplete="username"
+        autocapitalize="none"
+        [attr.aria-invalid]="forma.controls.korisnickoIme.touched && forma.controls.korisnickoIme.invalid"
+      />
+      <p class="polje__pomoc">{{ 'registracija.korisnickoImePomoc' | t }}</p>
+      <app-field-error
+        [kontrola]="forma.controls.korisnickoIme"
+        [poruke]="{
+          required: ('prijava.unesiteKorisnickoIme' | t),
+          minlength: ('registracija.najmanje3' | t),
+          maxlength: ('registracija.najvise20' | t),
+          pattern: ('registracija.dozvoljeniZnaci' | t)
+        }"
+      />
+    </div>
+
+    <div class="polje">
+      <label for="lozinka">{{ 'prijava.lozinka' | t }}</label>
+      <input
+        id="lozinka"
+        data-testid="registracija-lozinka"
+        type="password"
+        formControlName="lozinka"
+        autocomplete="new-password"
+        [attr.aria-invalid]="forma.controls.lozinka.touched && forma.controls.lozinka.invalid"
+      />
+
+      <app-pravila-lozinke [lozinka]="forma.controls.lozinka.value" />
+    </div>
+
+    <div class="polje">
+      <label for="lozinkaConfirm">{{ 'registracija.potvrdaLozinke' | t }}</label>
+      <input
+        id="lozinkaConfirm"
+        data-testid="registracija-lozinka-potvrda"
+        type="password"
+        formControlName="lozinkaConfirm"
+        autocomplete="new-password"
+        [attr.aria-invalid]="nePoklapajuSe()"
+      />
+      @if (nePoklapajuSe()) {
+        <p class="polje-greska" role="alert">{{ 'registracija.nePoklapajuSe' | t }}</p>
+      } @else {
+        <app-field-error
+          [kontrola]="forma.controls.lozinkaConfirm"
+          [poruke]="{ required: ('registracija.ponoviteLozinku' | t) }"
+        />
+      }
+    </div>
+
+    <div class="polje">
+      <label for="phone">{{ 'registracija.telefon' | t }} <span class="opciono">{{ 'opste.opciono' | t }}</span></label>
+      <input
+        id="phone"
+        data-testid="registracija-telefon"
+        type="tel"
+        formControlName="phone"
+        autocomplete="tel"
+        placeholder="+381601234567"
+        [attr.aria-invalid]="forma.controls.phone.touched && forma.controls.phone.invalid"
+      />
+      <p class="polje__pomoc">{{ 'registracija.telefonPomoc' | t }}</p>
+      <app-field-error [kontrola]="forma.controls.phone" />
+    </div>
+
+    <button type="submit" class="dugme dugme--puna-sirina" data-testid="registracija-dugme"
+            [disabled]="salje() || forma.invalid">
+      {{ (salje() ? 'registracija.slanje' : 'registracija.registrujSe') | t }}
+    </button>
+
+    <p class="ispod">{{ 'registracija.vecImateNalog' | t }} <a routerLink="/prijava">{{ 'registracija.prijaviteSe' | t }}</a></p>
+  </form>
+</section>

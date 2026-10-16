@@ -1,0 +1,421 @@
+# GENERISANO skriptom backend_Node/shared/napravi-openapi.js
+# Opisi se menjaju u shared/openapi-opisi.js, pa se skripta pokrene ponovo.
+openapi: 3.0.3
+info:
+  title: Voyra Booking Service
+  version: 1.0.0
+  description: >-
+    Rezervacija i otkazivanje leta, potvrda u PDF-u (spec §4.8).
+
+
+    Svi odgovori su JSON. Uspeh nosi `success: true`, a greska zajednicku semu `Greska`.
+    Dokumentacija se iskljucuje sa `DOCS_ENABLED=false`.
+servers:
+  - url: http://localhost:4006
+    description: Lokalni razvoj
+tags:
+  - name: Servis
+  - name: Rezervacija
+paths:
+  /:
+    get:
+      summary: Spisak ruta servisa
+      tags:
+        - Servis
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": &a1
+          description: Neispravan zahtev (validacija)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: VALIDATION_ERROR
+                message: Neispravni podaci
+                errors:
+                  - checkIn je obavezan
+                statusCode: 400
+        "404": &a2
+          description: Resurs nije pronadjen
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: NOT_FOUND
+                message: Putovanje nije pronadjeno
+                statusCode: 404
+        "503": &a3
+          description: Servis iza gateway-a nije dostupan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: SERVICE_UNAVAILABLE
+                message: Ciljni servis trenutno nije dostupan
+                statusCode: 503
+  /api/bookings:
+    get:
+      summary: Rezervacije prijavljenog korisnika
+      tags:
+        - Rezervacija
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": &a4
+          description: Nedostaje token, token je nevazeci ili je opozvan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: TOKEN_REVOKED
+                message: Sesija je istekla ili je nalog promenjen. Prijavite se ponovo.
+                statusCode: 401
+        "403": &a5
+          description: Nalog nema pravo pristupa (uloga ili status)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: FORBIDDEN
+                message: Samo administratori mogu da pristupe ovom resursu
+                statusCode: 403
+        "404": *a2
+        "409": &a6
+          description: Sukob sa trenutnim stanjem (verzija, dvostruka rezervacija, prelaz statusa)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: VERSION_CONFLICT
+                message: Putovanje je u medjuvremenu izmenjeno
+                currentVersion: 2027-06-10T12:00:00.000Z
+                statusCode: 409
+        "410": &a7
+          description: Ponuda vise ne postoji (Duffel ponude vaze 15-20 min)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: SELECTION_EXPIRED
+                message: Izabrana ponuda je istekla - izaberite ponovo
+                statusCode: 410
+        "422": &a8
+          description: Zahtev je ispravan, ali se ne moze izvrsiti nad ovim podacima
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Greska"
+              example:
+                success: false
+                error: UNPROCESSABLE
+                message: Podaci o putnicima nisu potpuni
+                errors:
+                  - "Putnik 1: nedostaje broj pasosa"
+                statusCode: 422
+        "503": *a3
+      security:
+        - bearerAuth: []
+    post:
+      summary: Rezervacija leta
+      tags:
+        - Rezervacija
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "403": *a5
+        "404": *a2
+        "409": *a6
+        "410": *a7
+        "422": *a8
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /api/bookings/{id}:
+    get:
+      summary: Jedna rezervacija
+      tags:
+        - Rezervacija
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "403": *a5
+        "404": *a2
+        "409": *a6
+        "410": *a7
+        "422": *a8
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /api/bookings/{id}/cancel:
+    patch:
+      summary: Otkazivanje rezervacije
+      tags:
+        - Rezervacija
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "403": *a5
+        "404": *a2
+        "409": *a6
+        "410": *a7
+        "422": *a8
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /api/bookings/{id}/confirmation:
+    get:
+      summary: Potvrda rezervacije u PDF-u
+      tags:
+        - Rezervacija
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Vrednost parametra `id`
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "403": *a5
+        "404": *a2
+        "409": *a6
+        "410": *a7
+        "422": *a8
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /api/bookings/validate:
+    post:
+      summary: Provera ponude pre rezervacije
+      tags:
+        - Rezervacija
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "401": *a4
+        "403": *a5
+        "404": *a2
+        "409": *a6
+        "410": *a7
+        "422": *a8
+        "503": *a3
+      security:
+        - bearerAuth: []
+  /health:
+    get:
+      summary: Provera da servis radi
+      tags:
+        - Servis
+      responses:
+        "200":
+          description: Uspeh
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                  data:
+                    description: Sadrzaj odgovora; oblik zavisi od rute
+                  statusCode:
+                    type: integer
+                    example: 200
+        "400": *a1
+        "404": *a2
+        "503": *a3
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT iz `POST /api/users/login`. Vazi 24 h, a prestaje da vazi ranije kada se promeni
+        lozinka, uloga ili status naloga (claim `tv`).
+    internalKey:
+      type: apiKey
+      in: header
+      name: X-Internal-Key
+      description: Zajednicki kljuc iz `.env`-a. Ove rute NISU dostupne spolja - gateway ih ne prosledjuje.
+  schemas:
+    Greska:
+      type: object
+      required:
+        - success
+        - error
+        - message
+        - statusCode
+      properties:
+        success:
+          type: boolean
+          enum:
+            - false
+          description: Uvek `false` kod greske
+        error:
+          type: string
+          description: Masinski citljiv kod greske
+          example: VALIDATION_ERROR
+        message:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+          description: Poruka za korisnika; Joi validacija vraca listu poruka
+        statusCode:
+          type: integer
+          example: 400
+        errors:
+          type: array
+          items:
+            type: string
+          description: Pojedinacne greske validacije, kada ih servis salje
+        attemptsLeft:
+          type: integer
+          description: Koliko pokusaja ostaje pre zakljucavanja (prijava, SMS kod, lozinka)
+        retryAfter:
+          type: integer
+          description: Sekundi do isteka zakljucavanja (uz 429)
+        currentVersion:
+          type: string
+          description: Trenutna verzija putovanja kod 409 VERSION_CONFLICT

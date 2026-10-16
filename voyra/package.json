@@ -1,0 +1,26 @@
+{
+  "name": "voyra",
+  "version": "1.0.0",
+  "description": "Mikroservisna aplikacija za planiranje putovanja",
+  "private": true,
+  "scripts": {
+    "install-all": "npm install && npm --prefix backend_Node/api-gateway install && npm --prefix backend_Node/user-service install && npm --prefix backend_Node/integration-service install && npm --prefix backend_Node/trip-service install && npm --prefix backend_Node/planner-service install && npm --prefix backend_Node/admin-service install && npm --prefix backend_Node/booking-service install && npm --prefix backend_Node/notification-service install && npm --prefix backend_Node/orchestrator-service install && npm --prefix frontend install",
+    "start-all": "concurrently \"npm --prefix backend_Node/api-gateway start\" \"npm --prefix backend_Node/user-service start\" \"npm --prefix backend_Node/integration-service start\" \"npm --prefix backend_Node/trip-service start\" \"npm --prefix backend_Node/planner-service start\" \"npm --prefix backend_Node/admin-service start\" \"npm --prefix backend_Node/booking-service start\" \"npm --prefix backend_Node/notification-service start\" \"npm --prefix backend_Node/orchestrator-service start\"",
+    "start-frontend": "npm --prefix frontend start",
+    "dev": "concurrently -n backend,frontend -c blue,magenta \"npm run start-all\" \"npm --prefix frontend start\"",
+    "openapi": "node backend_Node/shared/napravi-openapi.js",
+    "proba:openapi": "node backend_Node/shared/proba-openapi.js",
+    "proba:env": "node backend_Node/shared/proba-env.js",
+    "test:sve": "node scripts/test-sve.js",
+    "proba:kljucevi": "node scripts/proba-kljucevi.js",
+    "merenje:plan": "node scripts/merenje-plana.js"
+  },
+  "dependencies": {
+    "concurrently": "^8.0.0",
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-parser": "^10.1.1"
+  }
+}

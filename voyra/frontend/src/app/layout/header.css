@@ -1,0 +1,217 @@
+.zaglavlje {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  /* Neprozirno: logotip nosi svoju (istu) pozadinu, pa bi se kroz
+     poluprovidno zaglavlje video pravougaonik oko natpisa. */
+  background: var(--boja-pozadina);
+  border-bottom: 1px solid var(--boja-ivica);
+}
+
+.zaglavlje__sadrzaj {
+  display: flex;
+  align-items: center;
+  gap: var(--razmak-2);
+  min-height: 4.25rem;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: block;
+  margin-right: auto;
+  text-decoration: none;
+}
+
+/* Natpis iz logotipa; visina nosi velicinu, sirina prati odnos stranica */
+.logo__slika {
+  height: 1.7rem;
+  width: calc(1.7rem * 899 / 304);
+  transition: opacity var(--prelaz);
+}
+
+/* Znak aplikacije za mobilni prikaz; na desktopu ostaje natpis */
+.logo__mobilni {
+  display: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  /* Uglovi slike su svetli - zaobljenje prati zaobljeni kvadrat znaka */
+  border-radius: 14%;
+  transition: opacity var(--prelaz);
+}
+
+.logo:hover .logo__mobilni {
+  opacity: 0.85;
+}
+
+.logo:hover .logo__slika {
+  opacity: 0.75;
+}
+
+.meni {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.meni a,
+.meni__dugme {
+  position: relative;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radijus);
+  font: inherit;
+  font-size: 0.92rem;
+  color: var(--boja-tekst);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--prelaz), background var(--prelaz);
+}
+
+.meni a:hover,
+.meni__dugme:hover {
+  color: var(--boja-primarna);
+}
+
+/* Tanka linija ispod aktivne stavke - diskretnije od pune podloge */
+.meni a.aktivno {
+  color: var(--boja-primarna);
+  font-weight: 600;
+}
+
+.meni a.aktivno::after {
+  content: '';
+  position: absolute;
+  left: 0.85rem;
+  right: 0.85rem;
+  bottom: 0.15rem;
+  height: 1.5px;
+  background: var(--boja-primarna);
+  border-radius: 2px;
+}
+
+/* Selektor mora da nadjaca `.meni a` (specificnost 0,1,1) - inace
+   `background: none` odatle ostavi dugme bez podloge, pa svetli tekst
+   nestane na svetloj pozadini. */
+.meni a.meni__istaknuto {
+  margin-left: 0.4rem;
+  padding-inline: 1.15rem;
+  color: var(--boja-pozadina);
+  background: var(--boja-primarna);
+  font-weight: 600;
+}
+
+.meni a.meni__istaknuto:hover {
+  color: var(--boja-pozadina);
+  background: var(--boja-primarna-tamna);
+}
+
+.meni a.meni__istaknuto.aktivno::after {
+  display: none;
+}
+
+/* Izbor jezika: dva mala dugmeta, aktivno je popunjeno */
+.jezik {
+  display: flex;
+  order: 2;
+  border: 1px solid var(--boja-ivica-jaka);
+  border-radius: var(--radijus);
+  overflow: hidden;
+}
+
+.jezik__dugme {
+  padding: 0.3rem 0.55rem;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--boja-primarna);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color var(--prelaz), background var(--prelaz);
+}
+
+.jezik__dugme + .jezik__dugme {
+  border-left: 1px solid var(--boja-ivica-jaka);
+}
+
+.jezik__dugme:hover {
+  background: var(--boja-povrsina-2);
+}
+
+.jezik__dugme--aktivno,
+.jezik__dugme--aktivno:hover {
+  color: var(--boja-pozadina);
+  background: var(--boja-primarna);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 2.8rem;
+  height: 2.6rem;
+  padding: 0.55rem;
+  background: none;
+  border: 1px solid var(--boja-ivica-jaka);
+  border-radius: var(--radijus);
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  height: 1.5px;
+  background: var(--boja-primarna);
+  border-radius: 2px;
+}
+
+@media (max-width: 760px) {
+  .logo__slika {
+    display: none;
+  }
+
+  .logo__mobilni {
+    display: block;
+  }
+
+  .hamburger {
+    display: flex;
+    order: 3;
+  }
+
+  .meni {
+    order: 4;
+  }
+
+  .meni {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.1rem;
+    padding-bottom: var(--razmak-2);
+  }
+
+  .meni--otvoren {
+    display: flex;
+  }
+
+  .meni a,
+  .meni__dugme {
+    text-align: left;
+    padding-block: 0.7rem;
+  }
+
+  .meni a.aktivno::after {
+    display: none;
+  }
+
+  .meni a.meni__istaknuto {
+    margin-left: 0;
+    margin-top: 0.4rem;
+    text-align: center;
+  }
+}

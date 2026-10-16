@@ -1,0 +1,1019 @@
+[
+  {
+    "id": 1,
+    "naziv": "Akropolj",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.9715,
+    "lon": 23.7257,
+    "opis": "Utvrđena stena iznad grada sa Partenonom i Erehtejonom.",
+    "vremeTrajanja": 150,
+    "pregledi": 5000,
+    "ocena": 4.9,
+    "radnoVreme": {
+      "open": "08:00",
+      "close": "20:00"
+    },
+    "wikipedia": "en:Acropolis_of_Athens"
+  },
+  {
+    "id": 2,
+    "naziv": "Hram Zevsa Olimpijskog",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.9693,
+    "lon": 23.7331,
+    "opis": "Ostaci najvećeg hrama antičke Grčke, sa petnaest uspravnih stubova.",
+    "vremeTrajanja": 45,
+    "pregledi": 2600,
+    "ocena": 4.5,
+    "radnoVreme": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "wikipedia": "en:Temple_of_Olympian_Zeus,_Athens"
+  },
+  {
+    "id": 3,
+    "naziv": "Antička agora",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.9755,
+    "lon": 23.7215,
+    "opis": "Središte javnog života antičke Atine, sa hramom Hefesta.",
+    "vremeTrajanja": 90,
+    "pregledi": 2400,
+    "ocena": 4.6,
+    "radnoVreme": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "wikipedia": "en:Ancient_Agora_of_Athens"
+  },
+  {
+    "id": 4,
+    "naziv": "Rimska agora",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.9747,
+    "lon": 23.7254,
+    "opis": "Trgovački trg iz rimskog doba, uz Kulu vetrova.",
+    "vremeTrajanja": 45,
+    "pregledi": 1500,
+    "ocena": 4.2,
+    "radnoVreme": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "wikipedia": "en:Roman_Agora"
+  },
+  {
+    "id": 5,
+    "naziv": "Hadrijanova biblioteka",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.976,
+    "lon": 23.7258,
+    "opis": "Ostaci carske biblioteke sa dvorištem i redom stubova.",
+    "vremeTrajanja": 45,
+    "pregledi": 1400,
+    "ocena": 4.1,
+    "radnoVreme": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "wikipedia": "en:Library_of_Hadrian"
+  },
+  {
+    "id": 6,
+    "naziv": "Hadrijanova kapija",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.9701,
+    "lon": 23.7312,
+    "opis": "Mermerni luk koji je delio stari grad od Hadrijanovog.",
+    "vremeTrajanja": 20,
+    "pregledi": 1800,
+    "ocena": 4.2,
+    "cena": 0,
+    "wikipedia": "en:Arch_of_Hadrian_(Athens)"
+  },
+  {
+    "id": 7,
+    "naziv": "Panatinaikos stadion",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.9683,
+    "lon": 23.7413,
+    "opis": "Mermerni stadion prvih modernih Olimpijskih igara 1896.",
+    "vremeTrajanja": 60,
+    "pregledi": 2300,
+    "ocena": 4.6,
+    "radnoVreme": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "wikipedia": "en:Panathenaic_Stadium"
+  },
+  {
+    "id": 8,
+    "naziv": "Odeon Heroda Atika",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.9709,
+    "lon": 23.7244,
+    "opis": "Antičko pozorište pod Akropoljem, i danas koncertna scena.",
+    "vremeTrajanja": 30,
+    "pregledi": 2000,
+    "ocena": 4.7,
+    "wikipedia": "en:Odeon_of_Herodes_Atticus"
+  },
+  {
+    "id": 9,
+    "naziv": "Kerameikos",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.9784,
+    "lon": 23.718,
+    "opis": "Antičko groblje i deo gradskih zidina sa Dipilonskom kapijom.",
+    "vremeTrajanja": 60,
+    "pregledi": 900,
+    "ocena": 4.1,
+    "radnoVreme": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "wikipedia": "en:Kerameikos"
+  },
+  {
+    "id": 10,
+    "naziv": "Areopag",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura",
+      "priroda"
+    ],
+    "lat": 37.9726,
+    "lon": 23.7231,
+    "opis": "Stenoviti breg pored Akropolja, nekada vrhovni sud Atine.",
+    "vremeTrajanja": 30,
+    "pregledi": 1700,
+    "ocena": 4.3,
+    "cena": 0,
+    "wikipedia": "en:Areopagus"
+  },
+  {
+    "id": 11,
+    "naziv": "Plaka",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura",
+      "soping"
+    ],
+    "lat": 37.9725,
+    "lon": 23.729,
+    "opis": "Stara četvrt pod Akropoljem, sa uskim ulicama i radnjama.",
+    "vremeTrajanja": 90,
+    "pregledi": 3000,
+    "ocena": 4.6,
+    "cena": 0,
+    "wikipedia": "en:Plaka"
+  },
+  {
+    "id": 12,
+    "naziv": "Anafiotika",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.9727,
+    "lon": 23.7266,
+    "opis": "Sokaci sa belim kućama koje su gradili majstori sa ostrva Anafi.",
+    "vremeTrajanja": 45,
+    "pregledi": 1200,
+    "ocena": 4.4,
+    "cena": 0,
+    "wikipedia": "en:Anafiotika"
+  },
+  {
+    "id": 13,
+    "naziv": "Trg Sintagma",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.9755,
+    "lon": 23.7348,
+    "opis": "Glavni gradski trg pred Parlamentom, sa smenom garde.",
+    "vremeTrajanja": 30,
+    "pregledi": 3200,
+    "ocena": 4.3,
+    "cena": 0,
+    "wikipedia": "en:Syntagma_Square"
+  },
+  {
+    "id": 14,
+    "naziv": "Monastiraki",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura",
+      "soping"
+    ],
+    "lat": 37.9761,
+    "lon": 23.7256,
+    "opis": "Trg i četvrt na spoju antičkog i savremenog dela grada.",
+    "vremeTrajanja": 60,
+    "pregledi": 2800,
+    "ocena": 4.4,
+    "cena": 0,
+    "wikipedia": "en:Monastiraki"
+  },
+  {
+    "id": 15,
+    "naziv": "Zapion",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura",
+      "priroda"
+    ],
+    "lat": 37.9724,
+    "lon": 23.7353,
+    "opis": "Izložbena palata iz 19. veka u Nacionalnoj bašti.",
+    "vremeTrajanja": 45,
+    "pregledi": 1300,
+    "ocena": 4.3,
+    "cena": 0,
+    "wikipedia": "en:Zappeion"
+  },
+  {
+    "id": 16,
+    "naziv": "Akademija u Atini",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.981,
+    "lon": 23.7331,
+    "opis": "Neoklasična zgrada sa stubovima Atine i Apolona.",
+    "vremeTrajanja": 30,
+    "pregledi": 1100,
+    "ocena": 4.4,
+    "cena": 0,
+    "wikipedia": "en:Academy_of_Athens_(modern)"
+  },
+  {
+    "id": 17,
+    "naziv": "Manastir Dafni",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 38.0136,
+    "lon": 23.636,
+    "opis": "Vizantijski manastir sa mozaicima, pod zaštitom UNESCO-a.",
+    "vremeTrajanja": 60,
+    "pregledi": 700,
+    "ocena": 4.5,
+    "wikipedia": "en:Daphni_Monastery"
+  },
+  {
+    "id": 18,
+    "naziv": "Mitropolitska crkva",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.9749,
+    "lon": 23.7305,
+    "opis": "Saborna crkva Atine; uz nju stoji mala srednjovekovna Mitropola.",
+    "vremeTrajanja": 30,
+    "pregledi": 900,
+    "ocena": 4.0,
+    "cena": 0,
+    "wikipedia": "en:Metropolitan_Cathedral_of_Athens"
+  },
+  {
+    "id": 19,
+    "naziv": "Kapnikarea",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura"
+    ],
+    "lat": 37.978,
+    "lon": 23.73,
+    "opis": "Vizantijska crkva iz 11. veka nasred trgovačke ulice.",
+    "vremeTrajanja": 20,
+    "pregledi": 800,
+    "ocena": 4.1,
+    "cena": 0,
+    "wikipedia": "en:Kapnikarea"
+  },
+  {
+    "id": 20,
+    "naziv": "Spomenik Filopapu",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "kultura",
+    "kategorije": [
+      "kultura",
+      "priroda"
+    ],
+    "lat": 37.9668,
+    "lon": 23.7207,
+    "opis": "Rimski nadgrobni spomenik na brdu preko puta Akropolja.",
+    "vremeTrajanja": 45,
+    "pregledi": 1000,
+    "ocena": 4.2,
+    "cena": 0,
+    "wikipedia": "en:Philopappos_Monument"
+  },
+  {
+    "id": 21,
+    "naziv": "Muzej Akropolja",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "muzeji",
+    "kategorije": [
+      "muzeji",
+      "kultura"
+    ],
+    "lat": 37.9683,
+    "lon": 23.7286,
+    "opis": "Nalazi sa Akropolja, sa staklenom salom posvećenom Partenonu.",
+    "vremeTrajanja": 120,
+    "pregledi": 4200,
+    "ocena": 4.8,
+    "radnoVreme": {
+      "open": "09:00",
+      "close": "17:00"
+    },
+    "wikipedia": "en:Acropolis_Museum"
+  },
+  {
+    "id": 22,
+    "naziv": "Nacionalni arheološki muzej",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "muzeji",
+    "kategorije": [
+      "muzeji"
+    ],
+    "lat": 37.9891,
+    "lon": 23.7326,
+    "opis": "Najveća zbirka grčke antike, od Mikene do rimskog doba.",
+    "vremeTrajanja": 150,
+    "pregledi": 3900,
+    "ocena": 4.8,
+    "radnoVreme": {
+      "open": "09:00",
+      "close": "17:00"
+    },
+    "wikipedia": "en:National_Archaeological_Museum,_Athens"
+  },
+  {
+    "id": 23,
+    "naziv": "Muzej Benaki",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "muzeji",
+    "kategorije": [
+      "muzeji",
+      "kultura"
+    ],
+    "lat": 37.976,
+    "lon": 23.7405,
+    "opis": "Grčka umetnost i zanati kroz sve epohe, u gradskoj palati.",
+    "vremeTrajanja": 90,
+    "pregledi": 1500,
+    "ocena": 4.4,
+    "radnoVreme": {
+      "open": "10:00",
+      "close": "18:00"
+    },
+    "wikipedia": "en:Benaki_Museum"
+  },
+  {
+    "id": 24,
+    "naziv": "Muzej kikladske umetnosti",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "muzeji",
+    "kategorije": [
+      "muzeji"
+    ],
+    "lat": 37.9762,
+    "lon": 23.744,
+    "opis": "Mermerne figure sa Kiklada, stare oko pet hiljada godina.",
+    "vremeTrajanja": 90,
+    "pregledi": 1400,
+    "ocena": 4.5,
+    "radnoVreme": {
+      "open": "10:00",
+      "close": "17:00"
+    },
+    "wikipedia": "en:Goulandris_Museum_of_Cycladic_Art"
+  },
+  {
+    "id": 25,
+    "naziv": "Vizantijski i hrišćanski muzej",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "muzeji",
+    "kategorije": [
+      "muzeji",
+      "kultura"
+    ],
+    "lat": 37.9755,
+    "lon": 23.7451,
+    "opis": "Ikone, freske i rukopisi iz vizantijskog i posle-vizantijskog doba.",
+    "vremeTrajanja": 90,
+    "pregledi": 1100,
+    "ocena": 4.3,
+    "radnoVreme": {
+      "open": "09:00",
+      "close": "17:00"
+    },
+    "wikipedia": "en:Byzantine_and_Christian_Museum"
+  },
+  {
+    "id": 26,
+    "naziv": "Numizmatički muzej",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "muzeji",
+    "kategorije": [
+      "muzeji"
+    ],
+    "lat": 37.9793,
+    "lon": 23.7345,
+    "opis": "Zbirka kovanica u nekadašnjoj kući arheologa Šlimana.",
+    "vremeTrajanja": 60,
+    "pregledi": 700,
+    "ocena": 4.1,
+    "radnoVreme": {
+      "open": "09:00",
+      "close": "16:00"
+    },
+    "wikipedia": "en:Numismatic_Museum_of_Athens"
+  },
+  {
+    "id": 27,
+    "naziv": "Muzej grada Atine",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "muzeji",
+    "kategorije": [
+      "muzeji",
+      "kultura"
+    ],
+    "lat": 37.9782,
+    "lon": 23.7333,
+    "opis": "Život u Atini pošto je postala prestonica, u kraljevskoj kući.",
+    "vremeTrajanja": 60,
+    "pregledi": 600,
+    "ocena": 4.0,
+    "radnoVreme": {
+      "open": "09:00",
+      "close": "16:00"
+    },
+    "wikipedia": "en:Museum_of_the_City_of_Athens"
+  },
+  {
+    "id": 28,
+    "naziv": "Stoa Atalova",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "muzeji",
+    "kategorije": [
+      "muzeji",
+      "kultura"
+    ],
+    "lat": 37.9748,
+    "lon": 23.7233,
+    "opis": "Obnovljeni antički trem koji čuva muzej Agore.",
+    "vremeTrajanja": 60,
+    "pregledi": 1600,
+    "ocena": 4.5,
+    "radnoVreme": {
+      "open": "08:00",
+      "close": "19:00"
+    },
+    "wikipedia": "en:Stoa_of_Attalos"
+  },
+  {
+    "id": 29,
+    "naziv": "Nacionalni muzej savremene umetnosti",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "muzeji",
+    "kategorije": [
+      "muzeji"
+    ],
+    "lat": 37.964,
+    "lon": 23.7289,
+    "opis": "Savremena grčka i strana umetnost u zgradi stare pivare.",
+    "vremeTrajanja": 90,
+    "pregledi": 800,
+    "ocena": 4.1,
+    "radnoVreme": {
+      "open": "11:00",
+      "close": "19:00"
+    },
+    "wikipedia": "en:National_Museum_of_Contemporary_Art,_Athens"
+  },
+  {
+    "id": 30,
+    "naziv": "Muzej Frisira",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "muzeji",
+    "kategorije": [
+      "muzeji"
+    ],
+    "lat": 37.973,
+    "lon": 23.73,
+    "opis": "Privatna zbirka savremenog evropskog slikarstva u Plaki.",
+    "vremeTrajanja": 60,
+    "pregledi": 350,
+    "ocena": 4.0,
+    "wikipedia": "en:Frissiras_Museum"
+  },
+  {
+    "id": 31,
+    "naziv": "Muzej Kanelopulos",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "muzeji",
+    "kategorije": [
+      "muzeji",
+      "kultura"
+    ],
+    "lat": 37.9735,
+    "lon": 23.7259,
+    "opis": "Privatna zbirka od praistorije do vizantijskog doba, u Plaki.",
+    "vremeTrajanja": 60,
+    "pregledi": 400,
+    "ocena": 4.1
+  },
+  {
+    "id": 32,
+    "naziv": "Brdo Likavitos",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "priroda",
+    "kategorije": [
+      "priroda"
+    ],
+    "lat": 37.9778,
+    "lon": 23.7417,
+    "opis": "Najviši vrh u gradu, sa pogledom na Atiku i more.",
+    "vremeTrajanja": 90,
+    "pregledi": 2500,
+    "ocena": 4.7,
+    "cena": 0,
+    "wikipedia": "en:Mount_Lycabettus"
+  },
+  {
+    "id": 33,
+    "naziv": "Nacionalna bašta",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "priroda",
+    "kategorije": [
+      "priroda"
+    ],
+    "lat": 37.9733,
+    "lon": 23.737,
+    "opis": "Senoviti park iza Parlamenta, nekadašnja kraljevska bašta.",
+    "vremeTrajanja": 75,
+    "pregledi": 2100,
+    "ocena": 4.4,
+    "cena": 0,
+    "wikipedia": "en:National_Garden,_Athens"
+  },
+  {
+    "id": 34,
+    "naziv": "Brdo Filopapu",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "priroda",
+    "kategorije": [
+      "priroda"
+    ],
+    "lat": 37.9678,
+    "lon": 23.722,
+    "opis": "Borova šetališta i najbolji pogled na Akropolj.",
+    "vremeTrajanja": 75,
+    "pregledi": 1600,
+    "ocena": 4.5,
+    "cena": 0,
+    "wikipedia": "en:Philopappos_Hill"
+  },
+  {
+    "id": 35,
+    "naziv": "Park Pedion tou Areos",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "priroda",
+    "kategorije": [
+      "priroda"
+    ],
+    "lat": 37.9929,
+    "lon": 23.7345,
+    "opis": "Jedan od najvećih gradskih parkova, sa drvoredima i spomenicima.",
+    "vremeTrajanja": 60,
+    "pregledi": 700,
+    "ocena": 3.9,
+    "cena": 0,
+    "wikipedia": "en:Pedion_tou_Areos"
+  },
+  {
+    "id": 36,
+    "naziv": "Park fondacije Stavros Niarhos",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "priroda",
+    "kategorije": [
+      "priroda",
+      "kultura"
+    ],
+    "lat": 37.94,
+    "lon": 23.692,
+    "opis": "Zeleni krov i park uz Operu i Nacionalnu biblioteku.",
+    "vremeTrajanja": 90,
+    "pregledi": 1900,
+    "ocena": 4.6,
+    "cena": 0,
+    "wikipedia": "en:Stavros_Niarchos_Foundation_Cultural_Center"
+  },
+  {
+    "id": 37,
+    "naziv": "Brdo Ardito",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "priroda",
+    "kategorije": [
+      "priroda"
+    ],
+    "lat": 37.9678,
+    "lon": 23.7397,
+    "opis": "Nisko brdo iznad Panatinaikos stadiona, sa stazama kroz borove.",
+    "vremeTrajanja": 45,
+    "pregledi": 400,
+    "ocena": 3.8,
+    "cena": 0
+  },
+  {
+    "id": 38,
+    "naziv": "Pijaca Varvakios",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "gastronomija",
+    "kategorije": [
+      "gastronomija",
+      "soping"
+    ],
+    "lat": 37.9803,
+    "lon": 23.7267,
+    "opis": "Gradska pijaca mesa, ribe i začina, otvorena od jutra.",
+    "vremeTrajanja": 60,
+    "pregledi": 1500,
+    "ocena": 4.3,
+    "cena": 0,
+    "radnoVreme": {
+      "open": "07:00",
+      "close": "18:00"
+    }
+  },
+  {
+    "id": 39,
+    "naziv": "Psiri",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "gastronomija",
+    "kategorije": [
+      "gastronomija",
+      "nocni_zivot"
+    ],
+    "lat": 37.9779,
+    "lon": 23.7223,
+    "opis": "Četvrt mezedžinica i barova iza Monastirakija.",
+    "vremeTrajanja": 90,
+    "pregledi": 1800,
+    "ocena": 4.4,
+    "cena": 0,
+    "wikipedia": "en:Psyri"
+  },
+  {
+    "id": 40,
+    "naziv": "Koukaki",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "gastronomija",
+    "kategorije": [
+      "gastronomija"
+    ],
+    "lat": 37.9645,
+    "lon": 23.7245,
+    "opis": "Mirna četvrt pod Filopapom, sa kafanama i pekarama.",
+    "vremeTrajanja": 90,
+    "pregledi": 900,
+    "ocena": 4.2,
+    "cena": 0,
+    "wikipedia": "en:Koukaki"
+  },
+  {
+    "id": 41,
+    "naziv": "Ulica Mitropoleos",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "gastronomija",
+    "kategorije": [
+      "gastronomija"
+    ],
+    "lat": 37.9765,
+    "lon": 23.729,
+    "opis": "Red kioska sa suvlakijem i girosom između Sintagme i Monastirakija.",
+    "vremeTrajanja": 45,
+    "pregledi": 1300,
+    "ocena": 4.1,
+    "cena": 0
+  },
+  {
+    "id": 42,
+    "naziv": "Pagrati",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "gastronomija",
+    "kategorije": [
+      "gastronomija"
+    ],
+    "lat": 37.9679,
+    "lon": 23.748,
+    "opis": "Stambena četvrt istočno od stadiona, poznata po tavernama.",
+    "vremeTrajanja": 90,
+    "pregledi": 700,
+    "ocena": 4.1,
+    "cena": 0,
+    "wikipedia": "en:Pagrati"
+  },
+  {
+    "id": 43,
+    "naziv": "Kolonaki",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "gastronomija",
+    "kategorije": [
+      "gastronomija",
+      "soping",
+      "nocni_zivot"
+    ],
+    "lat": 37.979,
+    "lon": 23.743,
+    "opis": "Otmena četvrt pod Likavitosom, sa kafeima i buticima.",
+    "vremeTrajanja": 90,
+    "pregledi": 1600,
+    "ocena": 4.3,
+    "cena": 0,
+    "wikipedia": "en:Kolonaki"
+  },
+  {
+    "id": 44,
+    "naziv": "Gazi i Technopolis",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "nocni_zivot",
+    "kategorije": [
+      "nocni_zivot",
+      "kultura"
+    ],
+    "lat": 37.9784,
+    "lon": 23.7118,
+    "opis": "Nekadašnja gasara pretvorena u prostor za koncerte, sa barovima okolo.",
+    "vremeTrajanja": 120,
+    "pregledi": 1500,
+    "ocena": 4.3,
+    "cena": 0,
+    "wikipedia": "en:Technopolis_(Gazi)"
+  },
+  {
+    "id": 45,
+    "naziv": "Exarhija",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "nocni_zivot",
+    "kategorije": [
+      "nocni_zivot",
+      "kultura"
+    ],
+    "lat": 37.9862,
+    "lon": 23.7334,
+    "opis": "Studentska četvrt sa muralima, knjižarama i kafanama.",
+    "vremeTrajanja": 90,
+    "pregledi": 1100,
+    "ocena": 4.0,
+    "cena": 0,
+    "wikipedia": "en:Exarcheia"
+  },
+  {
+    "id": 46,
+    "naziv": "Pozorište na Likavitosu",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "nocni_zivot",
+    "kategorije": [
+      "nocni_zivot",
+      "kultura"
+    ],
+    "lat": 37.9778,
+    "lon": 23.7417,
+    "opis": "Letnja pozornica na vrhu brda, za koncerte pod otvorenim nebom.",
+    "vremeTrajanja": 120,
+    "pregledi": 600,
+    "ocena": 4.2,
+    "wikipedia": "en:Lycabettus_Theatre"
+  },
+  {
+    "id": 47,
+    "naziv": "Ulica Adrianou",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "nocni_zivot",
+    "kategorije": [
+      "nocni_zivot",
+      "gastronomija"
+    ],
+    "lat": 37.9752,
+    "lon": 23.7238,
+    "opis": "Šetalište uz Antičku agoru, sa baštama barova i pogledom na Akropolj.",
+    "vremeTrajanja": 90,
+    "pregledi": 1400,
+    "ocena": 4.2,
+    "cena": 0
+  },
+  {
+    "id": 48,
+    "naziv": "Barovi oko Kerameikosa",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "nocni_zivot",
+    "kategorije": [
+      "nocni_zivot"
+    ],
+    "lat": 37.979,
+    "lon": 23.717,
+    "opis": "Deo grada oko Kerameikosa koji uveče živi od malih barova.",
+    "vremeTrajanja": 120,
+    "pregledi": 800,
+    "ocena": 4.0,
+    "cena": 0
+  },
+  {
+    "id": 49,
+    "naziv": "Ulica Ermu",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "soping",
+    "kategorije": [
+      "soping"
+    ],
+    "lat": 37.977,
+    "lon": 23.7299,
+    "opis": "Glavna pešačka trgovačka ulica, od Sintagme do Monastirakija.",
+    "vremeTrajanja": 60,
+    "pregledi": 2400,
+    "ocena": 4.2,
+    "cena": 0,
+    "wikipedia": "en:Ermou_Street_(Athens)"
+  },
+  {
+    "id": 50,
+    "naziv": "Buvljak u Monastirakiju",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "soping",
+    "kategorije": [
+      "soping"
+    ],
+    "lat": 37.9765,
+    "lon": 23.7245,
+    "opis": "Tezge sa starinama, pločama i suvenirima, najživlje nedeljom.",
+    "vremeTrajanja": 60,
+    "pregledi": 1700,
+    "ocena": 4.1,
+    "cena": 0
+  },
+  {
+    "id": 51,
+    "naziv": "Ulica Voukurestiu",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "soping",
+    "kategorije": [
+      "soping"
+    ],
+    "lat": 37.9779,
+    "lon": 23.7365,
+    "opis": "Ulica sa radnjama poznatih marki, blizu Sintagme.",
+    "vremeTrajanja": 45,
+    "pregledi": 700,
+    "ocena": 4.0,
+    "cena": 0
+  },
+  {
+    "id": 52,
+    "naziv": "Tržni centar The Mall Athens",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "soping",
+    "kategorije": [
+      "soping"
+    ],
+    "lat": 38.0413,
+    "lon": 23.7899,
+    "opis": "Veliki tržni centar u Marousiju, uz metro stanicu Neratziotisa.",
+    "vremeTrajanja": 90,
+    "pregledi": 900,
+    "ocena": 3.9,
+    "cena": 0,
+    "radnoVreme": {
+      "open": "09:00",
+      "close": "21:00"
+    },
+    "wikipedia": "en:The_Mall_Athens"
+  },
+  {
+    "id": 53,
+    "naziv": "Ulica Skoufa",
+    "grad": "Athens",
+    "city": "Athens",
+    "kategorija": "soping",
+    "kategorije": [
+      "soping",
+      "gastronomija"
+    ],
+    "lat": 37.9793,
+    "lon": 23.7399,
+    "opis": "Butici i kafei u srcu Kolonakija.",
+    "vremeTrajanja": 45,
+    "pregledi": 600,
+    "ocena": 4.1,
+    "cena": 0
+  }
+]

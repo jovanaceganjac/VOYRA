@@ -1,0 +1,192 @@
+.naslov {
+  padding-block: var(--razmak-4) var(--razmak-3);
+  max-width: 44rem;
+}
+
+.naslov h1 {
+  margin-bottom: 0.4rem;
+}
+
+.naslov__opis {
+  margin: 0;
+  color: var(--boja-tekst-slab);
+}
+
+.pretraga {
+  margin-bottom: var(--razmak-3);
+}
+
+.grupa {
+  margin: 0 0 var(--razmak-2);
+  padding: 0;
+  border: 0;
+}
+
+.grupa legend {
+  padding: 0;
+  margin-bottom: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--boja-tekst-slab);
+}
+
+.potvrde {
+  display: flex;
+  gap: 0.4rem 1.1rem;
+  flex-wrap: wrap;
+}
+
+.potvrda {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.potvrda input {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--boja-primarna);
+}
+
+.stanje {
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Alatke ---------- */
+.alatke {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--razmak-2);
+}
+
+.alatke .polje {
+  margin-bottom: 0;
+}
+
+.alatke select {
+  padding: 0.45rem 0.7rem;
+  font: inherit;
+  font-size: 0.9rem;
+  color: inherit;
+  background: var(--boja-povrsina);
+  border: 1px solid var(--boja-ivica-jaka);
+  border-radius: var(--radijus);
+}
+
+.alatke__broj {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Mreža: više atrakcija u redu, broj kolona prati širinu ---------- */
+.lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
+  align-items: stretch;
+  gap: var(--razmak-2);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--razmak-5);
+}
+
+.atrakcija {
+  display: flex;
+  flex-direction: column;
+  padding: var(--razmak-2);
+  overflow: hidden;
+}
+
+.atrakcija__zaglavlje {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--razmak-2);
+}
+
+.atrakcija__naziv {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.3;
+}
+
+.atrakcija__ocena {
+  flex: none;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: var(--boja-primarna);
+  color: var(--boja-pozadina);
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.atrakcija__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.oznaka--kategorija {
+  padding: 0.1rem 0.5rem;
+  font-size: 0.72rem;
+  background: var(--boja-povrsina-2);
+}
+
+.tacka::before {
+  content: '·';
+  margin-right: 0.4rem;
+  color: var(--boja-ivica-jaka);
+}
+
+.procena {
+  font-style: italic;
+}
+
+.atrakcija__opis {
+  margin: 0.5rem 0 0;
+  font-size: 0.86rem;
+  /* Kartice u redu ostaju iste visine - duži opis se skraćuje */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.atrakcija__bodovanje {
+  margin: auto 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--boja-ivica);
+  font-size: 0.8rem;
+  color: var(--boja-tekst-slab);
+}
+
+/* Slika zauzima gornji deo kartice, od ivice do ivice */
+.atrakcija app-slika-atrakcije {
+  display: block;
+  margin: calc(var(--razmak-2) * -1) calc(var(--razmak-2) * -1) 0.75rem;
+}
+
+/* Bodovanje se spušta na dno kartice; iznad njega je malo prostora */
+.atrakcija__meta + .atrakcija__bodovanje,
+.atrakcija__opis + .atrakcija__bodovanje {
+  margin-top: auto;
+}
+
+.atrakcija__bodovanje {
+  padding-top: 0.5rem;
+}
+
+.atrakcija > :nth-last-child(2) {
+  margin-bottom: 0.6rem;
+}

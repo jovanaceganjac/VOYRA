@@ -1,0 +1,442 @@
+.stranica {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+/* ---------- Zaglavlje ---------- */
+
+.putanja {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.putanja a {
+  color: inherit;
+}
+
+.zaglavlje__red {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.naslov {
+  margin: 0;
+}
+
+.podnaslov {
+  margin: 8px 0 0;
+  color: var(--boja-tekst-slab);
+}
+
+.sitno {
+  font-size: 0.8rem;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Akcije ---------- */
+
+.akcije {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 20px 0;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--boja-ivica);
+}
+
+/* Vidljivo samo čitaču ekrana */
+.samo-za-citac {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Dani u režimu izmene ---------- */
+
+.dani-izmena {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dan-izmena__zaglavlje {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--boja-ivica);
+}
+
+.dan-izmena__naslov {
+  margin: 0;
+  font-size: 1.15rem;
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.dan-izmena__datum {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--boja-tekst-slab);
+}
+
+.dan-izmena__vreme {
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.dan-izmena__prazno {
+  margin: 12px 0;
+  color: var(--boja-tekst-slab);
+  font-style: italic;
+}
+
+.racunam {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.dan-izmena__akcije {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+/* ---------- Aktivnost ---------- */
+
+.aktivnosti {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aktivnost {
+  display: grid;
+  grid-template-columns: 56px 120px 1fr auto;
+  gap: 12px;
+  align-items: start;
+  padding: 10px;
+  border: 1px solid var(--boja-ivica);
+  border-radius: 10px;
+  background: var(--boja-povrsina);
+}
+
+.aktivnost--krsenje {
+  border-color: var(--boja-greska);
+  background: color-mix(in srgb, var(--boja-greska) 5%, var(--boja-povrsina));
+}
+
+.aktivnost__vreme {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.aktivnost__telo {
+  min-width: 0;
+}
+
+.aktivnost__naziv {
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.aktivnost__meta {
+  margin: 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.aktivnost__akcije {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.ikonica {
+  min-width: 36px;
+  min-height: 36px;
+  border: 1px solid var(--boja-ivica);
+  border-radius: 8px;
+  background: var(--boja-povrsina);
+  color: var(--boja-tekst);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.ikonica:hover:not(:disabled) {
+  border-color: var(--boja-ivica-jaka);
+}
+
+.ikonica:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ikonica--opasno:hover:not(:disabled) {
+  border-color: var(--boja-greska);
+  color: var(--boja-greska);
+}
+
+.premesti__izbor {
+  min-height: 36px;
+  border: 1px solid var(--boja-ivica);
+  border-radius: 8px;
+  background: var(--boja-povrsina);
+  color: var(--boja-tekst);
+  padding: 0 6px;
+}
+
+.krsenje {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  color: var(--boja-greska);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.krsenje__ikona {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--boja-greska);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ---------- Panel i dijalozi ---------- */
+
+.dijalog-pozadina {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, #000 40%, transparent);
+  z-index: 900;
+}
+
+.panel {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(480px, 100%);
+  background: var(--boja-pozadina);
+  border-left: 1px solid var(--boja-ivica);
+  z-index: 901;
+  padding: 20px 16px;
+  overflow-y: auto;
+}
+
+.panel__zaglavlje {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.panel__naslov {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.panel__alatke {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.panel__prazno {
+  color: var(--boja-tekst-slab);
+}
+
+.ponude-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ponuda-atrakcija {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid var(--boja-ivica);
+  border-radius: 10px;
+  background: var(--boja-povrsina);
+}
+
+.ponuda-atrakcija__telo {
+  min-width: 0;
+}
+
+.ponuda-atrakcija__naziv {
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.ponuda-atrakcija__meta {
+  margin: 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.dijalog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(460px, calc(100% - 32px));
+  background: var(--boja-povrsina);
+  border: 1px solid var(--boja-ivica);
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 901;
+}
+
+.dijalog__naslov {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+}
+
+.dijalog__tekst {
+  margin: 0 0 16px;
+  color: var(--boja-tekst-slab);
+}
+
+.dijalog__dugmad {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Telefon ---------- */
+
+@media (max-width: 560px) {
+  /*
+   * Na uskom ekranu slika i akcije idu ispod teksta, a dugmad ostaju
+   * ista - bez skrivenog menija, da bi tok radio i sa tastaturom.
+   */
+  .aktivnost {
+    grid-template-columns: 56px 1fr;
+  }
+
+  .aktivnost app-slika-atrakcije,
+  .aktivnost__telo,
+  .aktivnost__akcije {
+    grid-column: 1 / -1;
+  }
+
+  .aktivnost__akcije {
+    justify-content: flex-start;
+  }
+
+  .ponuda-atrakcija {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    inset: 0;
+    width: 100%;
+    border-left: 0;
+  }
+}
+
+/* ---------- Blok rezervacije (spec §4.8) ---------- */
+
+.rezervacija {
+  margin-bottom: 20px;
+}
+
+.rezervacija__naslov {
+  margin: 0 0 12px;
+  font-size: 1.15rem;
+}
+
+.rezervacija__red {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin: 6px 0;
+}
+
+.rezervacija__oznaka {
+  min-width: 130px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--boja-tekst-slab);
+}
+
+.rezervacija__pnr {
+  font-size: 1.3rem;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.rezervacija__napomena {
+  margin: 12px 0;
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+.rezervacija__dugmad {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Otkazivanje: isti oblik kao „Izmeni plan" i „Generiši ponovo",
+   ali crveni okvir i tekst - radnja se ne može poništiti */
+.dugme--otkazivanje {
+  color: var(--boja-greska);
+  border-color: var(--boja-greska);
+}
+
+.dugme--otkazivanje:hover:not(:disabled) {
+  color: var(--boja-greska);
+  border-color: var(--boja-greska);
+  background: color-mix(in srgb, var(--boja-greska) 8%, transparent);
+}

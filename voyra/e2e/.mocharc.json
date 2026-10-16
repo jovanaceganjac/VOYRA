@@ -1,0 +1,8 @@
+{
+  "spec": "specs/*.spec.js",
+  "timeout": 300000,
+  "slow": 15000,
+  "reporter": "spec",
+  "file": ["podesavanja/koren.js"],
+  "exit": true
+}

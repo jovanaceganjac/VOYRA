@@ -1,0 +1,115 @@
+<section class="omotac">
+  <header class="naslov">
+    <h1>{{ 'atrakcije.naslov' | t }}</h1>
+    <p class="naslov__opis">{{ 'atrakcije.opis' | t }}</p>
+  </header>
+
+  <form class="kartica pretraga" (ngSubmit)="pretrazi()" novalidate>
+    <app-grad-unos idPolja="grad" [(izabran)]="grad" />
+
+    <fieldset class="grupa">
+      <legend>{{ 'atrakcije.interesovanja' | t }} <span class="opciono">{{ 'atrakcije.bezIzbora' | t }}</span></legend>
+
+      <div class="potvrde">
+        @for (i of preferencije.shema().interests; track i) {
+          <label class="potvrda">
+            <input type="checkbox" [checked]="jeIzabrano(i)" (change)="prebaci(i)" />
+            <span>{{ preferencije.naziv(i) }}</span>
+          </label>
+        }
+      </div>
+    </fieldset>
+
+    @if (greska(); as g) {
+      <p class="poruka poruka--greska" role="alert">{{ g }}</p>
+    }
+
+    <button type="submit" class="dugme" [disabled]="ucitava()">
+      {{ (ucitava() ? 'atrakcije.trazimo' : 'atrakcije.prikazi') | t }}
+    </button>
+  </form>
+
+  @if (ucitava()) {
+    <p class="stanje" role="status">{{ 'atrakcije.trazimoAtrakcije' | t }}</p>
+  } @else if (sve().length > 0) {
+    <div class="alatke">
+      <div class="polje">
+        <label for="kategorija">{{ 'atrakcije.kategorija' | t }}</label>
+        <select
+          id="kategorija"
+          [ngModel]="filterKategorije()"
+          (ngModelChange)="filterKategorije.set($event)"
+          name="kategorija"
+        >
+          <option value="">{{ 'atrakcije.sve' | t: { broj: sve().length } }}</option>
+          @for (k of kategorijeURezultatu(); track k) {
+            <option [value]="k">{{ preferencije.naziv(k) }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="polje">
+        <label for="sort">{{ 'atrakcije.sortiranje' | t }}</label>
+        <select id="sort" [ngModel]="sortiranje()" (ngModelChange)="sortiranje.set($event)" name="sort">
+          <option value="ocena">{{ 'atrakcije.poOceni' | t }}</option>
+          <option value="naziv">{{ 'atrakcije.poNazivu' | t }}</option>
+        </select>
+      </div>
+
+      <p class="alatke__broj">
+        {{ trazeniGrad() }} &middot; {{ 'atrakcije.prikazano' | t: { broj: prikazane().length } }}
+      </p>
+    </div>
+
+    <ul class="lista">
+      @for (a of prikazane(); track a.id) {
+        <li class="kartica atrakcija">
+          <app-slika-atrakcije [atrakcija]="a" />
+
+          <div class="atrakcija__zaglavlje">
+            <h2 class="atrakcija__naziv">
+              {{ a.name }}
+              @if (a.source === 'admin') {
+                <span class="oznaka-voyra" [title]="'plan.dodaoAdmin' | t">
+                  {{ 'plan.preporukaVoyre' | t }}
+                </span>
+              }
+            </h2>
+
+            @if (a.score !== undefined) {
+              <span class="atrakcija__ocena" [title]="'atrakcije.ocenaPoklapanja' | t: { broj: a.score }">
+                {{ a.score }}
+              </span>
+            }
+          </div>
+
+          <p class="atrakcija__meta">
+            @for (k of kategorije(a); track k) {
+              <span class="oznaka oznaka--kategorija">{{ preferencije.naziv(k) }}</span>
+            }
+            <span>{{ trajanje(a.duration) }}</span>
+            <span class="tacka">{{ a.price > 0 ? novac(a.price, a.currency) : ('plan.cenaNepoznata' | t) }}</span>
+            @if (a.openingHours) {
+              <span class="tacka">
+                {{ a.openingHours.open }}&ndash;{{ a.openingHours.close }}
+                @if (a.openingHoursEstimated) { <span class="procena">{{ 'plan.procena' | t }}</span> }
+              </span>
+            }
+          </p>
+
+          @if (a.description) {
+            <p class="atrakcija__opis">{{ a.description }}</p>
+          }
+
+          @if (a.scoreBreakdown; as b) {
+            <p class="atrakcija__bodovanje">
+              {{ 'atrakcije.bodovanje' | t: { interesovanja: b.interesovanja, popularnost: b.popularnost } }}
+            </p>
+          }
+        </li>
+      }
+    </ul>
+  } @else if (trazeniGrad()) {
+    <p class="stanje">{{ 'atrakcije.nijePronadjena' | t: { grad: trazeniGrad() } }}</p>
+  }
+</section>

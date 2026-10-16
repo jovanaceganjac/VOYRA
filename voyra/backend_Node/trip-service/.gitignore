@@ -1,0 +1,5 @@
+
+# Referentni podaci se preuzimaju skriptom (import:gradovi), ne cuvaju se u gitu
+data/airports.csv
+data/cities15000.zip
+data/cities15000.txt

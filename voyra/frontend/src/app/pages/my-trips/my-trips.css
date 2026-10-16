@@ -1,0 +1,237 @@
+.naslov {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+  padding-block: var(--razmak-4) var(--razmak-3);
+}
+
+.naslov h1 {
+  margin-bottom: 0.4rem;
+}
+
+.naslov__opis {
+  margin: 0;
+  color: var(--boja-tekst-slab);
+}
+
+.stanje {
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Prazno stanje ---------- */
+.prazno {
+  padding: var(--razmak-5) var(--razmak-2);
+  text-align: center;
+  border: 1px dashed var(--boja-ivica-jaka);
+  border-radius: var(--radijus-veliki);
+  background: var(--boja-povrsina-2);
+}
+
+.prazno p {
+  max-width: 34rem;
+  margin-inline: auto;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Alatke ---------- */
+.alatke {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--razmak-2);
+}
+
+.alatke__filter {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--boja-tekst-slab);
+}
+
+.alatke__filter select {
+  padding: 0.45rem 0.7rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--boja-tekst);
+  background: var(--boja-povrsina);
+  border: 1px solid var(--boja-ivica-jaka);
+  border-radius: var(--radijus);
+}
+
+.alatke__broj {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Lista ---------- */
+.putovanja {
+  display: grid;
+  gap: var(--razmak-2);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--razmak-5);
+}
+
+.putovanje {
+  padding: var(--razmak-2) var(--razmak-3);
+}
+
+.putovanje__zaglavlje {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+}
+
+.putovanje__glavno {
+  min-width: 0;
+}
+
+.putovanje__naslov {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.putovanje__ruta {
+  margin: 0.2rem 0 0;
+  font-weight: 600;
+  color: var(--boja-primarna);
+}
+
+.putovanje__meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.87rem;
+  color: var(--boja-tekst-slab);
+}
+
+.putovanje__desno {
+  text-align: right;
+}
+
+.putovanje__cena {
+  margin: 0.4rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.putovanje__kreirano {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--boja-tekst-slab);
+}
+
+/* ---------- Izmena naziva ---------- */
+.izmena {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.izmena input {
+  flex: 1 1 14rem;
+  padding: 0.5rem 0.7rem;
+  font: inherit;
+  color: inherit;
+  background: var(--boja-povrsina);
+  border: 1px solid var(--boja-ivica-jaka);
+  border-radius: var(--radijus);
+}
+
+.izmena .dugme {
+  padding: 0.5rem 1rem;
+}
+
+/* ---------- Dugmad ---------- */
+.putovanje__dugmad {
+  display: flex;
+  align-items: center;
+  gap: var(--razmak-2);
+  flex-wrap: wrap;
+  margin-top: var(--razmak-2);
+  padding-top: var(--razmak-2);
+  border-top: 1px solid var(--boja-ivica);
+}
+
+.veza-dugme {
+  padding: 0;
+  font: inherit;
+  font-size: 0.87rem;
+  color: var(--boja-tekst-slab);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.veza-dugme:hover:not(:disabled) {
+  color: var(--boja-primarna);
+}
+
+.veza-dugme--opasno:hover:not(:disabled) {
+  color: var(--boja-greska);
+}
+
+.potvrda {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radijus);
+  background: #fbf1ef;
+  font-size: 0.87rem;
+  color: #7e2a20;
+}
+
+.potvrda .veza-dugme {
+  color: #7e2a20;
+  font-weight: 600;
+}
+
+/* ---------- Detalj ---------- */
+.putovanje__detalj {
+  margin-top: var(--razmak-3);
+  padding-top: var(--razmak-3);
+  border-top: 2px solid var(--boja-primarna);
+}
+
+.putovanje__opis {
+  margin-bottom: var(--razmak-3);
+  color: var(--boja-tekst-slab);
+}
+
+@media (max-width: 560px) {
+  .putovanje__desno {
+    text-align: left;
+  }
+
+  .putovanje {
+    padding-inline: var(--razmak-2);
+  }
+}
+
+/* Zavrseno i otkazano su konacna stanja - vizuelno mirnija */
+.oznaka--zavrseno {
+  background: #eef1f6;
+  color: var(--boja-primarna);
+}
+
+.oznaka--otkazano {
+  background: #f5eceb;
+  color: var(--boja-greska);
+}
